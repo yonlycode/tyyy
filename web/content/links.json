@@ -1,0 +1,34 @@
+{
+  "title": "Retrouvez-moi",
+  "subtitle": "Tous mes liens et réseaux au même endroit",
+  "links": [
+    {
+      "id": "github",
+      "label": "GitHub",
+      "url": "https://github.com/",
+      "icon": "github",
+      "enabled": true
+    },
+    {
+      "id": "linkedin",
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/",
+      "icon": "linkedin",
+      "enabled": true
+    },
+    {
+      "id": "twitter",
+      "label": "Twitter / X",
+      "url": "https://x.com/",
+      "icon": "twitter",
+      "enabled": true
+    },
+    {
+      "id": "email",
+      "label": "Email",
+      "url": "mailto:contact@yoannfort.fr",
+      "icon": "email",
+      "enabled": true
+    }
+  ]
+}

@@ -1,24 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
 import { remark } from "remark";
 import html from "remark-html";
-import type { Article } from "../types";
+import type { Project } from "../types";
 import { api } from "../services/api";
 import ImageUploader from "./ImageUploader";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 
-export default function ArticleEditor({
-  article,
+export default function ProjectEditor({
+  project,
   onBack,
   onSaved,
   onDelete,
 }: {
-  article: Article | null;
+  project: Project | null;
   onBack: () => void;
-  onSaved: (a: Article) => void;
-  onDelete: (a: Article) => Promise<void>;
+  onSaved: (p: Project) => void;
+  onDelete: (p: Project) => Promise<void>;
 }) {
-  const [form, setForm] = useState<Article>(
-    article ?? {
+  const [form, setForm] = useState<Project>(
+    project ?? {
       slug: "",
       path: "",
       frontmatter: { title: "", description: "", date: "", tags: [], published: true },
@@ -33,7 +33,7 @@ export default function ArticleEditor({
 
   useEffect(() => {
     setForm(
-      article ?? {
+      project ?? {
         slug: "",
         path: "",
         frontmatter: { title: "", description: "", date: "", tags: [], published: true },
@@ -41,7 +41,7 @@ export default function ArticleEditor({
       }
     );
     setError("");
-  }, [article]);
+  }, [project]);
 
   useEffect(() => {
     remark()
@@ -51,9 +51,9 @@ export default function ArticleEditor({
       .catch(() => setPreview(""));
   }, [form.body]);
 
-  const isNew = useMemo(() => !article, [article]);
+  const isNew = useMemo(() => !project, [project]);
 
-  function setFm(patch: Partial<Article["frontmatter"]>) {
+  function setFm(patch: Partial<Project["frontmatter"]>) {
     setForm((f) => ({ ...f, frontmatter: { ...f.frontmatter, ...patch } }));
   }
 
@@ -66,12 +66,12 @@ export default function ArticleEditor({
     setError("");
     setBusy(true);
     try {
-      const updated: Article = {
+      const updated: Project = {
         ...form,
         frontmatter: { ...form.frontmatter, published: publish },
       };
-      await api.saveArticle(updated);
-      const saved = await api.getArticle(updated.slug);
+      await api.saveProject(updated);
+      const saved = await api.getProject(updated.slug);
       onSaved(saved);
     } catch (err) {
       setError((err as Error).message);
@@ -80,11 +80,11 @@ export default function ArticleEditor({
     }
   }
 
-  async function confirmDelete(article: Article) {
+  async function confirmDelete(project: Project) {
     setDeleting(true);
     setError("");
     try {
-      await onDelete(article);
+      await onDelete(project);
       onBack();
     } catch (err) {
       setError((err as Error).message);
@@ -98,7 +98,7 @@ export default function ArticleEditor({
     <div className="editor">
       <div className="editor-bar">
         <button onClick={onBack}>← Back</button>
-        <h2>{isNew ? "New article" : form.frontmatter.title || form.slug}</h2>
+        <h2>{isNew ? "New project" : form.frontmatter.title || form.slug}</h2>
         <div className="actions">
           <button className="primary" disabled={busy || deleting} onClick={() => save(true)}>
             {busy ? "Saving…" : "Publish"}
@@ -163,7 +163,7 @@ export default function ArticleEditor({
               className="md-input"
               value={form.body}
               onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
-              placeholder="# Write your article…"
+              placeholder="# Write your project…"
             />
           </div>
           <div className="md-pane">
@@ -174,12 +174,12 @@ export default function ArticleEditor({
       </div>
 
       {error && <p className="error">{error}</p>}
-      {!isNew && article && confirming && (
+      {!isNew && project && confirming && (
         <DeleteConfirmModal
-          slug={article.slug}
-          kind="article"
+          slug={project.slug}
+          kind="project"
           onCancel={() => setConfirming(false)}
-          onConfirm={() => confirmDelete(article)}
+          onConfirm={() => confirmDelete(project)}
         />
       )}
     </div>

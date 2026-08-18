@@ -91,12 +91,12 @@ func (a *App) GetConfig() map[string]any {
 			}
 			return ""
 		}(),
-		"dir": func() string {
-			if cfg.Dir != "" {
-				return cfg.Dir
+		"baseDir": func() string {
+			if cfg.BaseDir != "" {
+				return cfg.BaseDir
 			}
 			if a.cachedConfig != nil {
-				return a.cachedConfig.Dir
+				return a.cachedConfig.BaseDir
 			}
 			return ""
 		}(),
@@ -144,8 +144,8 @@ func (a *App) GetFullConfig() *content.Config {
 // SetConfig validates the GitHub credentials, stores them in memory,
 // and persists the full config (including token) to the cache file.
 func (a *App) SetConfig(cfg content.Config) error {
-	if cfg.Dir == "" {
-		cfg.Dir = content.ArticlesDir
+	if cfg.BaseDir == "" {
+		cfg.BaseDir = content.ContentBaseDir
 	}
 	if cfg.ImgDir == "" {
 		cfg.ImgDir = content.ImagesDir
@@ -172,6 +172,44 @@ func (a *App) ListArticles() ([]*content.Article, error) {
 	return repo.ListArticles()
 }
 
+func (a *App) ListProjects() ([]*content.Project, error) {
+	repo := a.repoOr()
+	if repo == nil {
+		return nil, errNotConfigured
+	}
+	return repo.ListProjects()
+}
+
+// GetLinks returns the contact links data from the repo.
+func (a *App) GetLinks() (*content.LinksData, error) {
+	repo := a.repoOr()
+	if repo == nil {
+		return nil, errNotConfigured
+	}
+	return repo.GetLinks()
+}
+
+// SaveLinks commits the contact links data to GitHub.
+func (a *App) SaveLinks(data *content.LinksData) error {
+	repo := a.repoOr()
+	if repo == nil {
+		return errNotConfigured
+	}
+	if data == nil {
+		data = &content.LinksData{}
+	}
+	if err := data.Validate(); err != nil {
+		return err
+	}
+	if err := repo.SaveLinks(data, data.DefaultCommitMsg("update")); err != nil {
+		if strings.Contains(err.Error(), "409") {
+			return content.ErrConflict
+		}
+		return err
+	}
+	return nil
+}
+
 // ListDeployments returns the most recent runs of the deploy workflow.
 func (a *App) ListDeployments(limit int) ([]*content.Deployment, error) {
 	repo := a.repoOr()
@@ -194,6 +232,21 @@ func (a *App) GetArticle(slug string) (*content.Article, error) {
 		return nil, err
 	}
 	return art, nil
+}
+
+func (a *App) GetProject(slug string) (*content.Project, error) {
+	repo := a.repoOr()
+	if repo == nil {
+		return nil, errNotConfigured
+	}
+	proj, err := repo.GetProject(slug)
+	if err != nil {
+		if strings.Contains(err.Error(), "404") {
+			return nil, content.ErrProjectNotFound
+		}
+		return nil, err
+	}
+	return proj, nil
 }
 
 // SaveArticle commits the article to GitHub. The body/frontmatter is
@@ -221,6 +274,33 @@ func (a *App) DeleteArticle(slug string) error {
 		return errNotConfigured
 	}
 	return repo.DeleteArticle(slug, "chore(admin): delete article "+slug)
+}
+
+// SaveProject commits the project to GitHub. The body/frontmatter is
+// serialized by the repository layer.
+func (a *App) SaveProject(proj *content.Project) error {
+	repo := a.repoOr()
+	if repo == nil {
+		return errNotConfigured
+	}
+	if proj.Slug == "" {
+		return content.ErrSlugRequired
+	}
+	if err := repo.SaveProject(proj, proj.DefaultCommitMsg("update")); err != nil {
+		if strings.Contains(err.Error(), "409") {
+			return content.ErrConflict
+		}
+		return err
+	}
+	return nil
+}
+
+func (a *App) DeleteProject(slug string) error {
+	repo := a.repoOr()
+	if repo == nil {
+		return errNotConfigured
+	}
+	return repo.DeleteProject(slug, "chore(admin): delete project "+slug)
 }
 
 // UploadMedia stores an image and returns the markdown reference to insert

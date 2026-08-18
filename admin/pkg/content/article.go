@@ -9,8 +9,11 @@ import (
 )
 
 const (
-	ArticlesDir = "web/content/articles"
-	ImagesDir   = "web/public/images"
+	ContentBaseDir = "web/content"
+	ArticlesDir    = ContentBaseDir + "/articles"
+	ProjectsDir    = ContentBaseDir + "/projects"
+	ImagesDir      = "web/public/images"
+	LinksFile      = ContentBaseDir + "/links.json"
 )
 
 // Frontmatter holds the YAML metadata of an article, aligned with the
@@ -94,6 +97,12 @@ type Repository interface {
 	GetArticle(slug string) (*Article, error)
 	SaveArticle(article *Article, commitMsg string) error
 	DeleteArticle(slug, commitMsg string) error
+	ListProjects() ([]*Project, error)
+	GetProject(slug string) (*Project, error)
+	SaveProject(project *Project, commitMsg string) error
+	DeleteProject(slug, commitMsg string) error
+	GetLinks() (*LinksData, error)
+	SaveLinks(data *LinksData, commitMsg string) error
 	UploadMedia(fileName string, data []byte) (string, error)
 }
 

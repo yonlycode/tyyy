@@ -20,19 +20,31 @@ import (
 // the token) is persisted to disk in a cache file at ~/.tyyy-admin/config.json
 // so that the settings form is fully pre-filled on subsequent sessions.
 type Config struct {
-	Token  string `json:"token"`
-	Owner  string `json:"owner"`
-	Repo   string `json:"repo"`
-	Dir    string `json:"dir"`    // articles directory, e.g. web/content/articles
-	ImgDir string `json:"imgDir"` // images directory, e.g. web/public/images
-	Branch string `json:"branch"`
+	Token   string `json:"token"`
+	Owner   string `json:"owner"`
+	Repo    string `json:"repo"`
+	BaseDir string `json:"baseDir"` // content base directory, e.g. web/content
+	ImgDir  string `json:"imgDir"`  // images directory, e.g. web/public/images
+	Branch  string `json:"branch"`
+}
+
+func (c Config) baseDir() string {
+	if c.BaseDir != "" {
+		return c.BaseDir
+	}
+	return ContentBaseDir
 }
 
 func (c Config) articlesDir() string {
-	if c.Dir != "" {
-		return c.Dir
-	}
-	return ArticlesDir
+	return path.Join(c.baseDir(), "articles")
+}
+
+func (c Config) projectsDir() string {
+	return path.Join(c.baseDir(), "projects")
+}
+
+func (c Config) linksPath() string {
+	return path.Join(c.baseDir(), "links.json")
 }
 
 func (c Config) imagesDir() string {
@@ -124,21 +136,13 @@ func (r *GitHubRepository) ListDeployments(limit int) ([]*Deployment, error) {
 
 // ListArticles returns metadata for every markdown file in the articles dir.
 func (r *GitHubRepository) ListArticles() ([]*Article, error) {
-	ctx := context.Background()
-	opts := &github.RepositoryContentGetOptions{Ref: r.cfg.branch()}
-	_, contents, _, err := r.client.Repositories.GetContents(ctx, r.cfg.Owner, r.cfg.Repo, r.cfg.articlesDir(), opts)
+	contents, err := r.list(r.cfg.articlesDir())
 	if err != nil {
 		return nil, err
 	}
 	var out []*Article
 	for _, c := range contents {
-		if c.GetType() != "file" {
-			continue
-		}
-		if !strings.HasSuffix(c.GetName(), ".md") && !strings.HasSuffix(c.GetName(), ".mdx") {
-			continue
-		}
-		raw, err := r.download(ctx, c.GetPath())
+		raw, err := r.download(c.GetPath())
 		if err != nil {
 			return nil, err
 		}
@@ -152,37 +156,150 @@ func (r *GitHubRepository) ListArticles() ([]*Article, error) {
 	return out, nil
 }
 
+// ListProjects returns metadata for every markdown file in the projects dir.
+func (r *GitHubRepository) ListProjects() ([]*Project, error) {
+	contents, err := r.list(r.cfg.projectsDir())
+	if err != nil {
+		return nil, err
+	}
+	var out []*Project
+	for _, c := range contents {
+		raw, err := r.download(c.GetPath())
+		if err != nil {
+			return nil, err
+		}
+		proj, err := ParseProject(c.GetPath(), raw)
+		if err != nil {
+			return nil, err
+		}
+		proj.SHA = c.GetSHA()
+		out = append(out, proj)
+	}
+	return out, nil
+}
+
 func (r *GitHubRepository) GetArticle(slug string) (*Article, error) {
-	ctx := context.Background()
-	p := r.articlePath(slug)
-	opts := &github.RepositoryContentGetOptions{Ref: r.cfg.branch()}
-	c, _, _, err := r.client.Repositories.GetContents(ctx, r.cfg.Owner, r.cfg.Repo, p, opts)
+	raw, sha, err := r.getRaw(r.cfg.articlesDir(), slug)
 	if err != nil {
 		return nil, err
 	}
-	decoded, err := c.GetContent()
+	art, err := ParseArticle(r.articlePath(r.cfg.articlesDir(), slug), raw)
 	if err != nil {
 		return nil, err
 	}
-	art, err := ParseArticle(p, []byte(decoded))
-	if err != nil {
-		return nil, err
-	}
-	art.SHA = c.GetSHA()
+	art.SHA = sha
 	return art, nil
 }
 
+func (r *GitHubRepository) GetProject(slug string) (*Project, error) {
+	raw, sha, err := r.getRaw(r.cfg.projectsDir(), slug)
+	if err != nil {
+		return nil, err
+	}
+	proj, err := ParseProject(r.projectPath(slug), raw)
+	if err != nil {
+		return nil, err
+	}
+	proj.SHA = sha
+	return proj, nil
+}
+
+// GetLinks reads and parses web/content/links.json. When the file does not
+// exist yet, it returns an empty (but usable) LinksData.
+func (r *GitHubRepository) GetLinks() (*LinksData, error) {
+	raw, err := r.download(r.cfg.linksPath())
+	if err != nil {
+		// The file may simply not exist yet — treat as empty.
+		return &LinksData{}, nil
+	}
+	var data LinksData
+	if err := json.Unmarshal(raw, &data); err != nil {
+		return nil, err
+	}
+	if data.Links == nil {
+		data.Links = []Link{}
+	}
+	return &data, nil
+}
+
+// SaveLinks writes the links data to web/content/links.json on the current branch.
+func (r *GitHubRepository) SaveLinks(data *LinksData, commitMsg string) error {
+	return r.saveJSONFile(r.cfg.linksPath(), data.Render(), commitMsg)
+}
+
 func (r *GitHubRepository) SaveArticle(article *Article, commitMsg string) error {
+	return r.saveFile(r.cfg.articlesDir(), article.Slug, article.Render(), article.SHA, commitMsg)
+}
+
+func (r *GitHubRepository) SaveProject(project *Project, commitMsg string) error {
+	return r.saveFile(r.cfg.projectsDir(), project.Slug, project.Render(), project.SHA, commitMsg)
+}
+
+func (r *GitHubRepository) DeleteArticle(slug, commitMsg string) error {
+	art, err := r.GetArticle(slug)
+	if err != nil {
+		return err
+	}
+	return r.deleteFile(r.cfg.articlesDir(), slug, art.SHA, commitMsg)
+}
+
+func (r *GitHubRepository) DeleteProject(slug, commitMsg string) error {
+	proj, err := r.GetProject(slug)
+	if err != nil {
+		return err
+	}
+	return r.deleteFile(r.cfg.projectsDir(), slug, proj.SHA, commitMsg)
+}
+
+// list returns the files in a content directory (ref of the current branch).
+func (r *GitHubRepository) list(dir string) ([]*github.RepositoryContent, error) {
 	ctx := context.Background()
-	p := r.articlePath(article.Slug)
+	opts := &github.RepositoryContentGetOptions{Ref: r.cfg.branch()}
+	_, contents, _, err := r.client.Repositories.GetContents(ctx, r.cfg.Owner, r.cfg.Repo, dir, opts)
+	if err != nil {
+		return nil, err
+	}
+	var out []*github.RepositoryContent
+	for _, c := range contents {
+		if c.GetType() != "file" {
+			continue
+		}
+		if !strings.HasSuffix(c.GetName(), ".md") && !strings.HasSuffix(c.GetName(), ".mdx") {
+			continue
+		}
+		out = append(out, c)
+	}
+	return out, nil
+}
+
+// getRaw returns the decoded content and SHA of a markdown file in dir.
+func (r *GitHubRepository) getRaw(dir, slug string) ([]byte, string, error) {
+	ctx := context.Background()
+	p := r.articlePath(dir, slug)
+	opts := &github.RepositoryContentGetOptions{Ref: r.cfg.branch()}
+	c, _, _, err := r.client.Repositories.GetContents(ctx, r.cfg.Owner, r.cfg.Repo, p, opts)
+	if err != nil {
+		return nil, "", err
+	}
+	decoded, err := c.GetContent()
+	if err != nil {
+		return nil, "", err
+	}
+	return []byte(decoded), c.GetSHA(), nil
+}
+
+// saveFile creates or updates a markdown file under dir on the current branch.
+func (r *GitHubRepository) saveFile(dir, slug string, content []byte, sha, commitMsg string) error {
+	ctx := context.Background()
+	p := r.articlePath(dir, slug)
 	payload := &github.RepositoryContentFileOptions{
-		Content:   article.Render(),
+		Content:   content,
 		Message:   github.String(commitMsg),
 		Branch:    github.String(r.cfg.branch()),
 		Committer: &github.CommitAuthor{Name: github.String("yo-port admin"), Email: github.String("admin@yo-port.local")},
 	}
-	if article.SHA != "" {
-		payload.SHA = github.String(article.SHA)
+	if sha != "" {
+		payload.SHA = github.String(sha)
 		_, _, err := r.client.Repositories.UpdateFile(ctx, r.cfg.Owner, r.cfg.Repo, p, payload)
 		return err
 	}
@@ -190,19 +307,38 @@ func (r *GitHubRepository) SaveArticle(article *Article, commitMsg string) error
 	return err
 }
 
-func (r *GitHubRepository) DeleteArticle(slug, commitMsg string) error {
+// saveJSONFile creates or updates a non-markdown file at the given repo path
+// on the current branch. The SHA is empty for new files.
+func (r *GitHubRepository) saveJSONFile(p string, content []byte, commitMsg string) error {
 	ctx := context.Background()
-	art, err := r.GetArticle(slug)
-	if err != nil {
+	payload := &github.RepositoryContentFileOptions{
+		Content:   content,
+		Message:   github.String(commitMsg),
+		Branch:    github.String(r.cfg.branch()),
+		Committer: &github.CommitAuthor{Name: github.String("yo-port admin"), Email: github.String("admin@yo-port.local")},
+	}
+	// Attempt to fetch the existing file to detect create vs update.
+	opts := &github.RepositoryContentGetOptions{Ref: r.cfg.branch()}
+	existing, _, _, err := r.client.Repositories.GetContents(ctx, r.cfg.Owner, r.cfg.Repo, p, opts)
+	if err == nil && existing != nil {
+		payload.SHA = github.String(existing.GetSHA())
+		_, _, err = r.client.Repositories.UpdateFile(ctx, r.cfg.Owner, r.cfg.Repo, p, payload)
 		return err
 	}
-	p := r.articlePath(slug)
+	_, _, err = r.client.Repositories.CreateFile(ctx, r.cfg.Owner, r.cfg.Repo, p, payload)
+	return err
+}
+
+// deleteFile removes a markdown file under dir on the current branch.
+func (r *GitHubRepository) deleteFile(dir, slug, sha, commitMsg string) error {
+	ctx := context.Background()
+	p := r.articlePath(dir, slug)
 	payload := &github.RepositoryContentFileOptions{
 		Message: github.String(commitMsg),
-		SHA:     github.String(art.SHA),
+		SHA:     github.String(sha),
 		Branch:  github.String(r.cfg.branch()),
 	}
-	_, _, err = r.client.Repositories.DeleteFile(ctx, r.cfg.Owner, r.cfg.Repo, p, payload)
+	_, _, err := r.client.Repositories.DeleteFile(ctx, r.cfg.Owner, r.cfg.Repo, p, payload)
 	return err
 }
 
@@ -223,11 +359,16 @@ func (r *GitHubRepository) UploadMedia(fileName string, data []byte) (string, er
 	return fmt.Sprintf("![%s](/images/%s)", fileName, fileName), nil
 }
 
-func (r *GitHubRepository) articlePath(slug string) string {
-	return path.Join(r.cfg.articlesDir(), slug+".md")
+func (r *GitHubRepository) articlePath(dir, slug string) string {
+	return path.Join(dir, slug+".md")
 }
 
-func (r *GitHubRepository) download(ctx context.Context, p string) ([]byte, error) {
+func (r *GitHubRepository) projectPath(slug string) string {
+	return path.Join(r.cfg.projectsDir(), slug+".md")
+}
+
+func (r *GitHubRepository) download(p string) ([]byte, error) {
+	ctx := context.Background()
 	opts := &github.RepositoryContentGetOptions{Ref: r.cfg.branch()}
 	content, _, _, err := r.client.Repositories.GetContents(ctx, r.cfg.Owner, r.cfg.Repo, p, opts)
 	if err != nil {

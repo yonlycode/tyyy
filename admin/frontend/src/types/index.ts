@@ -14,6 +14,14 @@ export interface Article {
   body: string;
 }
 
+export interface Project {
+  slug: string;
+  path: string;
+  sha?: string;
+  frontmatter: Frontmatter;
+  body: string;
+}
+
 export interface Deployment {
   id: number;
   runNumber: number;
@@ -28,11 +36,31 @@ export interface Deployment {
   htmlUrl: string;
 }
 
+export interface Link {
+  id: string;
+  label: string;
+  url: string;
+  icon: string;
+  enabled: boolean;
+}
+
+export interface LinksData {
+  title: string;
+  subtitle: string;
+  links: Link[];
+}
+
+export const EMPTY_LINKS: LinksData = {
+  title: "Retrouvez-moi",
+  subtitle: "",
+  links: [],
+};
+
 export interface Config {
   configured: boolean;
   owner: string;
   repo: string;
-  dir: string;
+  baseDir: string;
   imgDir: string;
   branch: string;
 }
@@ -43,7 +71,7 @@ export interface PersistedConfig {
   token: string;
   owner: string;
   repo: string;
-  dir: string;
+  baseDir: string;
   imgDir: string;
   branch: string;
 }
@@ -52,7 +80,7 @@ export const DEFAULT_CONFIG = {
   token: "",
   owner: "yonlycode",
   repo: "tyyy",
-  dir: "web/content/articles",
+  baseDir: "web/content",
   imgDir: "web/public/images",
   branch: "main",
 };

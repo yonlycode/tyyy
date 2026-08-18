@@ -95,7 +95,7 @@ const links = [
   { href: '/', label: 'Accueil' },
   { href: '/portfolio/', label: 'Portfolio' },
   { href: '/articles/', label: 'Articles' },
-  { href: '/privacy/', label: 'Contact' },
+  { href: '/contact/', label: 'Contact' },
 ];
 
 export function Navbar() {

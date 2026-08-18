@@ -32,18 +32,27 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 /content/
   articles/     → .md/.mdx articles (3 published)
   projects/     → .md project summaries (2 entries)
+  links.json    → contact links for the linktree page (managed via admin)
 /src/
-  app/          → Next.js pages (page, articles/[slug], portfolio, privacy)
+  app/          → Next.js pages (page, articles/[slug], portfolio, privacy, contact)
   components/
     providers/  → ThemeProvider (Emotion wrapper)
     ui/         → Button, Card, Badge, Navbar, Footer (all Emotion styled)
+    contact/    → ContactView (linktree page) + LinkIcon (inline SVG icons)
     AnimatedFadeIn.tsx → motion.fade wrapper
     analytics.tsx → GA4 script injection
     index.ts    → UI barrel re-exports
   lib/
     md.ts       → getSortedArticles, getArticleBySlug
+    links.ts    → getLinks (reads content/links.json)
   styles/
     theme.ts    → M3 tokens (colors, elevation, radius)
 next.config.ts  → output: 'export', unoptimized images, trailingSlash
 package.json    → dependencies + devDependencies
 .gitignore      → standard Next.js ignores
+
+## Contact (linktree) page
+- Data source: `content/links.json` (`{ title, subtitle, links[] }`), read at build time by `src/lib/links.ts` → `getLinks()` (filters `enabled` links).
+- Route: `/contact/` (linked from the navbar); the `privacy` page remains separate.
+- UI: `src/components/contact/ContactView.tsx` renders a centered list of buttons; `LinkIcon.tsx` maps `icon` names (`github`, `linkedin`, `twitter`, `email`, `link`, fallback `link`) to inline SVGs.
+- Editable from the admin desktop app (see `admin/AGENTS.md`).

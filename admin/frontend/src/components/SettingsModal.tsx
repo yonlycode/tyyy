@@ -13,7 +13,7 @@ export default function SettingsModal({
   const [token, setToken] = useState("");
   const [owner, setOwner] = useState(DEFAULT_CONFIG.owner);
   const [repo, setRepo] = useState(DEFAULT_CONFIG.repo);
-  const [dir, setDir] = useState(DEFAULT_CONFIG.dir);
+  const [baseDir, setBaseDir] = useState(DEFAULT_CONFIG.baseDir);
   const [imgDir, setImgDir] = useState(DEFAULT_CONFIG.imgDir);
   const [branch, setBranch] = useState(DEFAULT_CONFIG.branch);
   const [error, setError] = useState("");
@@ -24,7 +24,7 @@ export default function SettingsModal({
       setToken(initialConfig.token);
       setOwner(initialConfig.owner);
       setRepo(initialConfig.repo);
-      setDir(initialConfig.dir);
+      setBaseDir(initialConfig.baseDir);
       setImgDir(initialConfig.imgDir);
       setBranch(initialConfig.branch);
     }
@@ -35,7 +35,7 @@ export default function SettingsModal({
     setError("");
     setBusy(true);
     try {
-      await api.setConfig({ token, owner, repo, dir, imgDir, branch });
+      await api.setConfig({ token, owner, repo, baseDir, imgDir, branch });
       onSaved();
     } catch (err) {
       setError((err as Error).message);
@@ -67,8 +67,8 @@ export default function SettingsModal({
           </label>
         </div>
         <label>
-          Articles directory
-          <input value={dir} onChange={(e) => setDir(e.target.value)} required />
+          Content base directory
+          <input value={baseDir} onChange={(e) => setBaseDir(e.target.value)} required />
         </label>
         <label>
           Images directory

@@ -3,7 +3,7 @@
 **Current date:** 2026-08-18
 
 ## Overview
-Standalone **desktop** admin CMS (Wails) for the `yo-port` site. Edits the Markdown articles in the GitHub repo and commits to `main`, which triggers the site's GH Pages rebuild. Also monitors those builds: a **Deployments** tab lists recent runs of the `deploy.yml` workflow (status/conclusion via the GH Actions API). Ships as a native desktop app: a Go backend whose methods are bound directly to an embedded React SPA (no HTTP server, no REST API).
+Standalone **desktop** admin CMS (Wails) for the `yo-port` site. Edits the Markdown content in the GitHub repo (articles **and** projects) and commits to `main`, which triggers the site's GH Pages rebuild. Also monitors those builds: a **Deployments** tab lists recent runs of the `deploy.yml` workflow (status/conclusion via the GH Actions API). Ships as a native desktop app: a Go backend whose methods are bound directly to an embedded React SPA (no HTTP server, no REST API).
 
 ## Stack & Conventions
 - **Desktop shell:** Wails v2 (`github.com/wailsapp/wails/v2`), configured in `wails.json`, entrypoint `main.go`
@@ -19,27 +19,36 @@ Standalone **desktop** admin CMS (Wails) for the `yo-port` site. Edits the Markd
 - **Markdown preview:** `remark` + `remark-html`
 
 ## Defaults
-- Articles dir: `web/content/articles`
+- Content base dir: `web/content` (configurable via `baseDir`)
+- Articles dir: `<baseDir>/articles`
+- Projects dir: `<baseDir>/projects`
+- Links file: `<baseDir>/links.json`
 - Images dir: `web/public/images`
 - Branch: `main`
 - Owner/repo: `yonlycode/tyyy`
 
 ## Content contract (aligned with `web/src/lib/md.ts`)
-Each article is `slug.md` with frontmatter `title`, `description`, `date`, `tags`, `published` (defaults to `true`). `published !== false` = visible on the site.
+Each article **or project** is `slug.md` with frontmatter `title`, `description`, `date`, `tags`, `published` (defaults to `true`). `published !== false` = visible on the site. Articles and projects share the same frontmatter shape for now, but keep them as **separate Go/TS models** (`Article`/`Project`) so they can diverge later.
 
 ## Bound methods (frontend calls these only, via `wailsjs/go/app/App`)
 | Method | Notes |
 |---|---|
 | `GetConfig()` | token never serialized back |
 | `SetConfig(content.Config)` | token kept in memory only |
-| `ListArticles()` | list metadata |
+| `ListArticles()` | list article metadata |
 | `GetArticle(slug)` | full article |
 | `SaveArticle(*content.Article)` | save/publish (commit) |
 | `DeleteArticle(slug)` | delete |
+| `ListProjects()` | list project metadata |
+| `GetProject(slug)` | full project |
+| `SaveProject(*content.Project)` | save/publish (commit) |
+| `DeleteProject(slug)` | delete |
+| `GetLinks()` | contact links data (JSON) |
+| `SaveLinks(*content.LinksData)` | save contact links (commit) |
 | `UploadMedia(fileName, dataB64)` | returns markdown ref |
 | `ListDeployments(limit)` | recent runs of the `deploy.yml` workflow |
 
-Errors are returned to the frontend as rejected Promises — surface sentinel errors from `pkg/content/article.go` (`ErrConflict`, `ErrNotFound`, …).
+Errors are returned to the frontend as rejected Promises — surface sentinel errors from `pkg/content` (`ErrConflict`, `ErrNotFound`, `ErrProjectNotFound`, …).
 
 ## Build / run
 - Dev: `cd admin && wails dev` (HMR, opens native window)
@@ -49,6 +58,8 @@ Errors are returned to the frontend as rejected Promises — surface sentinel er
 ## Rules
 - Always re-run `go vet ./...`, `gofmt -w .`, and `tsc` (`yarn build`) after changes; regenerate bindings via `wails build` if a bound method signature changed.
 - The PAT must never be logged, written to disk, or returned to the frontend.
-- Keep `pkg/content/article.go` frontmatter keys (yaml + json) in sync with `web/src/lib/md.ts`.
+- Keep `pkg/content/article.go` and `pkg/content/project.go` frontmatter keys (yaml + json) in sync with `web/src/lib/md.ts`.
+- Keep `pkg/content/links.go` JSON keys (`id`, `label`, `url`, `icon`, `enabled`, plus `title`/`subtitle` on the container) in sync with `web/src/lib/links.ts` and `web/content/links.json`.
+- `SaveLinks` reads-then-writes `links.json` via the repo (create vs update by existing SHA); the order of `LinksData.Links` defines display order on the site.
 - Don't commit `frontend/wailsjs` or `build/` — both gitignored.
 - Only add **exported** methods to `App` that you intend to expose; unexported helpers stay private.

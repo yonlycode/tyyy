@@ -12,6 +12,7 @@ This project began as a clean Next.js app bootstrapped with `create-next-app` an
 
 - 📝 **Article hub** — dynamically generated from Markdown files in `content/articles/`
 - 🛠️ **Project showcase** — curated portfolio items in `content/projects/`
+- 🔗 **Contact linktree** — a `/contact` page with all social links, configured via `content/links.json`
 - 🎨 **Material Design 3 UI** — themed with Emotion, using the M3 color & elevation token system
 - ✨ **Animated page transitions** — Framer Motion `AnimatedFadeIn` wrapper on all pages
 - 📊 **Google Analytics 4** — client-side audience metrics (IP-anonymized, no personal data)
@@ -31,6 +32,7 @@ This project began as a clean Next.js app bootstrapped with `create-next-app` an
 | **Responsive UI** | Card, Button, Badge, Navbar, Footer components — all Emotion styled with M3 tokens |
 | **Animated Fade-In** | `src/components/AnimatedFadeIn.tsx` uses `motion.div` with `initial={{opacity:0, y:15}}` |
 | **Dynamic Article Pages** | `[slug]` route with `generateStaticParams` + `generateMetadata` |
+| **Contact Page** | `/contact` linktree page driven by `content/links.json`, rendered with inline SVG icons |
 | **Privacy Page** | Standalone `/privacy` page explaining analytics, hosting, and legal mentions |
 | **GA4 Integration** | `src/components/analytics.tsx` injects the GA script only when `gaId` is set |
 | **Deploy Script** | `.github/workflows/deploy.yml` — full GitHub Pages pipeline with caching and concurrency guard |
@@ -96,9 +98,10 @@ content/
 │   ├── ai-architecture.md
 │   ├── typescript-best-practices.md
 │   └── web-performance.md
-└── projects/           # Portfolio items (.md/.mdx)
-    ├── portfolio-ai.md
-    └── portfolio-web-performance.md
+├── projects/           # Portfolio items (.md/.mdx)
+│   ├── portfolio-ai.md
+│   └── portfolio-web-performance.md
+└── links.json          # Contact/social links for the /contact linktree page
 ```
 
 ### Article Frontmatter (YAML)
@@ -119,6 +122,23 @@ The `reading-time` package automatically estimates read time from the content.
 ### Project Frontmatter
 Each `.md` file in `content/projects/` follows the same structure with `title`, `description`, `date`, and `tags`.
 
+### Contact Links (`content/links.json`)
+The `/contact` linktree page is driven by a single JSON file:
+
+```json
+{
+  "title": "Retrouvez-moi",
+  "subtitle": "Tous mes liens et réseaux au même endroit",
+  "links": [
+    { "id": "github", "label": "GitHub", "url": "https://github.com/...", "icon": "github", "enabled": true }
+  ]
+}
+```
+
+- `icon` selects the inline SVG in `src/components/contact/LinkIcon.tsx` (`github`, `linkedin`, `twitter`, `email`, `link`, fallback `link`).
+- `enabled: false` hides the link on the site (still editable in the JSON).
+- Link order in the array defines display order. Editable from the admin desktop app (`admin/`).
+
 ---
 
 ## 🌐 Pages
@@ -129,6 +149,7 @@ Each `.md` file in `content/projects/` follows the same structure with `title`, 
 | **Articles** | `/articles/` | Grid of all published articles with read-time badges |
 | **Article** | `/articles/[slug]/` | Dynamic page per article with full HTML content |
 | **Portfolio** | `/portfolio/` | Grid of highlighted projects |
+| **Contact** | `/contact/` | Linktree page of social/contact links from `content/links.json` |
 | **Privacy** | `/privacy/` | Legal mentions, hosting info, GA4 disclosure |
 
 ---

@@ -1,6 +1,6 @@
 # yo-port Admin
 
-Standalone **desktop** admin CMS for the **yo-port** portfolio & blog. It lets you create, edit, publish and delete the Markdown articles that live in the GitHub repo (`web/content/articles/*.md`), plus upload images — committing changes directly to the `main` branch so the site's CI/CD rebuilds automatically. A dedicated **Deployments** tab shows the status of those builds (recent `deploy.yml` workflow runs).
+Standalone **desktop** admin CMS for the **yo-port** portfolio & blog. It lets you create, edit, publish and delete the Markdown content that lives in the GitHub repo — **articles** (`web/content/articles/*.md`) and **projects** (`web/content/projects/*.md`) — manage the **contact links** (`web/content/links.json`) plus upload images, committing changes directly to the `main` branch so the site's CI/CD rebuilds automatically. A dedicated **Deployments** tab shows the status of those builds (recent `deploy.yml` workflow runs).
 
 Built with **[Wails](https://wails.io/)**: a Go backend whose methods are bound directly to a React frontend embedded into a **single native desktop binary** (no server, no browser tab).
 
@@ -11,6 +11,8 @@ Built with **[Wails](https://wails.io/)**: a Go backend whose methods are bound 
 | Feature | Description |
 |---|---|
 | **Article management** | List, create, edit, publish/draft and delete articles stored in the repo |
+| **Project management** | Same workflow for portfolio projects, in its own tab |
+| **Contact links** | A **Links** tab to add, edit, toggle, delete and reorder (↑/↓) the links shown on the site's `/contact` page (`web/content/links.json`) |
 | **Markdown editor** | Textarea with live preview (via `remark` + `remark-html`) |
 | **Frontmatter editing** | `title`, `description`, `date`, `tags`, `published` toggle |
 | **Image upload** | Drag & drop / picker → uploaded to `web/public/images`, inserts `![name](/images/x)` |
@@ -44,13 +46,15 @@ admin/
 │   │   └── app.go          # App struct — bound Go methods (GetConfig, SaveArticle, …)
 │   └── content/
 │       ├── article.go      # Article model, frontmatter parsing, Repository interface
-│       └── github_repo.go  # GitHub REST implementation (list/get/save/delete/upload)
+│       ├── project.go      # Project model, frontmatter parsing
+│       ├── links.go        # Contact links model (LinksData/Link) + JSON render
+│       └── github_repo.go  # GitHub REST implementation (list/get/save/delete/upload/links)
 └── frontend/               # React + Vite + TS SPA
     ├── wailsjs/            # Auto-generated bindings (do not edit; gitignored)
     └── src/
         ├── services/api.ts # Thin wrapper around the generated Wails bindings
-        ├── types/index.ts  # Article / Config types
-        └── components/     # SettingsModal, ArticleList, ArticleEditor, ImageUploader, Deployments
+        ├── types/index.ts  # Article / Project / LinksData / Config types
+        └── components/     # SettingsModal, ArticleList, ArticleEditor, ProjectList, ProjectEditor, LinksEditor, ImageUploader, Deployments
 ```
 
 ---
@@ -101,11 +105,17 @@ The frontend calls these Go methods via the auto-generated bindings in `frontend
 | Method | Description |
 |---|---|
 | `GetConfig()` | Whether the app is configured (token never returned) |
-| `SetConfig(cfg)` | Set token + owner + repo + directories (kept in memory) |
+| `SetConfig(cfg)` | Set token + owner + repo + content base dir + dirs (kept in memory) |
 | `ListArticles()` | List all articles |
 | `GetArticle(slug)` | Fetch a single article |
 | `SaveArticle(article)` | Save / publish an article (commit to `main`) |
 | `DeleteArticle(slug)` | Delete an article |
+| `ListProjects()` | List all projects |
+| `GetProject(slug)` | Fetch a single project |
+| `SaveProject(project)` | Save / publish a project (commit to `main`) |
+| `DeleteProject(slug)` | Delete a project |
+| `GetLinks()` | Fetch the contact links data (`web/content/links.json`) |
+| `SaveLinks(data)` | Save contact links (commit to `main`) |
 | `UploadMedia(fileName, dataB64)` | Upload an image → returns `![name](/images/x)` |
 | `ListDeployments(limit)` | Recent runs of the `deploy.yml` deploy workflow |
 
@@ -116,7 +126,7 @@ The frontend calls these Go methods via the auto-generated bindings in `frontend
 ## 🔐 Security
 
 - The GitHub PAT is stored in **Go process memory only** — never written to disk and never exposed to the browser DOM.
-- The default target is `web/content/articles` on branch `main` (configurable in the settings modal).
+- The default content base directory is `web/content` — articles and projects resolve to `<baseDir>/articles` and `<baseDir>/projects` respectively, and contact links to `<baseDir>/links.json` (configurable in the settings modal).
 - On a 409 conflict (file changed on GitHub), the UI asks you to reload before saving again.
 
 ---
