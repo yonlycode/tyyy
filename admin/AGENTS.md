@@ -5,6 +5,8 @@
 ## Overview
 Standalone **desktop** admin CMS (Wails) for the `yo-port` site. Edits the Markdown content in the GitHub repo (articles **and** projects) and commits to `main`, which triggers the site's GH Pages rebuild. Also monitors those builds: a **Deployments** tab lists recent runs of the `deploy.yml` workflow (status/conclusion via the GH Actions API). Ships as a native desktop app: a Go backend whose methods are bound directly to an embedded React SPA (no HTTP server, no REST API).
 
+
+
 ## Stack & Conventions
 - **Desktop shell:** Wails v2 (`github.com/wailsapp/wails/v2`), configured in `wails.json`, entrypoint `main.go`
 - **Backend:** Go 1.26. Bound methods live on the `App` struct in `pkg/app/app.go`; only **exported** methods are bound
