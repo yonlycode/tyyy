@@ -1,6 +1,6 @@
 # yo-port Admin
 
-Standalone **desktop** admin CMS for the **yo-port** portfolio & blog. It lets you create, edit, publish and delete the Markdown articles that live in the GitHub repo (`web/content/articles/*.md`), plus upload images — committing changes directly to the `main` branch so the site's CI/CD rebuilds automatically.
+Standalone **desktop** admin CMS for the **yo-port** portfolio & blog. It lets you create, edit, publish and delete the Markdown articles that live in the GitHub repo (`web/content/articles/*.md`), plus upload images — committing changes directly to the `main` branch so the site's CI/CD rebuilds automatically. A dedicated **Deployments** tab shows the status of those builds (recent `deploy.yml` workflow runs).
 
 Built with **[Wails](https://wails.io/)**: a Go backend whose methods are bound directly to a React frontend embedded into a **single native desktop binary** (no server, no browser tab).
 
@@ -15,6 +15,7 @@ Built with **[Wails](https://wails.io/)**: a Go backend whose methods are bound 
 | **Frontmatter editing** | `title`, `description`, `date`, `tags`, `published` toggle |
 | **Image upload** | Drag & drop / picker → uploaded to `web/public/images`, inserts `![name](/images/x)` |
 | **GitHub commits** | Every save = direct commit to `main` → GH Actions redeploys the site |
+| **Deployment tracking** | Tracks recent runs of the `deploy.yml` workflow (status/conclusion) in a dedicated tab |
 | **No backend secrets on disk** | The GitHub PAT is kept in Go process memory only |
 | **Native desktop app** | React build embedded via `go:embed`; Go methods bound via Wails IPC |
 
@@ -49,7 +50,7 @@ admin/
     └── src/
         ├── services/api.ts # Thin wrapper around the generated Wails bindings
         ├── types/index.ts  # Article / Config types
-        └── components/     # SettingsModal, ArticleList, ArticleEditor, ImageUploader
+        └── components/     # SettingsModal, ArticleList, ArticleEditor, ImageUploader, Deployments
 ```
 
 ---
@@ -60,7 +61,7 @@ admin/
 - Go 1.26+
 - Node.js 22+ LTS (corepack) + Yarn 1.22
 - [Wails CLI](https://wails.io/docs/gettingstarted/installation) + system deps (`wails doctor`)
-- A GitHub **Personal Access Token** with `repo` scope (contents read/write)
+- A GitHub **Personal Access Token** with `repo` scope (contents read/write + Actions read for deployment tracking)
 
 ### Install
 ```bash
@@ -106,6 +107,7 @@ The frontend calls these Go methods via the auto-generated bindings in `frontend
 | `SaveArticle(article)` | Save / publish an article (commit to `main`) |
 | `DeleteArticle(slug)` | Delete an article |
 | `UploadMedia(fileName, dataB64)` | Upload an image → returns `![name](/images/x)` |
+| `ListDeployments(limit)` | Recent runs of the `deploy.yml` deploy workflow |
 
 > Regenerate bindings after changing a bound method signature: `cd admin && wails build` regenerates them automatically. Keep `frontend/wailsjs` in `tsconfig.json`'s `include`.
 

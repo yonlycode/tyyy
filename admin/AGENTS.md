@@ -3,7 +3,7 @@
 **Current date:** 2026-08-18
 
 ## Overview
-Standalone **desktop** admin CMS (Wails) for the `yo-port` site. Edits the Markdown articles in the GitHub repo and commits to `main`, which triggers the site's GH Pages rebuild. Ships as a native desktop app: a Go backend whose methods are bound directly to an embedded React SPA (no HTTP server, no REST API).
+Standalone **desktop** admin CMS (Wails) for the `yo-port` site. Edits the Markdown articles in the GitHub repo and commits to `main`, which triggers the site's GH Pages rebuild. Also monitors those builds: a **Deployments** tab lists recent runs of the `deploy.yml` workflow (status/conclusion via the GH Actions API). Ships as a native desktop app: a Go backend whose methods are bound directly to an embedded React SPA (no HTTP server, no REST API).
 
 ## Stack & Conventions
 - **Desktop shell:** Wails v2 (`github.com/wailsapp/wails/v2`), configured in `wails.json`, entrypoint `main.go`
@@ -37,6 +37,7 @@ Each article is `slug.md` with frontmatter `title`, `description`, `date`, `tags
 | `SaveArticle(*content.Article)` | save/publish (commit) |
 | `DeleteArticle(slug)` | delete |
 | `UploadMedia(fileName, dataB64)` | returns markdown ref |
+| `ListDeployments(limit)` | recent runs of the `deploy.yml` workflow |
 
 Errors are returned to the frontend as rejected Promises — surface sentinel errors from `pkg/content/article.go` (`ErrConflict`, `ErrNotFound`, …).
 

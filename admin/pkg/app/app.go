@@ -172,6 +172,15 @@ func (a *App) ListArticles() ([]*content.Article, error) {
 	return repo.ListArticles()
 }
 
+// ListDeployments returns the most recent runs of the deploy workflow.
+func (a *App) ListDeployments(limit int) ([]*content.Deployment, error) {
+	repo := a.repoOr()
+	if repo == nil {
+		return nil, errNotConfigured
+	}
+	return repo.ListDeployments(limit)
+}
+
 func (a *App) GetArticle(slug string) (*content.Article, error) {
 	repo := a.repoOr()
 	if repo == nil {

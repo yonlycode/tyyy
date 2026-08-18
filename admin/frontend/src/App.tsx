@@ -1,11 +1,15 @@
 import { useState } from "react";
-import type { Article } from "./types";
+import type { Article, Deployment } from "./types";
 import { api } from "./services/api";
 import { useAdminData } from "./hooks/useAdminData";
 import SettingsModal from "./components/SettingsModal";
 import SettingsPage from "./components/SettingsPage";
 import ArticleList from "./components/ArticleList";
 import ArticleEditor from "./components/ArticleEditor";
+import Deployments from "./components/Deployments";
+import DeleteConfirmModal from "./components/DeleteConfirmModal";
+
+type Tab = "articles" | "deployments";
 
 export default function App() {
   const { config, cachedConfig, articles, error, loading, setError, loadArticles, onConfigSaved } =
@@ -13,7 +17,30 @@ export default function App() {
   const [editing, setEditing] = useState<Article | null>(null);
   const [creating, setCreating] = useState(false);
   const [busySlug, setBusySlug] = useState<string | null>(null);
+  const [confirmSlug, setConfirmSlug] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
+  const [activeTab, setActiveTab] = useState<Tab>("articles");
+  const [deployments, setDeployments] = useState<Deployment[]>([]);
+  const [deployLoading, setDeployLoading] = useState(false);
+
+  async function loadDeployments() {
+    setDeployLoading(true);
+    setError("");
+    try {
+      setDeployments(await api.listDeployments());
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setDeployLoading(false);
+    }
+  }
+
+  function onSelectTab(tab: Tab) {
+    setActiveTab(tab);
+    if (tab === "deployments" && deployments.length === 0) {
+      void loadDeployments();
+    }
+  }
 
   async function onSavedConfig() {
     await onConfigSaved();
@@ -44,8 +71,12 @@ export default function App() {
     setCreating(false);
   }
 
-  async function onDelete(article: Article) {
-    if (!window.confirm(`Delete "${article.slug}"?`)) return;
+  function onDelete(article: Article) {
+    setConfirmSlug(article.slug);
+  }
+
+  async function onDeleteConfirmed(article: Article) {
+    setConfirmSlug(null);
     setBusySlug(article.slug);
     setError("");
     try {
@@ -57,6 +88,13 @@ export default function App() {
       setBusySlug(null);
     }
   }
+
+  async function onDeleteArticle(article: Article) {
+    await api.deleteArticle(article.slug);
+    await loadArticles();
+  }
+
+  const confirmTarget = confirmSlug ? articles.find((a) => a.slug === confirmSlug) : null;
 
   // Not configured yet — show the connection modal
   if (!config?.configured) {
@@ -74,12 +112,13 @@ export default function App() {
         article={null}
         onBack={onBack}
         onSaved={onSaved}
+        onDelete={onDeleteArticle}
       />
     );
   }
 
   if (editing) {
-    return <ArticleEditor article={editing} onBack={onBack} onSaved={onSaved} />;
+    return <ArticleEditor article={editing} onBack={onBack} onSaved={onSaved} onDelete={onDeleteArticle} />;
   }
 
   return (
@@ -93,15 +132,46 @@ export default function App() {
           Settings
         </button>
       </header>
+      <nav className="tabs">
+        <button
+          className={activeTab === "articles" ? "active" : ""}
+          onClick={() => onSelectTab("articles")}
+        >
+          Articles
+        </button>
+        <button
+          className={activeTab === "deployments" ? "active" : ""}
+          onClick={() => onSelectTab("deployments")}
+        >
+          Deployments
+        </button>
+      </nav>
       {error && <p className="error">{error}</p>}
-      {loading && <p className="hint">Loading articles…</p>}
-      <ArticleList
-        articles={articles}
-        onEdit={onEdit}
-        onCreate={onCreate}
-        onDelete={onDelete}
-        busySlug={busySlug}
-      />
+      {activeTab === "articles" && (
+        <>
+          {loading && <p className="hint">Loading articles…</p>}
+          <ArticleList
+            articles={articles}
+            onEdit={onEdit}
+            onCreate={onCreate}
+            onDelete={onDelete}
+            busySlug={busySlug}
+          />
+        </>
+      )}
+      {activeTab === "deployments" && (
+        <>
+          {deployLoading && <p className="hint">Loading deployments…</p>}
+          <Deployments deployments={deployments} busy={deployLoading} onRefresh={loadDeployments} />
+        </>
+      )}
+      {confirmTarget && (
+        <DeleteConfirmModal
+          article={confirmTarget}
+          onCancel={() => setConfirmSlug(null)}
+          onConfirm={onDeleteConfirmed}
+        />
+      )}
     </div>
   );
 }

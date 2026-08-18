@@ -14,6 +14,20 @@ export interface Article {
   body: string;
 }
 
+export interface Deployment {
+  id: number;
+  runNumber: number;
+  displayTitle: string;
+  status: string;
+  conclusion: string;
+  headSha: string;
+  headBranch: string;
+  event: string;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  htmlUrl: string;
+}
+
 export interface Config {
   configured: boolean;
   owner: string;

@@ -9,6 +9,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/google/go-github/v60/github"
 	"golang.org/x/oauth2"
@@ -48,6 +49,24 @@ func (c Config) branch() string {
 	return "main"
 }
 
+// Deployment represents a single run of the deploy workflow.
+type Deployment struct {
+	ID           int64   `json:"id"`
+	RunNumber    int     `json:"runNumber"`
+	DisplayTitle string  `json:"displayTitle"`
+	Status       string  `json:"status"`
+	Conclusion   string  `json:"conclusion"`
+	HeadSHA      string  `json:"headSha"`
+	HeadBranch   string  `json:"headBranch"`
+	Event        string  `json:"event"`
+	CreatedAt    *string `json:"createdAt"`
+	UpdatedAt    *string `json:"updatedAt"`
+	HTMLURL      string  `json:"htmlUrl"`
+}
+
+// DeployWorkflowFileName is the GH Actions workflow that deploys the site.
+const DeployWorkflowFileName = "deploy.yml"
+
 // GitHubRepository implements Repository on top of the GitHub REST API.
 type GitHubRepository struct {
 	cfg    Config
@@ -61,6 +80,46 @@ func NewGitHubRepository(cfg Config) (*GitHubRepository, error) {
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: cfg.Token})
 	tc := oauth2.NewClient(context.Background(), ts)
 	return &GitHubRepository{cfg: cfg, client: github.NewClient(tc)}, nil
+}
+
+// ListDeployments returns the most recent runs of the deploy workflow.
+func (r *GitHubRepository) ListDeployments(limit int) ([]*Deployment, error) {
+	if limit <= 0 {
+		limit = 10
+	}
+	ctx := context.Background()
+	opts := &github.ListWorkflowRunsOptions{
+		Branch:      r.cfg.branch(),
+		ListOptions: github.ListOptions{PerPage: limit},
+	}
+	runs, _, err := r.client.Actions.ListWorkflowRunsByFileName(ctx, r.cfg.Owner, r.cfg.Repo, DeployWorkflowFileName, opts)
+	if err != nil {
+		return nil, err
+	}
+	var out []*Deployment
+	for _, run := range runs.WorkflowRuns {
+		d := &Deployment{
+			ID:           run.GetID(),
+			RunNumber:    run.GetRunNumber(),
+			DisplayTitle: run.GetDisplayTitle(),
+			Status:       run.GetStatus(),
+			Conclusion:   run.GetConclusion(),
+			HeadSHA:      run.GetHeadSHA(),
+			HeadBranch:   run.GetHeadBranch(),
+			Event:        run.GetEvent(),
+			HTMLURL:      run.GetHTMLURL(),
+		}
+		if t := run.GetCreatedAt(); !t.IsZero() {
+			s := t.Time.Format(time.RFC3339)
+			d.CreatedAt = &s
+		}
+		if t := run.GetUpdatedAt(); !t.IsZero() {
+			s := t.Time.Format(time.RFC3339)
+			d.UpdatedAt = &s
+		}
+		out = append(out, d)
+	}
+	return out, nil
 }
 
 // ListArticles returns metadata for every markdown file in the articles dir.
