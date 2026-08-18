@@ -118,3 +118,25 @@ td.actions { display: flex; gap: 6px; }
 
 .uploader { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .uploader input[type="file"] { display: none; }
+
+header .settings-btn {
+  margin-left: auto;
+}
+
+.settings-page { width: 520px; }
+
+.settings-list {
+  margin: 0 0 20px;
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 6px 16px;
+  font-size: 14px;
+}
+.settings-list dt { color: var(--muted); font-weight: 500; }
+.settings-list dd { color: var(--text); }
+.settings-list .token-hidden {
+  font-family: monospace;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+

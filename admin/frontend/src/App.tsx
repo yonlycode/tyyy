@@ -1,34 +1,23 @@
-import { useEffect, useState } from "react";
-import type { Article, Config } from "./types";
+import { useState } from "react";
+import type { Article } from "./types";
 import { api } from "./services/api";
+import { useAdminData } from "./hooks/useAdminData";
 import SettingsModal from "./components/SettingsModal";
+import SettingsPage from "./components/SettingsPage";
 import ArticleList from "./components/ArticleList";
 import ArticleEditor from "./components/ArticleEditor";
 
 export default function App() {
-  const [config, setConfig] = useState<Config | null>(null);
-  const [articles, setArticles] = useState<Article[]>([]);
+  const { config, cachedConfig, articles, error, loading, setError, loadArticles, onConfigSaved } =
+    useAdminData();
   const [editing, setEditing] = useState<Article | null>(null);
   const [creating, setCreating] = useState(false);
   const [busySlug, setBusySlug] = useState<string | null>(null);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    api.getConfig().then(setConfig).catch(() => setConfig(null));
-  }, []);
-
-  async function loadArticles() {
-    try {
-      setArticles(await api.listArticles());
-    } catch (err) {
-      setError((err as Error).message);
-    }
-  }
+  const [showSettings, setShowSettings] = useState(false);
 
   async function onSavedConfig() {
-    const cfg = await api.getConfig();
-    setConfig(cfg);
-    await loadArticles();
+    await onConfigSaved();
+    setShowSettings(false);
   }
 
   function onEdit(article: Article) {
@@ -69,8 +58,14 @@ export default function App() {
     }
   }
 
+  // Not configured yet — show the connection modal
   if (!config?.configured) {
-    return <SettingsModal onSaved={onSavedConfig} />;
+    return <SettingsModal onSaved={onSavedConfig} initialConfig={cachedConfig || undefined} />;
+  }
+
+  // Settings modal overlay
+  if (showSettings) {
+    return <SettingsPage config={config} onBack={() => setShowSettings(false)} />;
   }
 
   if (creating) {
@@ -90,12 +85,16 @@ export default function App() {
   return (
     <div className="app">
       <header>
-        <h1>yo-port admin</h1>
+        <h1>tyyy admin</h1>
         <span className="repo">
           {config.owner}/{config.repo} · {config.branch}
         </span>
+        <button className="settings-btn" onClick={() => setShowSettings(true)} title="Settings">
+          Settings
+        </button>
       </header>
       {error && <p className="error">{error}</p>}
+      {loading && <p className="hint">Loading articles…</p>}
       <ArticleList
         articles={articles}
         onEdit={onEdit}

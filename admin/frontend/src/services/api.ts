@@ -2,13 +2,14 @@ import {
   DeleteArticle,
   GetArticle,
   GetConfig,
+  GetFullConfig,
   ListArticles,
   SaveArticle,
   SetConfig,
   UploadMedia,
 } from "../../wailsjs/go/app/App";
 import type { content } from "../../wailsjs/go/models";
-import type { Article, Config } from "../types";
+import type { Article, Config, PersistedConfig } from "../types";
 
 export interface SetConfigPayload {
   token: string;
@@ -27,4 +28,5 @@ export const api = {
   saveArticle: (article: Article) => SaveArticle(article as unknown as content.Article),
   deleteArticle: (slug: string) => DeleteArticle(slug),
   uploadImage: (fileName: string, data: string) => UploadMedia(fileName, data),
+  loadConfig: () => GetFullConfig() as Promise<PersistedConfig | null>,
 };

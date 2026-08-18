@@ -23,9 +23,21 @@ export interface Config {
   branch: string;
 }
 
+// PersistedConfig mirrors the backend Config struct for cache operations.
+// It includes the token so the settings form is fully pre-filled on restart.
+export interface PersistedConfig {
+  token: string;
+  owner: string;
+  repo: string;
+  dir: string;
+  imgDir: string;
+  branch: string;
+}
+
 export const DEFAULT_CONFIG = {
+  token: "",
   owner: "yonlycode",
-  repo: "tyy",
+  repo: "tyyy",
   dir: "web/content/articles",
   imgDir: "web/public/images",
   branch: "main",

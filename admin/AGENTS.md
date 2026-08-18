@@ -22,7 +22,7 @@ Standalone **desktop** admin CMS (Wails) for the `yo-port` site. Edits the Markd
 - Articles dir: `web/content/articles`
 - Images dir: `web/public/images`
 - Branch: `main`
-- Owner/repo: `yoannfort/yo-port`
+- Owner/repo: `yonlycode/tyyy`
 
 ## Content contract (aligned with `web/src/lib/md.ts`)
 Each article is `slug.md` with frontmatter `title`, `description`, `date`, `tags`, `published` (defaults to `true`). `published !== false` = visible on the site.

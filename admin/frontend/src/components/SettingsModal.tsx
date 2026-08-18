@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DEFAULT_CONFIG } from "../types";
+import type { PersistedConfig } from "../types";
 import { api } from "../services/api";
 
 export default function SettingsModal({
   onSaved,
+  initialConfig,
 }: {
   onSaved: () => void;
+  initialConfig?: PersistedConfig;
 }) {
   const [token, setToken] = useState("");
   const [owner, setOwner] = useState(DEFAULT_CONFIG.owner);
@@ -15,6 +18,17 @@ export default function SettingsModal({
   const [branch, setBranch] = useState(DEFAULT_CONFIG.branch);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (initialConfig) {
+      setToken(initialConfig.token);
+      setOwner(initialConfig.owner);
+      setRepo(initialConfig.repo);
+      setDir(initialConfig.dir);
+      setImgDir(initialConfig.imgDir);
+      setBranch(initialConfig.branch);
+    }
+  }, [initialConfig]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -35,7 +49,8 @@ export default function SettingsModal({
       <form className="modal" onSubmit={submit}>
         <h2>GitHub connection</h2>
         <p className="hint">
-          The token is kept in the Go process memory and never stored on disk.
+          Configuration is saved to disk so the form is pre-filled on restart.
+          The token is also cached — store it securely.
         </p>
         <label>
           Personal Access Token

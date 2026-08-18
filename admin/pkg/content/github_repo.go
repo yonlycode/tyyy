@@ -2,9 +2,12 @@ package content
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/google/go-github/v60/github"
@@ -12,7 +15,9 @@ import (
 )
 
 // Config holds the GitHub connection details supplied through the admin UI.
-// The token is kept in memory only and never persisted to disk.
+// When a connection is successfully established, the full config (including
+// the token) is persisted to disk in a cache file at ~/.tyyy-admin/config.json
+// so that the settings form is fully pre-filled on subsequent sessions.
 type Config struct {
 	Token  string `json:"token"`
 	Owner  string `json:"owner"`
@@ -174,4 +179,51 @@ func (r *GitHubRepository) download(ctx context.Context, p string) ([]byte, erro
 		return nil, err
 	}
 	return []byte(decoded), nil
+}
+
+// ConfigCachePath returns the path to the config cache file.
+func ConfigCachePath() (string, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", fmt.Errorf("config cache: %w", err)
+	}
+	return filepath.Join(home, ".tyyy-admin", "config.json"), nil
+}
+
+// LoadConfig reads and returns the persisted config from disk.
+// Returns nil if the file does not exist.
+func LoadConfig() (*Config, error) {
+	cfgPath, err := ConfigCachePath()
+	if err != nil {
+		return nil, err
+	}
+	data, err := os.ReadFile(cfgPath)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("load config: %w", err)
+	}
+	var cfg Config
+	if err := json.Unmarshal(data, &cfg); err != nil {
+		return nil, fmt.Errorf("load config: %w", err)
+	}
+	return &cfg, nil
+}
+
+// SaveConfig writes the config to disk in ~/.tyyy-admin/config.json.
+func SaveConfig(cfg Config) error {
+	cfgPath, err := ConfigCachePath()
+	if err != nil {
+		return err
+	}
+	dir := filepath.Dir(cfgPath)
+	if err := os.MkdirAll(dir, 0o700); err != nil {
+		return fmt.Errorf("save config: %w", err)
+	}
+	data, err := json.Marshal(cfg)
+	if err != nil {
+		return fmt.Errorf("save config: %w", err)
+	}
+	return os.WriteFile(cfgPath, data, 0o600)
 }

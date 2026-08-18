@@ -82,9 +82,9 @@ func (a *Article) Render() []byte {
 
 // Sentinel errors surfaced to the UI.
 var (
-	ErrNotFound     = errors.New("article not found")
-	ErrSlugRequired = errors.New("slug is required")
-	ErrConflict     = errors.New("conflict: the file changed on GitHub, reload before saving again")
+	ErrNotFound      = errors.New("article not found")
+	ErrSlugRequired  = errors.New("slug is required")
+	ErrConflict      = errors.New("conflict: the file changed on GitHub, reload before saving again")
 	ErrMediaRequired = errors.New("fileName and data are required")
 )
 
