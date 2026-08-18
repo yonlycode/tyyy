@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import styled from '@emotion/styled';
 import { m3Theme } from '@/styles/theme';
 
@@ -73,7 +74,7 @@ export const SmallButton = styled(Button)({
 });
 
 /** Filled button rendered as an anchor link */
-export const ButtonLink = styled('a')({
+export const ButtonLink = styled(Link)({
   background: m3Theme.colors.primary,
   color: m3Theme.colors.onPrimary,
   border: 'none',
@@ -103,7 +104,7 @@ export const ButtonLink = styled('a')({
 });
 
 /** Outlined button rendered as an anchor link */
-export const OutlineButtonLink = styled('a')({
+export const OutlineButtonLink = styled(Link)({
   background: 'transparent',
   border: `2px solid ${m3Theme.colors.primary}`,
   color: m3Theme.colors.primary,
@@ -114,7 +115,7 @@ export const OutlineButtonLink = styled('a')({
   cursor: 'pointer',
   textDecoration: 'none',
   display: 'inline-block',
-  transition: 'background 0.2s ease, transform 0.1s ease, color 0.2s ease',
+  transition: 'background 0.2s ease, color 0.2s ease, transform 0.2s ease, border-color 0.2s ease',
 
   '&:hover': {
     background: m3Theme.colors.primaryContainer,

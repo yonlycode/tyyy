@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import styled from '@emotion/styled';
 import { AnimatedFadeIn } from '@/components/AnimatedFadeIn';
 import type { ArticleMeta } from '@/lib/md';
@@ -21,7 +22,7 @@ const ArticleGrid = styled('div')({
   '@media (max-width: 900px)': { gridTemplateColumns: '1fr' },
 });
 
-const ArticleLink = styled('a')({
+const ArticleLink = styled(Link)({
   textDecoration: 'none',
   display: 'block',
   height: '100%',
@@ -62,7 +63,7 @@ const ReadMore = styled('span')({
   [`${ArticleLink}:hover &`]: { color: m3Theme.colors.brandAccent },
 });
 
-const ArrowLink = styled('a')({
+const ArrowLink = styled(Link)({
   display: 'inline-flex',
   alignItems: 'center',
   gap: m3Theme.spacing.sm,
@@ -90,7 +91,7 @@ export function ArticlesPreview({ articles }: { articles: ArticleMeta[] }) {
             <Eyebrow>Blog</Eyebrow>
             <SectionTitle>Derniers articles</SectionTitle>
             <SectionSubtitle>
-              Mes réflexions sur l’architecture IA, les performances et le développement web.
+              Mes réflexions sur l'architecture IA, les performances et le développement web.
             </SectionSubtitle>
           </SectionHeader>
         </AnimatedFadeIn>

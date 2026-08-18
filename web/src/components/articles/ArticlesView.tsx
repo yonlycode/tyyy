@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import styled from '@emotion/styled';
 import { AnimatedFadeIn } from '@/components/AnimatedFadeIn';
 import type { ArticleMeta } from '@/lib/md';
@@ -13,7 +14,6 @@ import {
   SectionSubtitle,
   FeatureCard,
   Badge,
-  OutlineButtonLink,
 } from '@/components/ui';
 
 const ArticleGrid = styled('div')({
@@ -23,7 +23,7 @@ const ArticleGrid = styled('div')({
   '@media (max-width: 900px)': { gridTemplateColumns: '1fr' },
 });
 
-const ArticleLink = styled('a')({
+const ArticleLink = styled(Link)({
   textDecoration: 'none',
   display: 'block',
   height: '100%',
@@ -71,7 +71,7 @@ export function ArticlesView({ articles }: { articles: ArticleMeta[] }) {
             <Eyebrow>Blog</Eyebrow>
             <SectionTitle>Articles &amp; billets</SectionTitle>
             <SectionSubtitle>
-              Mes écrits sur l’architecture IA, la performance et le développement web.
+              Mes écrits sur l'architecture IA, la performance et le développement web.
             </SectionSubtitle>
           </SectionHeader>
         </AnimatedFadeIn>
@@ -118,12 +118,22 @@ export function ArticlesView({ articles }: { articles: ArticleMeta[] }) {
         </ArticleGrid>
 
         <FooterRow>
-          <OutlineButtonLink
+          <a
             href="/"
-            style={{ borderColor: m3Theme.colors.primary, color: m3Theme.colors.primary }}
+            style={{
+              textDecoration: 'none',
+              border: `2px solid ${m3Theme.colors.primary}`,
+              color: m3Theme.colors.primary,
+              borderRadius: m3Theme.radius.medium,
+              padding: '0.875rem 1.5rem',
+              fontSize: '1rem',
+              fontWeight: 500,
+              cursor: 'pointer',
+              display: 'inline-block',
+            }}
           >
-            ← Retour à l’accueil
-          </OutlineButtonLink>
+            ← Retour à l'accueil
+          </a>
         </FooterRow>
       </Container>
     </Section>

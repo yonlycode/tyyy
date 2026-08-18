@@ -1,16 +1,17 @@
 'use client';
 
+import Link from 'next/link';
 import styled from '@emotion/styled';
 import { AnimatedFadeIn } from '@/components/AnimatedFadeIn';
 import type { Article } from '@/lib/md';
 import { m3Theme } from '@/styles/theme';
-import { Container, Card, Badge, OutlineButtonLink } from '@/components/ui';
+import { Container, Card, Badge } from '@/components/ui';
 
 const Wrapper = styled('div')({
   paddingBlock: m3Theme.spacing.xxl,
 });
 
-const BackLink = styled('a')({
+const BackLink = styled(Link)({
   display: 'inline-flex',
   alignItems: 'center',
   gap: m3Theme.spacing.sm,
@@ -92,12 +93,22 @@ export function ProjectDetailView({ project }: { project: Article }) {
               dangerouslySetInnerHTML={{ __html: project.contentHtml }}
             />
             <FooterBar>
-              <OutlineButtonLink
+              <a
                 href="/portfolio/"
-                style={{ borderColor: m3Theme.colors.primary, color: m3Theme.colors.primary }}
+                style={{
+                  textDecoration: 'none',
+                  border: `2px solid ${m3Theme.colors.primary}`,
+                  color: m3Theme.colors.primary,
+                  borderRadius: m3Theme.radius.medium,
+                  padding: '0.875rem 1.5rem',
+                  fontSize: '1rem',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  display: 'inline-block',
+                }}
               >
                 ← Retour au portfolio
-              </OutlineButtonLink>
+              </a>
             </FooterBar>
           </Card>
         </AnimatedFadeIn>
