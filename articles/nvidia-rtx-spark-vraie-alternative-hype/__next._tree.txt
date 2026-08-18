@@ -1,2 +1,2 @@
-:HL["/_next/static/chunks/2rk3-kn1ot74n.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"articles","param":null,"prefetchHints":4192,"slots":{"children":{"name":"slug","param":{"type":"d","key":"nvidia-rtx-spark-vraie-alternative-hype","siblings":[]},"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}}}},"staleTime":300,"buildId":"aFGjuhtwQqy8_P5lYJWxi"}
+:HL["/tyyy/_next/static/chunks/2rk3-kn1ot74n.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"articles","param":null,"prefetchHints":4192,"slots":{"children":{"name":"slug","param":{"type":"d","key":"nvidia-rtx-spark-vraie-alternative-hype","siblings":[]},"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}}}},"staleTime":300,"buildId":"Vv56B8ku55_BvqWryx07e"}
