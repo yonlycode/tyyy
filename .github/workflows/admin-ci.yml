@@ -1,0 +1,58 @@
+name: Admin CI
+
+on:
+  push:
+    branches: ["main"]
+    paths: ["admin/**"]
+  pull_request:
+    paths: ["admin/**"]
+  workflow_dispatch:
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./admin
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: admin/go.mod
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "yarn"
+          cache-dependency-path: admin/frontend/yarn.lock
+
+      - name: Install Wails CLI
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgtk-3-dev \
+            libwebkit2gtk-4.0-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Check formatting
+        run: |
+          gofmt -l .
+          test -z "$(gofmt -l .)"
+
+      - name: Install frontend dependencies
+        working-directory: ./admin/frontend
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: wails build -platform linux/amd64 -clean

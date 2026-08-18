@@ -1,0 +1,116 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  NODE_OPTIONS: "--max-old-space-size=4096"
+  APP_NAME: "tyyy-admin"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+
+  build:
+    needs: release
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macos-arm64
+            os: macos-latest
+            platform: darwin/arm64
+            artifact: "tyyy-admin-${{ github.ref_name }}-macos-arm64.zip"
+          - name: linux-amd64
+            os: ubuntu-latest
+            platform: linux/amd64
+            artifact: "tyyy-admin-${{ github.ref_name }}-linux-amd64.AppImage"
+          - name: windows-amd64
+            os: windows-latest
+            platform: windows/amd64
+            artifact: "tyyy-admin-${{ github.ref_name }}-windows-amd64.exe"
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: ./admin
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: admin/go.mod
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "yarn"
+          cache-dependency-path: admin/frontend/yarn.lock
+
+      - name: Install Wails CLI
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Install Linux system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgtk-3-dev \
+            libwebkit2gtk-4.0-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
+
+      - name: Install frontend dependencies
+        working-directory: ./admin/frontend
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: wails build -platform ${{ matrix.platform }} -clean
+
+      - name: Package macOS
+        if: runner.os == 'macOS'
+        run: |
+          ditto -c -k --keepParent "build/bin/tyyy-admin.app" "build/bin/${{ matrix.artifact }}"
+
+      - name: Package Linux (AppImage)
+        if: runner.os == 'Linux'
+        run: |
+          set -euo pipefail
+          ARCH=x86_64
+          curl -L -o appimagetool https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-$ARCH.AppImage
+          chmod +x appimagetool
+          mkdir -p appdir
+          cp build/bin/tyyy-admin appdir/AppRun
+          chmod +x appdir/AppRun
+          printf '[Desktop Entry]\nType=Application\nName=Tyyy Admin\nComment=yo-port admin CMS\nIcon=app\nCategories=Utility;\n' > appdir/tyyy-admin.desktop
+          cp "${{ github.workspace }}/admin/build/appicon.png" appdir/app.png
+          ./appimagetool appdir "${{ matrix.artifact }}"
+          chmod +x "${{ matrix.artifact }}"
+          mkdir -p build/bin && mv "${{ matrix.artifact }}" build/bin/
+
+      - name: Package Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        working-directory: ./admin/build/bin
+        run: Copy-Item tyyy-admin.exe "${{ matrix.artifact }}"
+
+      - name: Upload artifact to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: admin/build/bin/${{ matrix.artifact }}
