@@ -1,17 +1,10 @@
 ---
 title: "DeepSeek Harness : L'architecture qui tue le mythe du modèle brut"
+description: "Analyse technique de l'architecture du DeepSeek Harness — prefix caching, compaction, framework Cordis, culture des mémos.
+"
 date: 2026-07-20
-description: |
-  Analyse technique de l'architecture du DeepSeek Harness — prefix caching, compaction, framework Cordis, culture des mémos.
-tags:
-  - DeepSeek
-  - AI-Engineering
-  - LLM-Architecture
-  - Local-First
-  - Agent-AI
-  - MLOps
+tags: [DeepSeek, AI-Engineering, LLM-Architecture, Local-First, Agent-AI, MLOps]
 published: true
-
 ---
 
 **Un token en cache coûte 120x moins cher qu'un token recalculé.**
