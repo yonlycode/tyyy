@@ -43,6 +43,7 @@ This project began as a clean Next.js app bootstrapped with `create-next-app` an
 |---|---|
 | **Framework** | Next.js 16 (app router, static export) |
 | **Language** | TypeScript 5 |
+| **Package manager** | Yarn 1.x (enforced via `packageManager` field, uses corepack) |
 | **CSS-in-JS** | `@emotion/react`, `@emotion/styled` |
 | **Animations** | `framer-motion` |
 | **Markdown** | `gray-matter`, `remark`, `remark-html`, `reading-time` |
@@ -55,25 +56,19 @@ This project began as a clean Next.js app bootstrapped with `create-next-app` an
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 20+
-- pnpm / npm / yarn
+- Node.js 20+ (corepack included)
+- Yarn 1.x (auto-enabled via corepack from `packageManager` field)
 
 ### Installation
 ```bash
-# Install dependencies
-pnpm install
-# or
-npm install
-# or
+# Install dependencies (yarn enforced via corepack)
 yarn install
 ```
 
+> **Note:** Other managers (pnpm, npm) work but yarn is the only one guaranteed by `packageManager` in `package.json`.
+
 ### Development
 ```bash
-pnpm dev
-# or
-npm run dev
-# or
 yarn dev
 ```
 
@@ -86,10 +81,6 @@ The page auto-reloads as you edit files. All UI components, pages, and content a
 ## 📦 Build & Export
 
 ```bash
-pnpm build
-# or
-npm run build
-# or
 yarn build
 ```
 
@@ -162,11 +153,11 @@ All components live in `src/components/ui/` and are re-exported via `src/compone
 ### GitHub Pages (automatic)
 1. Push to the `main` branch
 2. The `.github/workflows/deploy.yml` workflow triggers:
-   - Checkout + Node 20 cache
-   - `npm ci`
-   - `npm run build` (generates `./out/`)
-   - Uploads `./out` as artifact
-   - Deploys to GitHub Pages
+    - Checkout + Node 20 cache
+    - `yarn install --frozen-lockfile`
+    - `yarn build` (generates `./out/`)
+    - Uploads `./web/out` as artifact
+    - Deploys to GitHub Pages
 
 ### Manual deployment
 ```bash

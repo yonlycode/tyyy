@@ -15,6 +15,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Stack & Conventions
 - **Framework:** Next.js 16.x (app router, static export)
 - **Language:** TypeScript 5
+- **Package manager:** Yarn 1.x (enforced via `packageManager` in `package.json`, uses corepack)
 - **CSS-in-JS:** Emotion (`@emotion/react`, `@emotion/styled`)
 - **Animations:** Framer Motion (`framer-motion`)
 - **Markdown processing:** `gray-matter` + `remark` + `remark-html` + `reading-time`
@@ -23,7 +24,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - **Data fetching:** Server-side at build time via `getSortedArticles()` / `getArticleBySlug()` reading from `/content`
 - **Static generation:** `generateStaticParams` + `export output: 'export'` with `trailingSlash: true`
 - **Analytics:** GA4 client-side script in `src/components/analytics.tsx`, injected from `src/app/layout.tsx`
-- **CI/CD:** GitHub Actions deploy to GitHub Pages (`.github/workflows/deploy.yml`)
+- **CI/CD:** GitHub Actions deploy to GitHub Pages (`.github/workflows/deploy.yml`) — builds with `yarn`
 
 ## Directory Structure
 ```
