@@ -56,7 +56,7 @@ This project began as a clean Next.js app bootstrapped with `create-next-app` an
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 20+ (corepack included)
+- Node.js 22+ LTS (corepack included)
 - Yarn 1.x (auto-enabled via corepack from `packageManager` field)
 
 ### Installation

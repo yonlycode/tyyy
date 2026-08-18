@@ -14,6 +14,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Stack & Conventions
 - **Framework:** Next.js 16.x (app router, static export)
+- **Runtime:** Node.js 22+ LTS
 - **Language:** TypeScript 5
 - **Package manager:** Yarn 1.x (enforced via `packageManager` in `package.json`, uses corepack)
 - **CSS-in-JS:** Emotion (`@emotion/react`, `@emotion/styled`)
