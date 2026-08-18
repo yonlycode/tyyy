@@ -1,0 +1,53 @@
+1:"$Sreact.fragment"
+2:I[15290,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"ThemeProvider"]
+3:I[47896,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"PageShell"]
+4:I[39756,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"default"]
+5:I[37457,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"default"]
+6:I[97287,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"GoogleAnalytics"]
+8:I[97367,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"OutletBoundary"]
+9:"$Sreact.suspense"
+c:I[97367,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"ViewportBoundary"]
+e:I[97367,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"MetadataBoundary"]
+10:I[68027,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"default",1]
+:HL["/_next/static/chunks/2rk3-kn1ot74n.css","style"]
+b:X
+0:{"P":null,"c":["","portfolio","portfolio-web-performance",""],"q":"","i":false,"f":[[["",{"children":["portfolio",{"children":[["slug","portfolio-web-performance","d",[]],{"children":["__PAGE__",{},"$undefined","$undefined",4608]},"$undefined","$undefined",4608]},"$undefined","$undefined",4608]},"$undefined","$undefined",4624],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/2rk3-kn1ot74n.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/_next/static/chunks/3ise_we-fbile.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/_next/static/chunks/2w7bs2bl4d4p7.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"fr","children":["$","body",null,{"children":[["$","$L2",null,{"children":["$","$L3",null,{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]}],["$","$L6",null,{"gaId":"G-XXXXXXX"}]]}]}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["$","$1","c",{"children":["$L7",[["$","script","script-0",{"src":"/_next/static/chunks/2nw8_uw1yeo3a.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/_next/static/chunks/0omn3dxtc-w3k.js","async":true,"nonce":"$undefined"}]],["$","$L8",null,{"children":["$","$9",null,{"name":"Next.MetadataOutlet","children":"$@a"}]}]]}],{},null,false,null]},null,false,"$b"]},null,false,"$b"]},null,false,null],["$","$1","h",{"children":[null,["$","$Lc",null,{"children":"$Ld"}],["$","div",null,{"hidden":true,"children":["$","$Le",null,{"children":["$","$9",null,{"name":"Next.Metadata","children":"$Lf"}]}]}],null]}],false]],"m":"$undefined","G":["$10",[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/2rk3-kn1ot74n.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"h":null,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"ZniD9hz3ZnEZ-TJjM9l4S"}
+11:I[22177,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js","/_next/static/chunks/2nw8_uw1yeo3a.js","/_next/static/chunks/0omn3dxtc-w3k.js"],"ProjectDetailView"]
+b:C
+12:T7f6,<h1>Optimisation de performance pour e-commerce</h1>
+<p>Projet d'optimisation complète visant à réduire les temps de chargement et augmenter le taux de conversion pour une boutique en ligne B2B.</p>
+<h2>Le défi</h2>
+<p>La boutique en ligne originale affichait des temps de chargement moyens de 5.2 secondes sur desktop et plus de 9 secondes sur mobile, avec un taux d'abandon de panier de 78%.</p>
+<h2>Solutions mises en place</h2>
+<h3>Frontend Optimization</h3>
+<ul>
+<li><strong>Code splitting dynamique</strong> : Découpage des bundles par route, réduction du JavaScript initial de 250KB à 80KB</li>
+<li><strong>Lazy loading des images</strong> : Intersection Observer pour charger uniquement les images visibles</li>
+<li><strong>Critical CSS extraction</strong> : Extraction et inlining du CSS critique dans le <code>&#x3C;head></code></li>
+<li><strong>Font optimization</strong> : Subsetting et display: swap pour éviter les flashes de texte invisible</li>
+</ul>
+<h3>Backend Optimization</h3>
+<ul>
+<li><strong>Response caching</strong> : Mise en cache HTTP avec TTL adaptatif selon la fréquence d'accès</li>
+<li><strong>Database query optimization</strong> : Indexation ciblée et réduction des requêtes N+1 de 40%</li>
+<li><strong>Asset compression</strong> : Gzip/Brotli automatique avec niveau d'optimisation adaptatif</li>
+</ul>
+<h3>Mesures de performance</h3>
+<ul>
+<li><strong>LCP réduit</strong> : De 5.2s à 1.8s (+65% improvement)</li>
+<li><strong>FID amélioré</strong> : De 120ms à 45ms (+62% improvement)</li>
+<li><strong>Taux de conversion augmenté</strong> : De 2.1% à 3.8% (+81% improvement)</li>
+<li><strong>Abandon de panier réduit</strong> : De 78% à 45% (-42%)</li>
+</ul>
+<h2>Impact business</h2>
+<ul>
+<li><strong>+150% de revenu moyen par visite</strong></li>
+<li><strong>-60% de temps de chargement mobile</strong></li>
+<li><strong>+2.5M$ de chiffre d'affaires annuel</strong> attribué aux améliorations de performance</li>
+</ul>
+<hr>
+<p><em>Publié le 25 avril 2024 · Projet client</em></p>
+7:["$","$L11",null,{"project":{"slug":"portfolio-web-performance","title":"Optimisation de performance pour e-commerce","description":"Amélioration des temps de chargement et conversion pour une boutique en ligne existante.","date":"2024-04-25","tags":["web","performance","e-commerce","optimization"],"canonicalUrl":"","published":true,"readTime":"2 min read","contentHtml":"$12"}}]
+d:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#6750A4"}]]
+a:null
+f:[["$","title","0",{"children":"Optimisation de performance pour e-commerce"}],["$","meta","1",{"name":"description","content":"Amélioration des temps de chargement et conversion pour une boutique en ligne existante."}]]

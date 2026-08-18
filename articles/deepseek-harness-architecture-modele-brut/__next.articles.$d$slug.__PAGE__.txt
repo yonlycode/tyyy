@@ -1,0 +1,81 @@
+1:"$Sreact.fragment"
+2:I[17953,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js","/_next/static/chunks/3tqgwpfl_q7aw.js","/_next/static/chunks/0omn3dxtc-w3k.js"],"ArticleView"]
+3:T14eb,<p><strong>Un token en cache coûte 120x moins cher qu'un token recalculé.</strong></p>
+<p>0,003$ contre 0,43$ par million de tokens.</p>
+<p>La différence n'est pas dans le modèle. Elle est dans l'architecture du système qui l'entoure.</p>
+<p>DeepSeek l'a compris. Leur harness est une machine d'ingénierie obsessionnelle. Voici ce qu'on peut en tirer.</p>
+<hr>
+<h3>1/ Le log "Append-Only" — L'impératif financier</h3>
+<p>Règle d'or : <strong>une fois qu'une donnée a été envoyée au modèle, on ne revient jamais en arrière.</strong></p>
+<p>Si l'agent produit une erreur (mauvais chemin d'accès, commande ratée), l'erreur reste dans le log. L'agent formule sa correction à la suite. Point.</p>
+<p>Pourquoi ? Le prefix caching.</p>
+<p>Les fournisseurs de LLMs gardent le début d'une requête en cache. Si le contexte reste strictement identique, le modèle ne recalcule pas cette base. Modifier un historique, même d'une lettre au début, <strong>détruit ce signet précieux.</strong></p>
+<p>Le contexte n'est jamais stocké comme un tableau manipulable. Il est calculé à la volée comme une projection dérivée du journal d'événements. Chaque byte gagné est un byte qui reste en cache.</p>
+<hr>
+<h3>2/ Le hack de la "Compaction"</h3>
+<p>Quand la mémoire de l'agent sature, la plupart des systèmes insèrent un "prompt de résumé" au début de la conversation.</p>
+<p>Ironie : c'est exactement au moment où la requête est la plus volumineuse et la plus onéreuse qu'ils <strong>tuent le prefix cache.</strong></p>
+<p>DeepSeek fait autrement : même requête exacte (instructions, outils, historique long) + un message utilisateur tout à la fin qui demande à l'agent d'agir comme moteur de compaction.</p>
+<p>Le cache est intégralement préservé. Le résumé arrive à la fin, pas au début. Zéro friction. C'est simple. C'est efficace.</p>
+<hr>
+<h3>3/ Cordis — Chaque action doit savoir se rétracter</h3>
+<p>Le harness s'appuie sur Cordis, un framework issu du monde des chatbots écrit par "Shigma".</p>
+<p>La règle : <strong>composabilité stricte.</strong> Chaque plugin, chaque composant doit déclarer sa fonction inverse. Aucun plugin ne s'installe sans fournir la méthode exacte pour annuler proprement toutes ses interactions temporelles.</p>
+<p>Zéro fuite de mémoire. Zéro effet de bord résiduel en production.</p>
+<p>C'est une exigence architecturale, pas une feature optionnelle.</p>
+<hr>
+<h3>4/ Quatre presets, une enveloppe</h3>
+<p>DeepSeek orchestre quatre modes de comportement dans le même système :</p>
+<p><strong>Standard Mode</strong> — L'agent classique avec outils de lecture et shell.</p>
+<p><strong>Programmatic Tool Calling</strong> — Le plus intéressant. L'agent reçoit une interface TypeScript générée. Au lieu de pinguer l'API à chaque besoin, il rédige un programme global qui boucle, filtre et interroge plusieurs outils en parallèle. Exécution dans un Worker Thread Node.js cloisonné (CPU et RAM limités). Seul le résultat pur enrichit le contexte.</p>
+<p><strong>Minimal Mode</strong> — L'environnement brut de post-training, utilisé pour le reinforcement learning. Un shell persistant + un éditeur.</p>
+<p><strong>Creation Mode</strong> — L'agent obtient un accès système au harness qui le fait lui-même tourner. Il peut écrire du JavaScript pour instancier, configurer et évaluer d'autres agents directement depuis l'hôte.</p>
+<hr>
+<h3>5/ Orchestration de sous-agents officielle</h3>
+<p>Pas besoin d'émuler des concurrents maladroitement. Le harness lance des instances d'agents externes comme Claude Code ou le serveur CodeX d'OpenAI pour déléguer des tâches spécifiques.</p>
+<p>Il pointe vers les binaires installés sur la machine, gère la création puis la destruction méticuleuse de l'arbre des processus locaux. Une fois la tâche achevée, tout est nettoyé.</p>
+<hr>
+<h3>6/ La culture des mémos</h3>
+<p>C'est le point le plus sous-estimé.</p>
+<p>Le répertoire source contient <strong>683 mémos d'ingénierie</strong> documentant formellement l'architecture. Aucun changement substantiel du code n'est autorisé sans un mémo associé validé automatiquement par un script.</p>
+<p>Chaque document doit obligatoirement inclure une section <strong>"Alternatives Considérées".</strong></p>
+<p>Ça semble mineur. C'est énorme. Ça évite que des développeurs arrivant plus tard ne relitiguent sans fin des options qui avaient déjà été écartées de manière justifiée.</p>
+<hr>
+<h3>Ce que ça nous apprend</h3>
+<p>Le défi futur de l'IA agentige n'est pas d'avoir le meilleur modèle de base.</p>
+<p>C'est de développer des wrappers extrêmement rigoureux, <strong>efficaces financièrement</strong>, et capables d'interagir nativement avec l'écosystème local sans détruire le cache.</p>
+<p>Le harness DeepSeek est un manifeste technique. 683 mémos. Un log append-only. Un système qui économise 120x par byte en cache.</p>
+<p>Les modèles s'homogénéiseront. Les wrappers qui tiendront la route, c'est ceux qui pensent l'ingénierie system comme un tout.</p>
+<p>C'est exactement cette approche que je défends depuis le début : la souveraineté ne se résume pas à faire tourner un modèle en local. C'est toute l'architecture autour qui compte.</p>
+<p>#DeepSeek #AIEngineering #LLM #AgentAI #LocalFirst #MLOps</p>
+8:X
+d:X
+d:C
+0:{"buildId":"ZniD9hz3ZnEZ-TJjM9l4S","data":[{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"article":{"slug":"deepseek-harness-architecture-modele-brut","title":"DeepSeek Harness : L'architecture qui tue le mythe du modèle brut","description":"Analyse technique de l'architecture du DeepSeek Harness — prefix caching, compaction, framework Cordis, culture des mémos.\n","date":"2026-07-20","tags":["DeepSeek","AI-Engineering","LLM-Architecture","Local-First","Agent-AI","MLOps"],"canonicalUrl":"","published":true,"readTime":"4 min read","contentHtml":"$3"}}],["$L4","$L5"],"$L6"]}],"isPartial":"$@7","staleTime":"$8","varyParams":null},{"rsc":"$L9","isPartial":"$@a","staleTime":"$8","varyParams":null},{"rsc":"$Lb","isPartial":"$@c","staleTime":"$8","varyParams":"$d"},{"rsc":"$Le","isPartial":"$@f","staleTime":"$8","varyParams":"$d"},{"rsc":"$L10","isPartial":"$@11","staleTime":"$8","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@12","rootVaryParams":null,"needsRuntimeRequest":"$@13"}
+14:I[97367,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"OutletBoundary"]
+15:"$Sreact.suspense"
+17:I[97367,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"ViewportBoundary"]
+18:I[97367,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"MetadataBoundary"]
+19:I[39756,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"default"]
+1a:I[37457,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"default"]
+1b:I[15290,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"ThemeProvider"]
+1c:I[47896,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"PageShell"]
+1d:I[97287,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"GoogleAnalytics"]
+:HL["/_next/static/chunks/2rk3-kn1ot74n.css","style"]
+4:["$","script","script-0",{"src":"/_next/static/chunks/3tqgwpfl_q7aw.js","async":true}]
+5:["$","script","script-1",{"src":"/_next/static/chunks/0omn3dxtc-w3k.js","async":true}]
+6:["$","$L14",null,{"children":["$","$15",null,{"name":"Next.MetadataOutlet","children":"$@16"}]}]
+9:["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#6750A4"}]]}],["$","div",null,{"hidden":true,"children":["$","$L18",null,{"children":["$","$15",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"DeepSeek Harness : L'architecture qui tue le mythe du modèle brut"}],["$","meta","1",{"name":"description","content":"Analyse technique de l'architecture du DeepSeek Harness — prefix caching, compaction, framework Cordis, culture des mémos.\n"}]]}]}]}],null]}]
+b:["$","$1","c",{"children":[null,["$","$L19",null,{"parallelRouterKey":"children","template":["$","$L1a",null,{}]}]]}]
+e:["$","$1","c",{"children":[null,["$","$L19",null,{"parallelRouterKey":"children","template":["$","$L1a",null,{}]}]]}]
+10:["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/2rk3-kn1ot74n.css","precedence":"next"}],["$","script","script-0",{"src":"/_next/static/chunks/3ise_we-fbile.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/2w7bs2bl4d4p7.js","async":true}]],["$","html",null,{"lang":"fr","children":["$","body",null,{"children":[["$","$L1b",null,{"children":["$","$L1c",null,{"children":["$","$L19",null,{"parallelRouterKey":"children","template":["$","$L1a",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}]}],["$","$L1d",null,{"gaId":"G-XXXXXXX"}]]}]}]]}]
+16:null
+13:true
+8:300
+8:C
+12:0
+a:"$undefined"
+c:"$undefined"
+f:"$undefined"
+11:"$undefined"
+7:"$undefined"

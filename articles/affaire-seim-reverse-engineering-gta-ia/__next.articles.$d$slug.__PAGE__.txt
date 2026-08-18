@@ -1,0 +1,65 @@
+1:"$Sreact.fragment"
+2:I[17953,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js","/_next/static/chunks/3tqgwpfl_q7aw.js","/_next/static/chunks/0omn3dxtc-w3k.js"],"ArticleView"]
+3:Td81,<h1>L'Affaire Séim : le reverse engineering de GTA par IA</h1>
+<p>6 ans de travail communautaire pour inverser le code de GTA San Andreas. Stagnation à 60%. Séim, profil non-développeur, boucle les 40% restants en seulement <strong>2 mois</strong>.</p>
+<p>Ce n'est pas de la magie. C'est de l'orchestration industrielle d'agents autonomes.</p>
+<p>La méthode n'a rien à voir avec un prompt basique envoyé dans une interface web. C'est une pipeline de rétroaction autonome adossée à une source de vérité :</p>
+<ol>
+<li><strong>Ghidra</strong> (désassembleur open source de la NSA) extrait le code assembleur brut et le pseudo-code du binaire du jeu.</li>
+<li><strong>L'Orchestrateur</strong> (Agent 1) analyse les dépendances pour déterminer l'ordre optimal de résolution des fonctions.</li>
+<li><strong>Le Codeur</strong> (Agent 2) traduit l'assembleur brut en C++ propre et de haut niveau.</li>
+<li><strong>Le Reviewer/QA</strong> (Agent 3) compare le C++ généré avec l'assembleur de Ghidra. Il identifie les écarts et force le Codeur à itérer jusqu'à obtention d'un consensus absolu.</li>
+</ol>
+<p>Le workflow a d'abord été géré manuellement par copier-coller de contextes avant d'être entièrement automatisé par un outil standalone disponible sur GitHub.</p>
+<p>Le seul goulot d'étranglement restant est physique : tester visuellement le jeu en run (physique, caméra, collisions) nécessite encore <strong>60 à 70 heures</strong> de jeu humain. L'IA ne sait pas encore playtester seule.</p>
+<p>Les livrables produits par cette pipeline court-circuitent les outils de modding traditionnels :</p>
+<ul>
+<li>Un hub web regroupant <strong>35 outils</strong> pour compiler les scripts GTA 3 Script ou injecter des textures.</li>
+<li>Un Map Editor en drag &#x26; drop qui importe un mesh 3D et génère les meshes de collision en <strong>2 secondes</strong>.</li>
+<li>Une IA de capture de mouvement instantanée extrayant un squelette d'une vidéo en <strong>5 secondes</strong>.</li>
+</ul>
+<p>Cette aventure a permis de déterrer des secrets enfouis :</p>
+<ul>
+<li>L'activation du mode multi-protagoniste (GTA V style) désactivé à l'époque de la PS2.</li>
+<li>De l'archéologie de textures, en retrouvant les murs réels photographiés à Los Angeles et Las Vegas en 2002 par les équipes de Rockstar.</li>
+<li>GTA 3 et Vice City encapsulés et émulés sur la TV de CJ dans le moteur sans perte de performance.</li>
+</ul>
+<p>Trois leçons fondamentales à en tirer :</p>
+<p><strong>La mort de la syntaxe, l'avènement de l'architecture.</strong>
+Savoir écrire du C++ ou du HTML n'a plus de valeur intrinsèque. La valeur s'est déplacée vers la capacité à concevoir des architectures agentiques capables de s'auto-corriger face à une source de vérité technique.</p>
+<p><strong>La souveraineté par l'Open Source.</strong>
+La réussite du projet repose sur la maîtrise complète de la stack : un désassembleur libre (Ghidra) et une pipeline d'orchestration locale et hébergée sans dépendances propriétaires.</p>
+<p><strong>Le flou juridique.</strong>
+Le code généré est propre et entièrement réécrit. Pourtant, Rockstar a pour habitude de détruire ces projets via des strikes DMCA. La release finale sera une course de vitesse avant la suppression inévitable du dépôt.</p>
+<p>L'avenir du développement n'est pas dans l'écriture du code, il est dans la construction de la machine qui le produit.</p>
+8:X
+d:X
+d:C
+0:{"buildId":"ZniD9hz3ZnEZ-TJjM9l4S","data":[{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"article":{"slug":"affaire-seim-reverse-engineering-gta-ia","title":"L'Affaire Séim : le reverse engineering de GTA par IA","description":"Comment Séim a inversé les derniers 40% de GTA San Andreas en 2 mois grâce à une boucle d'agents IA multi-niveaux, et ce que ça révèle sur l'avènement de l'architecture face à la syntaxe.","date":"2026-06-08","tags":["ai","agents","reverse-engineering","open-source","architecture"],"canonicalUrl":"","published":true,"readTime":"3 min read","contentHtml":"$3"}}],["$L4","$L5"],"$L6"]}],"isPartial":"$@7","staleTime":"$8","varyParams":null},{"rsc":"$L9","isPartial":"$@a","staleTime":"$8","varyParams":null},{"rsc":"$Lb","isPartial":"$@c","staleTime":"$8","varyParams":"$d"},{"rsc":"$Le","isPartial":"$@f","staleTime":"$8","varyParams":"$d"},{"rsc":"$L10","isPartial":"$@11","staleTime":"$8","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@12","rootVaryParams":null,"needsRuntimeRequest":"$@13"}
+14:I[97367,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"OutletBoundary"]
+15:"$Sreact.suspense"
+17:I[97367,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"ViewportBoundary"]
+18:I[97367,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"MetadataBoundary"]
+19:I[39756,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"default"]
+1a:I[37457,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"default"]
+1b:I[15290,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"ThemeProvider"]
+1c:I[47896,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"PageShell"]
+1d:I[97287,["/_next/static/chunks/3ise_we-fbile.js","/_next/static/chunks/2w7bs2bl4d4p7.js"],"GoogleAnalytics"]
+:HL["/_next/static/chunks/2rk3-kn1ot74n.css","style"]
+4:["$","script","script-0",{"src":"/_next/static/chunks/3tqgwpfl_q7aw.js","async":true}]
+5:["$","script","script-1",{"src":"/_next/static/chunks/0omn3dxtc-w3k.js","async":true}]
+6:["$","$L14",null,{"children":["$","$15",null,{"name":"Next.MetadataOutlet","children":"$@16"}]}]
+9:["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#6750A4"}]]}],["$","div",null,{"hidden":true,"children":["$","$L18",null,{"children":["$","$15",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"L'Affaire Séim : le reverse engineering de GTA par IA"}],["$","meta","1",{"name":"description","content":"Comment Séim a inversé les derniers 40% de GTA San Andreas en 2 mois grâce à une boucle d'agents IA multi-niveaux, et ce que ça révèle sur l'avènement de l'architecture face à la syntaxe."}]]}]}]}],null]}]
+b:["$","$1","c",{"children":[null,["$","$L19",null,{"parallelRouterKey":"children","template":["$","$L1a",null,{}]}]]}]
+e:["$","$1","c",{"children":[null,["$","$L19",null,{"parallelRouterKey":"children","template":["$","$L1a",null,{}]}]]}]
+10:["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/2rk3-kn1ot74n.css","precedence":"next"}],["$","script","script-0",{"src":"/_next/static/chunks/3ise_we-fbile.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/2w7bs2bl4d4p7.js","async":true}]],["$","html",null,{"lang":"fr","children":["$","body",null,{"children":[["$","$L1b",null,{"children":["$","$L1c",null,{"children":["$","$L19",null,{"parallelRouterKey":"children","template":["$","$L1a",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}]}],["$","$L1d",null,{"gaId":"G-XXXXXXX"}]]}]}]]}]
+16:null
+13:true
+8:300
+8:C
+12:0
+a:"$undefined"
+c:"$undefined"
+f:"$undefined"
+11:"$undefined"
+7:"$undefined"
