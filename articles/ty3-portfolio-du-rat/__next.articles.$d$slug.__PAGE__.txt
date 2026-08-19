@@ -1,0 +1,66 @@
+1:"$Sreact.fragment"
+2:I[17953,["/tyyy/_next/static/chunks/3ise_we-fbile.js","/tyyy/_next/static/chunks/1s_4p3gnf0pkh.js","/tyyy/_next/static/chunks/1dxzh8yxkvzet.js","/tyyy/_next/static/chunks/0omn3dxtc-w3k.js"],"ArticleView"]
+3:Td2c,<p>J'ai construit mon portfolio. Il coûte <strong>0€/an</strong> en infra.</p>
+<p>Pas de Vercel. Pas de Netlify. Pas de Supabase. Pas de "freemium" qui vous piège avec des quotas qui disparaissent quand vous avez du trafic.</p>
+<p>Juste :</p>
+<p><strong>GitHub Pages</strong> (statique, gratuit, pour de vrai)
+<strong>Un repo</strong> avec des fichiers Markdown
+<strong>Un pipeline GitHub Actions</strong> qui rebuild à chaque commit
+<strong>Une app desktop</strong> (Wails/Go/React) qui commit à ma place</p>
+<p>C'est tout.</p>
+<p>On m'a demandé : "Pourquoi tu fais pas juste un Notion ?"</p>
+<p>Parce que Notion, c'est du SaaS. Et du SaaS, c'est de la dépendance déguisée en commodité.</p>
+<p>Mon site vit dans un repo Git. Mon contenu, c'est du Markdown brut. Ma "base de données", c'est <code>links.json</code>. Si GitHub part en vrille demain (ça n'arrivera pas, mais supposons), j'ai tout en local. Mon portfolio, c'est mon repo. Point.</p>
+<p><strong>L'architecture :</strong></p>
+<ul>
+<li><code>web/</code> → Next.js en export statique. <code>output: 'export'</code>. Zéro serveur. Zéro runtime. Des fichiers HTML qui traînent sur GitHub Pages.</li>
+<li><code>admin/</code> → App desktop native. Go backend + React frontend. Pas de HTTP. Pas d'API key sur un disque. Le PAT GitHub reste en cache pour plus de facilité.</li>
+<li>Contenu → Markdown + frontmatter. <code>gray-matter</code>, <code>remark</code>, <code>reading-time</code>. C'est du texte. Du vrai. Lisible dans un terminal en 2074.</li>
+<li>CI/CD → GitHub Actions détecte un push sur <code>main</code>, rebuild, déployé. Automatique. Invisible. Gratuit.</li>
+</ul>
+<p><strong>Le budget :</strong> 0€ d'infra. 0€ de base de données. 0€ de backend.</p>
+<p>J'ai même mis Google Analytics. Client-side uniquement. Pas de cookie banner RGPD. Pas de consentement à accepter. Le script charge, GA track, c'est tout. Anonymisé. Pas de tracking de merde.</p>
+<p><strong>Pourquoi une app desktop ?</strong></p>
+<p>Parce que j'ai pas envie de taper dans Git pour écrire un article. Parce que VS Code + terminal, c'est bien pour coder, pas pour écrire du contenu. L'app, c'est un CMS. Mais un CMS qui n'est pas un SaaS. Qui tourne sur ma machine. Qui commet sur mon repo. Qui fait exactement ce que je lui dis.</p>
+<p>Pas de "cloud". Pas de "synchronisation". Juste un commit.</p>
+<p><strong>Nom de code : "le portfolio du rat".</strong></p>
+<p>Oui, c'est volontaire. Je suis rat. J'ai pas envie de payer 40 abonnements pour héberger 3 pages statiques. J'ai pas envie que mon site dépende d'une startup qui peut changer ses tarifs, fermer, ou se faire racheter par un conglomérat qui transformera mon site en portail publicitaire.</p>
+<p>GitHub est un monopole ? Oui. Mais c'est un monopole <strong>open source</strong> avec un repo public. Mon code est là. Mon contenu est là. Mon infrastructure, c'est du Git.</p>
+<p>Le seul truc qui me coûte de l'argent, c'est mon électricité pour faire tourner l'app desktop. Et encore...</p>
+<p>Zéro facture. Zéro dépendance. Zéro excuse.</p>
+<p>Le code est public. github.com/yonlycode. Fork. Copie. Pique. C'est open source.</p>
+<p>La vraie question : <em>quand est-ce que tu arrêtes de payer pour quelque chose que tu pourrais faire toi-même ?</em></p>
+<hr>
+<p><em>tyyy — le portfolio du rat de Yoann Fort</em></p>
+8:X
+d:X
+d:C
+0:{"buildId":"n-Xcoy_Zm8uWmRVABm1O_","data":[{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"article":{"slug":"ty3-portfolio-du-rat","title":"TY3 / Portfolio du Rat","description":"J'ai construit mon portfolio. Il coûte **0€/an** en infra.\nPas de Vercel. Pas de Netlify. Pas de Supabase. Pas de \"freemium\" qui vous piège avec des quotas qui disparaissent quand vous avez du trafic.\nJuste :\n**GitHub Pages** (statique, gratuit, pour de vrai) **Un repo** avec des fichiers Markdown **Un pipeline GitHub Actions** qui rebuild à chaque commit **Une app desktop** (Wails/Go/React) qui commit à ma place ","date":"2026-08-19","tags":[],"canonicalUrl":"","published":true,"readTime":"3 min read","contentHtml":"$3"}}],["$L4","$L5"],"$L6"]}],"isPartial":"$@7","staleTime":"$8","varyParams":null},{"rsc":"$L9","isPartial":"$@a","staleTime":"$8","varyParams":null},{"rsc":"$Lb","isPartial":"$@c","staleTime":"$8","varyParams":"$d"},{"rsc":"$Le","isPartial":"$@f","staleTime":"$8","varyParams":"$d"},{"rsc":"$L10","isPartial":"$@11","staleTime":"$8","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@12","rootVaryParams":null,"needsRuntimeRequest":"$@13"}
+14:I[97367,["/tyyy/_next/static/chunks/3ise_we-fbile.js","/tyyy/_next/static/chunks/1s_4p3gnf0pkh.js"],"OutletBoundary"]
+15:"$Sreact.suspense"
+17:I[97367,["/tyyy/_next/static/chunks/3ise_we-fbile.js","/tyyy/_next/static/chunks/1s_4p3gnf0pkh.js"],"ViewportBoundary"]
+18:I[97367,["/tyyy/_next/static/chunks/3ise_we-fbile.js","/tyyy/_next/static/chunks/1s_4p3gnf0pkh.js"],"MetadataBoundary"]
+19:I[39756,["/tyyy/_next/static/chunks/3ise_we-fbile.js","/tyyy/_next/static/chunks/1s_4p3gnf0pkh.js"],"default"]
+1a:I[37457,["/tyyy/_next/static/chunks/3ise_we-fbile.js","/tyyy/_next/static/chunks/1s_4p3gnf0pkh.js"],"default"]
+1b:I[15290,["/tyyy/_next/static/chunks/3ise_we-fbile.js","/tyyy/_next/static/chunks/1s_4p3gnf0pkh.js"],"ThemeProvider"]
+1c:I[47896,["/tyyy/_next/static/chunks/3ise_we-fbile.js","/tyyy/_next/static/chunks/1s_4p3gnf0pkh.js"],"PageShell"]
+1d:I[97287,["/tyyy/_next/static/chunks/3ise_we-fbile.js","/tyyy/_next/static/chunks/1s_4p3gnf0pkh.js"],"GoogleAnalytics"]
+:HL["/tyyy/_next/static/chunks/391e7m40v-bf0.css","style"]
+:HL["https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap","style"]
+4:["$","script","script-0",{"src":"/tyyy/_next/static/chunks/1dxzh8yxkvzet.js","async":true}]
+5:["$","script","script-1",{"src":"/tyyy/_next/static/chunks/0omn3dxtc-w3k.js","async":true}]
+6:["$","$L14",null,{"children":["$","$15",null,{"name":"Next.MetadataOutlet","children":"$@16"}]}]
+9:["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#6366F1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L18",null,{"children":["$","$15",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"TY3 / Portfolio du Rat"}],["$","meta","1",{"name":"description","content":"J'ai construit mon portfolio. Il coûte **0€/an** en infra.\nPas de Vercel. Pas de Netlify. Pas de Supabase. Pas de \"freemium\" qui vous piège avec des quotas qui disparaissent quand vous avez du trafic.\nJuste :\n**GitHub Pages** (statique, gratuit, pour de vrai) **Un repo** avec des fichiers Markdown **Un pipeline GitHub Actions** qui rebuild à chaque commit **Une app desktop** (Wails/Go/React) qui commit à ma place "}]]}]}]}],null]}]
+b:["$","$1","c",{"children":[null,["$","$L19",null,{"parallelRouterKey":"children","template":["$","$L1a",null,{}]}]]}]
+e:["$","$1","c",{"children":[null,["$","$L19",null,{"parallelRouterKey":"children","template":["$","$L1a",null,{}]}]]}]
+10:["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/tyyy/_next/static/chunks/391e7m40v-bf0.css","precedence":"next"}],["$","script","script-0",{"src":"/tyyy/_next/static/chunks/3ise_we-fbile.js","async":true}],["$","script","script-1",{"src":"/tyyy/_next/static/chunks/1s_4p3gnf0pkh.js","async":true}]],["$","html",null,{"lang":"fr","children":[["$","head",null,{"children":[["$","link",null,{"rel":"preconnect","href":"https://fonts.googleapis.com"}],["$","link",null,{"rel":"preconnect","href":"https://fonts.gstatic.com","crossOrigin":"anonymous"}],["$","link",null,{"href":"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap","rel":"stylesheet"}]]}],["$","body",null,{"children":[["$","$L1b",null,{"children":["$","$L1c",null,{"children":["$","$L19",null,{"parallelRouterKey":"children","template":["$","$L1a",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}]}],["$","$L1d",null,{"gaId":"G-2ZHCGP7VD4"}]]}]]}]]}]
+16:null
+13:true
+8:300
+8:C
+12:0
+a:"$undefined"
+c:"$undefined"
+f:"$undefined"
+11:"$undefined"
+7:"$undefined"
