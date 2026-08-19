@@ -102,15 +102,19 @@ export default function LinksEditor({
         </div>
       </div>
 
-      <div className="fields">
-        <label>
-          Title
-          <input value={form.title} onChange={(e) => setMeta({ title: e.target.value })} />
-        </label>
-        <label>
-          Subtitle
-          <input value={form.subtitle} onChange={(e) => setMeta({ subtitle: e.target.value })} />
-        </label>
+      <div className="form-grid">
+        <div className="fields">
+          <div className="row">
+            <label>
+              Title
+              <input value={form.title} onChange={(e) => setMeta({ title: e.target.value })} />
+            </label>
+            <label>
+              Subtitle
+              <input value={form.subtitle} onChange={(e) => setMeta({ subtitle: e.target.value })} />
+            </label>
+          </div>
+        </div>
       </div>
 
       <div className="list-head">
@@ -120,73 +124,63 @@ export default function LinksEditor({
         </button>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Order</th>
-            <th>Label</th>
-            <th>URL</th>
-            <th>Icon</th>
-            <th>Enabled</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {form.links.map((link, index) => (
-            <tr key={link.id || `new-${index}`}>
-              <td className="actions">
-                <button disabled={index === 0} onClick={() => moveLink(index, -1)} title="Move up">
-                  ↑
-                </button>
-                <button
-                  disabled={index === form.links.length - 1}
-                  onClick={() => moveLink(index, 1)}
-                  title="Move down"
-                >
-                  ↓
-                </button>
-              </td>
-              <td>
+      <div className="link-list">
+        {form.links.map((link, index) => (
+          <div className="link-row" key={link.id || `new-${index}`}>
+            <div className="link-order">
+              <button
+                className="icon-btn"
+                disabled={index === 0}
+                onClick={() => moveLink(index, -1)}
+                title="Move up"
+              >
+                ↑
+              </button>
+              <span className="index">{index + 1}</span>
+              <button
+                className="icon-btn"
+                disabled={index === form.links.length - 1}
+                onClick={() => moveLink(index, 1)}
+                title="Move down"
+              >
+                ↓
+              </button>
+            </div>
+            <div className="link-fields">
+              <input
+                value={link.label}
+                placeholder="GitHub"
+                onChange={(e) => patchLink(index, { label: e.target.value })}
+              />
+              <input
+                value={link.url}
+                placeholder="https://…"
+                onChange={(e) => patchLink(index, { url: e.target.value })}
+              />
+            </div>
+            <div className="link-options">
+              <span className="badge icon-badge">{link.icon}</span>
+              <select value={link.icon} onChange={(e) => patchLink(index, { icon: e.target.value })}>
+                {ICONS.map((ic) => (
+                  <option key={ic} value={ic}>
+                    {ic}
+                  </option>
+                ))}
+              </select>
+              <label className="check inline-check" title={link.enabled ? "Enabled" : "Disabled"}>
                 <input
-                  value={link.label}
-                  placeholder="GitHub"
-                  onChange={(e) => patchLink(index, { label: e.target.value })}
+                  type="checkbox"
+                  checked={link.enabled}
+                  onChange={(e) => patchLink(index, { enabled: e.target.checked })}
                 />
-              </td>
-              <td>
-                <input
-                  value={link.url}
-                  placeholder="https://…"
-                  onChange={(e) => patchLink(index, { url: e.target.value })}
-                />
-              </td>
-              <td>
-                <select value={link.icon} onChange={(e) => patchLink(index, { icon: e.target.value })}>
-                  {ICONS.map((ic) => (
-                    <option key={ic} value={ic}>
-                      {ic}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td>
-                <label className="check">
-                  <input
-                    type="checkbox"
-                    checked={link.enabled}
-                    onChange={(e) => patchLink(index, { enabled: e.target.checked })}
-                  />
-                </label>
-              </td>
-              <td className="actions">
-                <button className="danger" onClick={() => removeLink(index)}>
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </label>
+              <button className="danger" onClick={() => removeLink(index)}>
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
 
       {error && <p className="error">{error}</p>}
     </div>

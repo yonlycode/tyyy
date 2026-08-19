@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { remark } from "remark";
-import html from "remark-html";
 import type { Project } from "../types";
 import { api } from "../services/api";
 import ImageUploader from "./ImageUploader";
 import DeleteConfirmModal from "./DeleteConfirmModal";
+import MarkdownPreviewModal from "./MarkdownPreviewModal";
 
 export default function ProjectEditor({
   project,
@@ -17,39 +16,23 @@ export default function ProjectEditor({
   onSaved: (p: Project) => void;
   onDelete: (p: Project) => Promise<void>;
 }) {
-  const [form, setForm] = useState<Project>(
-    project ?? {
-      slug: "",
-      path: "",
-      frontmatter: { title: "", description: "", date: "", tags: [], published: true },
-      body: "",
-    }
-  );
-  const [preview, setPreview] = useState("");
+  const empty: Project = {
+    slug: "",
+    path: "",
+    frontmatter: { title: "", description: "", date: "", tags: [], published: true },
+    body: "",
+  };
+  const [form, setForm] = useState<Project>(project ?? empty);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
-    setForm(
-      project ?? {
-        slug: "",
-        path: "",
-        frontmatter: { title: "", description: "", date: "", tags: [], published: true },
-        body: "",
-      }
-    );
+    setForm(project ?? empty);
     setError("");
   }, [project]);
-
-  useEffect(() => {
-    remark()
-      .use(html)
-      .process(form.body)
-      .then((file) => setPreview(String(file)))
-      .catch(() => setPreview(""));
-  }, [form.body]);
 
   const isNew = useMemo(() => !project, [project]);
 
@@ -116,64 +99,72 @@ export default function ProjectEditor({
 
       <div className="form-grid">
         <div className="fields">
-          <label>
-            Slug (file name)
-            <input
-              value={form.slug}
-              disabled={!isNew}
-              onChange={(e) =>
-                setForm((f) => ({
-                  ...f,
-                  slug: e.target.value.replace(/[^a-z0-9-_]/g, "-").toLowerCase(),
-                }))
-              }
-            />
-          </label>
+          <div className="row">
+            <label>
+              Slug (file name)
+              <input
+                value={form.slug}
+                disabled={!isNew}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    slug: e.target.value.replace(/[^a-z0-9-_]/g, "-").toLowerCase(),
+                  }))
+                }
+              />
+            </label>
+            <label>
+              Date
+              <input type="date" value={form.frontmatter.date} onChange={(e) => setFm({ date: e.target.value })} />
+            </label>
+          </div>
           <label>
             Title
             <input value={form.frontmatter.title} onChange={(e) => setFm({ title: e.target.value })} />
           </label>
           <label>
             Description
-            <textarea value={form.frontmatter.description} onChange={(e) => setFm({ description: e.target.value })} rows={3} />
+            <textarea value={form.frontmatter.description} onChange={(e) => setFm({ description: e.target.value })} rows={2} />
           </label>
-          <label>
-            Date
-            <input type="date" value={form.frontmatter.date} onChange={(e) => setFm({ date: e.target.value })} />
-          </label>
-          <label>
-            Tags (comma separated)
-            <input value={(form.frontmatter.tags || []).join(", ")} onChange={(e) => setTags(e.target.value)} />
-          </label>
-          <label className="check">
-            <input
-              type="checkbox"
-              checked={form.frontmatter.published !== false}
-              onChange={(e) => setFm({ published: e.target.checked })}
-            />
-            Published (visible on site)
-          </label>
+          <div className="row">
+            <label>
+              Tags (comma separated)
+              <input value={(form.frontmatter.tags || []).join(", ")} onChange={(e) => setTags(e.target.value)} />
+            </label>
+            <label className="check inline-check">
+              <input
+                type="checkbox"
+                checked={form.frontmatter.published !== false}
+                onChange={(e) => setFm({ published: e.target.checked })}
+              />
+              Published
+            </label>
+          </div>
           <ImageUploader onInserted={(md) => setForm((f) => ({ ...f, body: f.body + "\n" + md + "\n" }))} />
-        </div>
-
-        <div className="md-columns">
-          <div className="md-pane">
-            <h3>Markdown</h3>
-            <textarea
-              className="md-input"
-              value={form.body}
-              onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
-              placeholder="# Write your project…"
-            />
-          </div>
-          <div className="md-pane">
-            <h3>Preview</h3>
-            <div className="preview" dangerouslySetInnerHTML={{ __html: preview }} />
-          </div>
         </div>
       </div>
 
+      <div className="md-pane">
+        <div className="md-toolbar">
+          <h3>Markdown</h3>
+          <button onClick={() => setShowPreview(true)}>Preview</button>
+        </div>
+        <textarea
+          className="md-input"
+          value={form.body}
+          onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
+          placeholder="# Write your project…"
+        />
+      </div>
+
       {error && <p className="error">{error}</p>}
+      {showPreview && (
+        <MarkdownPreviewModal
+          markdown={form.body}
+          title={form.frontmatter.title || "Preview"}
+          onClose={() => setShowPreview(false)}
+        />
+      )}
       {!isNew && project && confirming && (
         <DeleteConfirmModal
           slug={project.slug}
