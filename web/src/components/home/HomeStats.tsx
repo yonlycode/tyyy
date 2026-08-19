@@ -8,19 +8,32 @@ import { Container, Stat } from '@/components/ui';
 const StatsBand = styled('div')({
   display: 'grid',
   gridTemplateColumns: 'repeat(4, 1fr)',
-  gap: m3Theme.spacing.md,
-  background: m3Theme.colors.surface,
-  borderRadius: m3Theme.radius.extraLarge,
-  boxShadow: m3Theme.elevation.level1,
-  padding: m3Theme.spacing.lg,
   marginTop: m3Theme.spacing.section,
   position: 'relative',
   zIndex: 2,
-  '@media (max-width: 700px)': { gridTemplateColumns: 'repeat(2, 1fr)' },
+
+  /* Vertical dividers between columns */
+  '& > *:not(:last-child)': {
+    borderRight: `1px solid ${m3Theme.colors.surfaceBorder}`,
+  },
+
+  '@media (max-width: 700px)': {
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    '& > *:nth-child(2)': {
+      borderRight: 'none',
+    },
+    '& > *:nth-child(3), & > *:nth-child(4)': {
+      borderRight: 'none',
+    },
+    /* Add horizontal divider on mobile */
+    '& > *:nth-child(n+3)': {
+      borderTop: `1px solid ${m3Theme.colors.surfaceBorder}`,
+    },
+  },
 });
 
 const stats = [
-  { value: '10×', label: 'Réduction des coûts d’inférence' },
+  { value: '10×', label: 'Réduction des coûts d\'inférence' },
   { value: '100%', label: 'Souveraineté des données' },
   { value: '∞', label: 'Modèles frontières testés' },
   { value: '0', label: 'Dépendance au cloud' },

@@ -5,11 +5,11 @@ import { m3Theme } from '@/styles/theme';
 
 const StatWrap = styled('div')({
   textAlign: 'center',
-  padding: m3Theme.spacing.lg,
+  padding: `1.5rem 1rem`,
 });
 
 const StatValue = styled('div')({
-  fontSize: m3Theme.font.sizes['4xl'],
+  fontSize: m3Theme.font.sizes['5xl'],
   fontWeight: m3Theme.font.weights.extrabold,
   background: m3Theme.gradients.text,
   WebkitBackgroundClip: 'text',
@@ -20,9 +20,11 @@ const StatValue = styled('div')({
 });
 
 const StatLabel = styled('div')({
-  fontSize: m3Theme.font.sizes.sm,
-  color: m3Theme.colors.onSurfaceVariant,
+  fontSize: m3Theme.font.sizes.xs,
+  color: m3Theme.colors.onSurfaceMuted,
   fontWeight: m3Theme.font.weights.medium,
+  textTransform: 'uppercase',
+  letterSpacing: '0.1em',
 });
 
 export function Stat({ value, label }: { value: string; label: string }) {

@@ -30,8 +30,8 @@ const TagsRow = styled('div')({
 });
 
 const ScrollHint = styled('div')({
-  color: m3Theme.colors.primary,
-  opacity: 0.6,
+  color: m3Theme.colors.primaryHover,
+  opacity: 0.5,
   fontSize: m3Theme.font.sizes.xl,
   animation: `${bounce} 2s ease-in-out infinite`,
   marginTop: m3Theme.spacing.xl,
@@ -64,7 +64,7 @@ export function HomeHero() {
         <TagsRow>
           <Badge>#AI</Badge>
           <Badge>#LLMOps</Badge>
-          <Badge>#On-Premise</Badge>
+          <Badge>#OnPremise</Badge>
           <Badge>#Quantization</Badge>
         </TagsRow>
       </AnimatedFadeIn>

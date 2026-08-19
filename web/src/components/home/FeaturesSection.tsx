@@ -20,53 +20,49 @@ const Grid3 = styled('div')({
   '@media (max-width: 900px)': { gridTemplateColumns: '1fr' },
 });
 
-const BadgeIcon = styled('div')<{ color: string }>(({ color }) => ({
+const BadgeIcon = styled('div')({
   width: '48px',
   height: '48px',
   borderRadius: m3Theme.radius.medium,
-  background: color,
+  background: m3Theme.colors.primarySoft,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   marginBottom: m3Theme.spacing.md,
-}));
+});
 
-const Dot = styled('span')<{ color: string }>(({ color }) => ({
+const Dot = styled('span')({
   width: '18px',
   height: '18px',
   borderRadius: '50%',
-  background: color,
+  background: m3Theme.colors.primary,
   display: 'block',
-}));
+});
 
-const FeatureTitle = styled('h3')<{ color: string }>(({ color }) => ({
+const FeatureTitle = styled('h3')({
   fontSize: m3Theme.font.sizes.xl,
-  color,
+  color: m3Theme.colors.onSurface,
   marginBottom: m3Theme.spacing.md,
-}));
+  fontWeight: m3Theme.font.weights.semibold,
+});
 
 const FeatureText = styled('p')({
-  color: m3Theme.colors.onSurfaceVariant,
+  color: m3Theme.colors.onSurfaceMuted,
   lineHeight: 1.7,
   margin: 0,
+  fontSize: m3Theme.font.sizes.sm,
 });
 
 const features = [
   {
-    accent: m3Theme.colors.primary,
-    container: m3Theme.colors.primaryContainer,
     title: 'LLMOps & Edge AI',
     text: 'Inférence locale et benchmarking de modèles frontières (Mistral, Llama, DeepSeek) sur architectures de rupture (AMD Strix Halo, Ryzen AI Max).',
   },
   {
-    accent: m3Theme.colors.secondary,
-    container: m3Theme.colors.secondaryContainer,
     title: 'Souveraineté Numérique',
-    text: 'Passer du cloud à l’infrastructure locale on-premise pour garantir une souveraineté totale des données et diviser les coûts d’inférence par 10.',
+    text: 'Passer du cloud à l\'infrastructure locale on-premise pour garantir une souveraineté totale des données et diviser les coûts d\'inférence par 10.',
   },
   {
-    accent: m3Theme.colors.success,
-    container: m3Theme.colors.successContainer,
     title: 'Performance Hardware',
     text: 'Optimisation hardware sur architectures locales, quantification (GGUF, AWQ, 4-bit, 8-bit) et distillation de modèles.',
   },
@@ -74,7 +70,7 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <Section >
+    <Section>
       <Container>
         <AnimatedFadeIn>
           <SectionHeader>
@@ -90,13 +86,11 @@ export function FeaturesSection() {
         <Grid3>
           {features.map((f, i) => (
             <AnimatedFadeIn key={f.title} delay={0.1 + i * 0.15}>
-              <FeatureCard
-                style={{ height: '100%', borderTop: `4px solid ${f.container}` }}
-              >
-                <BadgeIcon color={f.container}>
-                  <Dot color={f.accent} />
+              <FeatureCard style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <BadgeIcon>
+                  <Dot />
                 </BadgeIcon>
-                <FeatureTitle color={f.accent}>{f.title}</FeatureTitle>
+                <FeatureTitle>{f.title}</FeatureTitle>
                 <FeatureText>{f.text}</FeatureText>
               </FeatureCard>
             </AnimatedFadeIn>

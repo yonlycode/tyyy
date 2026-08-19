@@ -20,33 +20,12 @@ const floatAlt = keyframes`
   100% { transform: translate(0, 0) scale(1); }
 `;
 
-const glowPulse = keyframes`
-  0%, 100% { box-shadow: 0 0 0 0 rgba(187, 134, 252, 0.45), 0 10px 40px rgba(103, 80, 164, 0.35); }
-  50%      { box-shadow: 0 0 0 22px rgba(187, 134, 252, 0), 0 10px 40px rgba(103, 80, 164, 0.45); }
+const avatarGlow = keyframes`
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4), 0 8px 32px rgba(99, 102, 241, 0.2); }
+  50%      { box-shadow: 0 0 0 16px rgba(99, 102, 241, 0), 0 8px 32px rgba(99, 102, 241, 0.3); }
 `;
 
 /* ── Styles ──────────────────────────────────────────────────────── */
-
-const Blob = styled('div')<{ variant: 'a' | 'b'; size: number; top: string; left?: string; right?: string }>(
-  ({ variant, size, top, left, right }) => ({
-    position: 'absolute',
-    width: size,
-    height: size,
-    top,
-    left,
-    right,
-    borderRadius: '50%',
-    filter: 'blur(70px)',
-    opacity: 0.35,
-    background:
-      variant === 'a'
-        ? 'radial-gradient(circle, #BB86FC, #6750A4)'
-        : 'radial-gradient(circle, #5E35B1, #E8C9FF)',
-    animation: `${variant === 'a' ? float : floatAlt} 18s ease-in-out infinite`,
-    pointerEvents: 'none',
-    zIndex: 0,
-  }),
-);
 
 const HeroArea = styled('div')({
   position: 'relative',
@@ -63,6 +42,27 @@ const HeroInner = styled('div')({
   textAlign: 'center',
 });
 
+const Blob = styled('div')<{ variant: 'a' | 'b'; size: number; top: string; left?: string; right?: string }>(
+  ({ variant, size, top, left, right }) => ({
+    position: 'absolute',
+    width: size,
+    height: size,
+    top,
+    left,
+    right,
+    borderRadius: '50%',
+    filter: 'blur(80px)',
+    opacity: 0.2,
+    background:
+      variant === 'a'
+        ? 'radial-gradient(circle, #6366F1, #4F46E5)'
+        : 'radial-gradient(circle, #34D399, #059669)',
+    animation: `${variant === 'a' ? float : floatAlt} 20s ease-in-out infinite`,
+    pointerEvents: 'none',
+    zIndex: 0,
+  }),
+);
+
 const Avatar = styled('div')({
   width: '88px',
   height: '88px',
@@ -75,15 +75,15 @@ const Avatar = styled('div')({
   fontSize: m3Theme.font.sizes['2xl'],
   fontWeight: m3Theme.font.weights.extrabold,
   color: m3Theme.colors.onPrimary,
-  animation: `${glowPulse} 3.5s ease-in-out infinite`,
+  animation: `${avatarGlow} 3.5s ease-in-out infinite`,
   marginBottom: m3Theme.spacing.lg,
 });
 
 const HeroTitle = styled('h2')({
-  fontSize: m3Theme.font.sizes['3xl'],
+  fontSize: m3Theme.font.sizes['6xl'],
   fontWeight: m3Theme.font.weights.extrabold,
   lineHeight: m3Theme.font.lineHeights.tight,
-  letterSpacing: '-0.02em',
+  letterSpacing: '-0.03em',
   background: m3Theme.gradients.text,
   WebkitBackgroundClip: 'text',
   backgroundClip: 'text',
@@ -110,8 +110,8 @@ export function PageHero({ eyebrow, title, subtitle, avatar }: PageHeroProps) {
       <HeroArea>
         {!reducedMotion && (
           <>
-            <Blob variant="a" size={280} top="-10%" left="-5%" />
-            <Blob variant="b" size={240} top="50%" right="-8%" />
+            <Blob variant="a" size={320} top="-15%" left="-8%" />
+            <Blob variant="b" size={260} top="40%" right="-10%" />
           </>
         )}
 

@@ -5,9 +5,10 @@ import styled from '@emotion/styled';
 import { m3Theme } from '@/styles/theme';
 
 const FooterRoot = styled('footer')({
-  background: m3Theme.colors.deep,
-  color: m3Theme.colors.surfaceBright,
+  background: m3Theme.colors.footerBg,
+  color: m3Theme.colors.onSurfaceMuted,
   marginTop: m3Theme.spacing.xxxl,
+  borderTop: `1px solid ${m3Theme.colors.footerBorder}`,
 });
 
 const FooterInner = styled('div')({
@@ -30,7 +31,7 @@ const FooterTop = styled('div')({
 const FooterBrand = styled('div')({
   fontWeight: m3Theme.font.weights.bold,
   fontSize: m3Theme.font.sizes.lg,
-  color: m3Theme.colors.surfaceBright,
+  color: m3Theme.colors.onSurface,
 });
 
 const FooterLinks = styled('div')({
@@ -39,19 +40,30 @@ const FooterLinks = styled('div')({
 });
 
 const FooterLink = styled(Link)({
-  color: m3Theme.colors.surfaceBright,
+  color: m3Theme.colors.onSurfaceMuted,
   textDecoration: 'none',
-  fontSize: m3Theme.font.sizes.sm,
+  fontSize: m3Theme.font.sizes.md,
   fontWeight: m3Theme.font.weights.medium,
   opacity: 0.85,
   transition: 'color 0.2s ease, opacity 0.2s ease',
 
-  '&:hover': { color: m3Theme.colors.brandAccent, opacity: 1 },
+  '&:hover': { color: m3Theme.colors.primaryHover, opacity: 1 },
   '&:focus-visible': {
     outline: 'none',
-    boxShadow: `0 0 0 2px ${m3Theme.colors.brandAccent}`,
+    boxShadow: `0 0 0 2px ${m3Theme.colors.primary}`,
     borderRadius: m3Theme.radius.small,
   },
+});
+
+const StatusDot = styled('span')({
+  display: 'inline-block',
+  width: '8px',
+  height: '8px',
+  borderRadius: '50%',
+  background: m3Theme.colors.success,
+  boxShadow: `0 0 6px ${m3Theme.colors.success}`,
+  marginRight: '6px',
+  animation: 'pulse 2s ease-in-out infinite',
 });
 
 const FooterBottom = styled('div')({
@@ -61,10 +73,17 @@ const FooterBottom = styled('div')({
   alignItems: 'center',
   gap: m3Theme.spacing.md,
   paddingTop: m3Theme.spacing.lg,
-  borderTop: `1px solid rgba(255,255,255,0.1)`,
-  fontSize: m3Theme.font.sizes.xs,
-  color: m3Theme.colors.surfaceBright,
-  opacity: 0.8,
+  borderTop: `1px solid ${m3Theme.colors.footerBorder}`,
+  fontSize: m3Theme.font.sizes.sm,
+  color: m3Theme.colors.onSurfaceDim,
+});
+
+const Availability = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  color: m3Theme.colors.onSurfaceMuted,
+  fontSize: m3Theme.font.sizes.sm,
+  fontWeight: m3Theme.font.weights.medium,
 });
 
 export function Footer() {
@@ -84,7 +103,11 @@ export function Footer() {
         </FooterTop>
         <FooterBottom>
           <span>© {year} Yoann Fort. Architecte IA &amp; Lead LLMOps.</span>
-          <span>Next.js · Emotion · Material Design 3</span>
+          <Availability>
+            <StatusDot />
+            Available for work
+          </Availability>
+          <span>Next.js · Emotion · Dark Design</span>
         </FooterBottom>
       </FooterInner>
     </FooterRoot>

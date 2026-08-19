@@ -9,16 +9,16 @@ const NavbarRoot = styled('header')({
   position: 'sticky',
   top: 0,
   zIndex: m3Theme.z.navbar,
-  background: 'rgba(254, 247, 255, 0.82)',
-  backdropFilter: 'saturate(180%) blur(12px)',
-  WebkitBackdropFilter: 'saturate(180%) blur(12px)',
-  borderBottom: `1px solid ${m3Theme.colors.outlineVariant}`,
+  background: 'rgba(11, 15, 25, 0.8)',
+  backdropFilter: 'saturate(180%) blur(16px)',
+  WebkitBackdropFilter: 'saturate(180%) blur(16px)',
+  borderBottom: `1px solid ${m3Theme.colors.surfaceBorder}`,
 });
 
 const NavbarInner = styled('nav')({
   maxWidth: '1200px',
   margin: '0 auto',
-  padding: `0.75rem ${m3Theme.spacing.xl}`,
+  padding: `0.875rem ${m3Theme.spacing.xl}`,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -57,7 +57,7 @@ const Links = styled('div')({
 });
 
 const NavLink = styled(Link)<{ active: boolean }>(({ active }) => ({
-  color: active ? m3Theme.colors.primary : m3Theme.colors.onSurfaceVariant,
+  color: active ? m3Theme.colors.onSurface : m3Theme.colors.onSurfaceMuted,
   textDecoration: 'none',
   fontSize: m3Theme.font.sizes.sm,
   fontWeight: m3Theme.font.weights.semibold,

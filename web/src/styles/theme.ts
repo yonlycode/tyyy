@@ -1,94 +1,80 @@
 export const m3Theme = {
+  // ── Palette: Dark mode by default ──────────────────────────────────
   colors: {
-    // Primary palette - M3 Purple base
-    primary: '#6750A4',
-    onPrimary: '#FFFFFF',
-    primaryContainer: '#EADDFF',
-    onPrimaryContainer: '#21005D',
+    // Surface layers (slate-950 → slate-50)
+    surface: '#0B0F19',          // page background — near-black
+    surfaceElevated: '#111827',  // card background
+    surfaceHover: '#1E293B',     // hover state
+    surfaceBorder: '#1E293B',    // default border
+    surfaceBorderHover: '#6366F155', // purple glow border on hover
 
-    // Extended M3 semantic colors for AI/technical profile
-    secondary: '#5E35B1',
-    onSecondary: '#FFFFFF',
-    secondaryContainer: '#E8C9FF',
-    onSecondaryContainer: '#1A0050',
+    // Text
+    onSurface: '#F1F5F9',        // primary text (slate-100)
+    onSurfaceMuted: '#94A3B8',   // secondary text (slate-400)
+    onSurfaceDim: '#64748B',     // tertiary text (slate-500)
 
-    // Success/Warning/Error for governance & reliability
-    success: '#2E7D32',
-    onSuccess: '#FFFFFF',
-    successContainer: '#DCEDC8',
-    onSuccessContainer: '#1B5E20',
+    // Accent — indigo/purple
+    primary: '#6366F1',          // main accent (indigo-500)
+    primaryHover: '#818CF8',     // hover (indigo-400)
+    primaryDark: '#4F46E5',      // solid button bg (indigo-600)
+    primarySoft: '#6366F118',    // subtle fill (12% opacity) — also aliased below
+    primaryGlow: 'rgba(99, 102, 241, 0.35)', // glow shadow
 
-    warning: '#F57F17',
-    onWarning: '#FFFFFF',
-    warningContainer: '#FFF3E0',
-    onWarningContainer: '#B45F04',
+    // Neon green — performance / status / availability
+    success: '#34D399',          // neon green (emerald-400)
+    successSoft: '#34D39922',    // subtle green fill
 
-    error: '#D32F2F',
-    onError: '#FFFFFF',
-    errorContainer: '#FFCDD2',
-    onErrorContainer: '#B71C1C',
+    // Gradients
+    heroGradient: 'radial-gradient(ellipse 80% 60% at 10% 0%, rgba(99,102,241,0.12) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 90% 20%, rgba(52,211,153,0.06) 0%, transparent 50%), linear-gradient(180deg, #0B0F19 0%, #0F172A 100%)',
+    glowGradient: 'linear-gradient(135deg, #6366F1 0%, #818CF8 50%, #4F46E5 100%)',
+    textGradient: 'linear-gradient(135deg, #F1F5F9 0%, #818CF8 100%)',
 
-    // Info/technical accent
-    info: '#0288D1',
-    onInfo: '#FFFFFF',
-    infoContainer: '#E3F2FD',
-    onInfoContainer: '#01579B',
+    // Grid pattern for CTA
+    gridPattern: 'rgba(148, 163, 184, 0.06)',
 
-    // Surface system with depth for layered UI
-    surface: '#FEF7FF',
-    onSurface: '#1D1B20',
-    surfaceVariant: '#E7E0EC',
-    onSurfaceVariant: '#49454F',
-    surfaceDim: '#E0D8F0',
-    surfaceBright: '#FCFBFF',
+    // Footer
+    footerBg: '#020617',         // slate-950
+    footerBorder: '#1E293B',
 
-    // Outline & divider
-    outline: '#79747E',
-    outlineVariant: '#B0A8BC',
-
-    // Background gradients for hero sections
-    background: '#FEF7FF',
-    surfaceBackground: '#FFFFFF',
-
-    // Badge/state colors aligned with M3
-    badge: '#6750A4',
-    badgeOn: '#FFFFFF',
-
-    // Chat/agent message colors
-    agentMessage: '#E8EAED',
-    userMessage: '#DCF8C6',
-
-    // Brand accent for highlights
-    brandAccent: '#BB86FC',
-    brandOnAccent: '#0A0A0A',
-
-    // Additional expressive tones for depth
-    primarySoft: '#E8DEF8',
-    secondarySoft: '#F3EDF9',
-    lavender: '#D0BCFF',
-    deep: '#1C1B1F',
+    // Aliases for backward compatibility
+    onPrimary: '#FFFFFF',        // text on primary (purple) bg
+    primaryContainer: '#6366F122', // subtle purple fill
+    secondary: '#818CF8',        // lighter indigo
+    secondaryContainer: '#818CF818',
+    onSecondaryContainer: '#F1F5F9',
+    brandAccent: '#A5B4FC',      // lighter indigo accent
+    outline: '#334155',          // darker border
+    outlineVariant: '#1E293B',   // same as surfaceBorder
+    onSurfaceVariant: '#94A3B8', // alias for onSurfaceMuted
   },
+
   gradients: {
-    hero: 'radial-gradient(120% 120% at 20% 0%, #EADDFF 0%, transparent 55%), radial-gradient(120% 120% at 90% 10%, #E8C9FF 0%, transparent 50%), linear-gradient(160deg, #FEF7FF 0%, #F3EDF9 100%)',
-    glow: 'linear-gradient(135deg, #6750A4 0%, #BB86FC 50%, #5E35B1 100%)',
-    text: 'linear-gradient(120deg, #6750A4 0%, #BB86FC 55%, #5E35B1 100%)',
+    hero: 'radial-gradient(ellipse 80% 60% at 10% 0%, rgba(99,102,241,0.12) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 90% 20%, rgba(52,211,153,0.06) 0%, transparent 50%), linear-gradient(180deg, #0B0F19 0%, #0F172A 100%)',
+    glow: 'linear-gradient(135deg, #6366F1 0%, #818CF8 50%, #4F46E5 100%)',
+    text: 'linear-gradient(135deg, #F1F5F9 0%, #818CF8 100%)',
   },
+
+  // ── Elevation ──────────────────────────────────────────────────────
   elevation: {
     level0: 'none',
-    level1: '0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30)',
-    level2: '0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30)',
-    level3: '0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px 0px rgba(0, 0, 0, 0.30)',
-    level4: '0px 8px 16px 4px rgba(0, 0, 0, 0.12), 0px 4px 8px 2px rgba(0, 0, 0, 0.20)',
-    // Subtle focus ring for accessibility
-    focus: '0 0 0 2px rgba(103, 80, 164, 0.4)',
+    level1: '0 1px 3px 0 rgba(0,0,0,0.4)',
+    level2: '0 4px 12px rgba(0,0,0,0.35)',
+    level3: '0 8px 24px rgba(0,0,0,0.4)',
+    level4: '0 12px 32px rgba(0,0,0,0.45)',
+    focus: '0 0 0 2px rgba(99, 102, 241, 0.5)',
+    glow: '0 0 20px rgba(99,102,241,0.15)',
   },
+
+  // ── Radius ─────────────────────────────────────────────────────────
   radius: {
     small: '8px',
     medium: '12px',
     large: '16px',
-    extraLarge: '28px',
+    extraLarge: '20px',
     circular: '9999px',
   },
+
+  // ── Spacing ────────────────────────────────────────────────────────
   spacing: {
     xs: '0.25rem',
     sm: '0.5rem',
@@ -99,10 +85,11 @@ export const m3Theme = {
     xxxl: '5rem',
     section: '6rem',
   },
+
+  // ── Typography ─────────────────────────────────────────────────────
   font: {
-    family:
-      "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
-    mono: "'SF Mono', ui-monospace, SFMono-Regular, Menlo, monospace",
+    family: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    mono: "'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, monospace",
     sizes: {
       xs: '0.75rem',
       sm: '0.875rem',
@@ -110,9 +97,10 @@ export const m3Theme = {
       lg: '1.125rem',
       xl: '1.375rem',
       '2xl': '1.75rem',
-      '3xl': '2.25rem',
+      '3xl': '2.5rem',
       '4xl': '3rem',
       '5xl': '3.75rem',
+      '6xl': '4.5rem',
     },
     weights: {
       regular: 400,
@@ -122,18 +110,22 @@ export const m3Theme = {
       extrabold: 800,
     },
     lineHeights: {
-      tight: 1.15,
-      snug: 1.3,
+      tight: 1.1,
+      snug: 1.2,
       normal: 1.5,
       relaxed: 1.75,
     },
   },
+
+  // ── Animation ──────────────────────────────────────────────────────
   animation: {
     fast: '0.15s ease',
     base: '0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     slow: '0.6s cubic-bezier(0.4, 0, 0.2, 1)',
     bounce: '0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
   },
+
+  // ── Z-index ────────────────────────────────────────────────────────
   z: {
     base: 1,
     elevated: 10,

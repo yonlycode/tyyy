@@ -23,7 +23,7 @@ export const Eyebrow = styled('span')({
   fontSize: m3Theme.font.sizes.xs,
   letterSpacing: '0.12em',
   textTransform: 'uppercase',
-  color: m3Theme.colors.primary,
+  color: m3Theme.colors.primaryHover,
   background: m3Theme.colors.primarySoft,
   padding: '0.4rem 0.9rem',
   borderRadius: m3Theme.radius.circular,
@@ -43,5 +43,5 @@ export const SectionTitle = styled('h2')({
 export const SectionSubtitle = styled('p')({
   fontSize: m3Theme.font.sizes.lg,
   lineHeight: m3Theme.font.lineHeights.relaxed,
-  color: m3Theme.colors.onSurfaceVariant,
+  color: m3Theme.colors.onSurfaceMuted,
 });

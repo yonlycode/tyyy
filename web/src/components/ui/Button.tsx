@@ -4,7 +4,7 @@ import Link from 'next/link';
 import styled from '@emotion/styled';
 import { m3Theme } from '@/styles/theme';
 
-/** Button component with enhanced Material Design 3 states */
+/** Button component with enhanced dark-mode states */
 export const Button = styled('button')({
   background: m3Theme.colors.primary,
   color: m3Theme.colors.onPrimary,
@@ -26,14 +26,14 @@ export const Button = styled('button')({
   },
 
   '&:hover': {
-    background: m3Theme.colors.primaryContainer,
+    background: m3Theme.colors.primaryHover,
     transform: 'translateY(-1px)',
   },
 
   '&:disabled': {
     opacity: 0.5,
     cursor: 'not-allowed',
-    background: m3Theme.colors.onSurfaceVariant,
+    background: m3Theme.colors.onSurfaceDim,
     color: m3Theme.colors.onSurface,
   },
 });
@@ -44,7 +44,7 @@ export const PrimaryButton = styled(Button)({
   color: m3Theme.colors.onPrimary,
 
   '&:hover': {
-    background: m3Theme.colors.primaryContainer,
+    background: m3Theme.colors.primaryHover,
     transform: 'translateY(-2px)',
   },
 });
@@ -53,16 +53,16 @@ export const PrimaryButton = styled(Button)({
 export const OutlineButton = styled(Button)({
   background: 'transparent',
   border: `2px solid ${m3Theme.colors.primary}`,
-  color: m3Theme.colors.primary,
+  color: m3Theme.colors.primaryHover,
 
   '&:hover': {
-    background: m3Theme.colors.primaryContainer,
-    color: m3Theme.colors.onPrimaryContainer,
+    background: m3Theme.colors.primarySoft,
+    color: m3Theme.colors.primaryHover,
   },
 
   '&:focus-visible': {
     boxShadow: m3Theme.elevation.focus,
-    borderColor: m3Theme.colors.primaryContainer,
+    borderColor: m3Theme.colors.primary,
   },
 });
 
@@ -73,13 +73,13 @@ export const SmallButton = styled(Button)({
   borderRadius: m3Theme.radius.small,
 });
 
-/** Filled button rendered as an anchor link — primary CTA */
+/** Filled button rendered as an anchor link — primary CTA (solid dark purple) */
 export const ButtonLink = styled(Link)({
-  background: m3Theme.gradients.glow,
+  background: m3Theme.colors.primaryDark,
   color: m3Theme.colors.onPrimary,
   border: 'none',
-  borderRadius: m3Theme.radius.extraLarge,
-  padding: '1rem 2rem',
+  borderRadius: m3Theme.radius.large,
+  padding: '1.125rem 2.25rem',
   fontSize: '1.0625rem',
   fontWeight: m3Theme.font.weights.semibold,
   letterSpacing: '0.01em',
@@ -89,11 +89,11 @@ export const ButtonLink = styled(Link)({
   alignItems: 'center',
   justifyContent: 'center',
   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-  boxShadow: '0 4px 16px rgba(103, 80, 164, 0.35)',
+  boxShadow: '0 4px 16px rgba(79, 70, 229, 0.4)',
 
   '&:focus-visible': {
     outline: 'none',
-    boxShadow: `${m3Theme.elevation.focus}, 0 4px 16px rgba(103, 80, 164, 0.35)`,
+    boxShadow: `${m3Theme.elevation.focus}, 0 4px 16px rgba(79, 70, 229, 0.4)`,
   },
 
   '&:active': {
@@ -101,18 +101,19 @@ export const ButtonLink = styled(Link)({
   },
 
   '&:hover': {
+    background: m3Theme.colors.primary,
     transform: 'translateY(-2px)',
-    boxShadow: '0 8px 30px rgba(103, 80, 164, 0.45)',
+    boxShadow: '0 8px 30px rgba(99, 102, 241, 0.45)',
   },
 });
 
-/** Outlined button rendered as an anchor link — secondary CTA */
+/** Outlined button rendered as an anchor link — ghost/secondary CTA */
 export const OutlineButtonLink = styled(Link)({
   background: 'transparent',
-  border: `1.5px solid ${m3Theme.colors.outline}`,
-  color: m3Theme.colors.onSurface,
-  borderRadius: m3Theme.radius.extraLarge,
-  padding: '1rem 2rem',
+  border: `1.5px solid ${m3Theme.colors.onSurfaceDim}`,
+  color: m3Theme.colors.onSurfaceMuted,
+  borderRadius: m3Theme.radius.large,
+  padding: '1.125rem 2.25rem',
   fontSize: '1.0625rem',
   fontWeight: m3Theme.font.weights.semibold,
   letterSpacing: '0.01em',
@@ -124,9 +125,9 @@ export const OutlineButtonLink = styled(Link)({
   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
 
   '&:hover': {
-    background: m3Theme.colors.primarySoft,
     borderColor: m3Theme.colors.primary,
-    color: m3Theme.colors.primary,
+    color: m3Theme.colors.primaryHover,
+    background: m3Theme.colors.primarySoft,
     transform: 'translateY(-2px)',
   },
 

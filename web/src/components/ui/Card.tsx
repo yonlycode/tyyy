@@ -3,19 +3,19 @@
 import styled from '@emotion/styled';
 import { m3Theme } from '@/styles/theme';
 
-/** Card component with enhanced hover interactions and shadow transitions */
+/** Card component with border-reactive hover (no shadows) */
 export const Card = styled('div')({
-  background: m3Theme.colors.surface,
+  background: m3Theme.colors.surfaceElevated,
   borderRadius: m3Theme.radius.medium,
   padding: '1.5rem',
-  boxShadow: m3Theme.elevation.level1,
-  transition: 'box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-  // Prevent card from being selected/highlighted
+  border: `1px solid ${m3Theme.colors.surfaceBorder}`,
+  transition: 'border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease',
   userSelect: 'none',
 
   '&:hover': {
-    boxShadow: m3Theme.elevation.level3,
-    transform: 'translateY(-4px)',
+    borderColor: m3Theme.colors.surfaceBorderHover,
+    boxShadow: m3Theme.elevation.glow,
+    transform: 'translateY(-2px)',
   },
 
   '&:focus-visible': {
@@ -24,20 +24,21 @@ export const Card = styled('div')({
   },
 });
 
-/** Card with elevated shadow for featured content */
+/** Card with purple border hover + micro-glow for featured content */
 export const FeatureCard = styled(Card)({
-  boxShadow: m3Theme.elevation.level2,
-  transition: 'box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+  borderTop: `3px solid ${m3Theme.colors.surfaceBorder}`,
 
   '&:hover': {
-    boxShadow: m3Theme.elevation.level4,
-    transform: 'translateY(-8px)',
+    borderColor: m3Theme.colors.surfaceBorderHover,
+    borderTopColor: m3Theme.colors.primary,
+    boxShadow: `0 0 24px ${m3Theme.colors.primaryGlow}, ${m3Theme.elevation.level2}`,
+    transform: 'translateY(-4px)',
   },
 });
 
 /** Card with border accent for selected state */
 export const BorderCard = styled(Card)({
-  border: `1px solid ${m3Theme.colors.outlineVariant}`,
+  border: `1px solid ${m3Theme.colors.surfaceBorder}`,
 
   '&:hover': {
     borderColor: m3Theme.colors.primary,
