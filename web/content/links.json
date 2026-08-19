@@ -5,21 +5,21 @@
     {
       "id": "github",
       "label": "GitHub",
-      "url": "https://github.com/",
+      "url": "https://github.com/yonlycode",
       "icon": "github",
       "enabled": true
     },
     {
       "id": "linkedin",
       "label": "LinkedIn",
-      "url": "https://www.linkedin.com/",
+      "url": "https://www.linkedin.com/in/yoann-fort/",
       "icon": "linkedin",
       "enabled": true
     },
     {
       "id": "twitter",
       "label": "Twitter / X",
-      "url": "https://x.com/",
+      "url": "https://x.com/TheYonlyYone",
       "icon": "twitter",
       "enabled": true
     },
