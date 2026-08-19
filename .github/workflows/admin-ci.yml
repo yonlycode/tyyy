@@ -42,6 +42,13 @@ jobs:
             libayatana-appindicator3-dev \
             librsvg2-dev
 
+      - name: Install frontend dependencies
+        working-directory: ./admin/frontend
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: wails build -platform linux/amd64 -clean
+
       - name: Vet
         run: go vet ./...
 
@@ -49,10 +56,3 @@ jobs:
         run: |
           gofmt -l .
           test -z "$(gofmt -l .)"
-
-      - name: Install frontend dependencies
-        working-directory: ./admin/frontend
-        run: yarn install --frozen-lockfile
-
-      - name: Build
-        run: wails build -platform linux/amd64 -clean
