@@ -1,8 +1,8 @@
 ---
 title: "TY3 / Portfolio du Rat"
-description: "J'ai construit mon portfolio. Il coûte **0€/an** en infra.
-Pas de Vercel. Pas de Netlify. Pas de Supabase. Pas de \"freemium\" qui vous piège avec des quotas qui disparaissent quand vous avez du trafic."
+description: "J'ai construit mon portfolio. Il coûte **0€/an** en infra. Pas de Vercel. Pas de Netlify. Pas de Supabase. Pas de \"freemium\" qui vous piège avec des quotas qui disparaissent quand vous avez du trafic."
 date: 2026-08-19
+tags: [Local-First, open-source, Portfolio, ratware, ZeroInfra]
 published: true
 ---
 
