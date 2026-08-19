@@ -2,9 +2,10 @@
 title: "Optimisation de performance pour e-commerce"
 description: "Amélioration des temps de chargement et conversion pour une boutique en ligne existante."
 date: 2024-04-25
-tags: ["web", "performance", "e-commerce", "optimization"]
+tags: [web, performance, e-commerce, optimization]
 published: true
 ---
+
 # Optimisation de performance pour e-commerce
 
 Projet d'optimisation complète visant à réduire les temps de chargement et augmenter le taux de conversion pour une boutique en ligne B2B.
@@ -41,3 +42,5 @@ La boutique en ligne originale affichait des temps de chargement moyens de 5.2 s
 ---
 
 *Publié le 25 avril 2024 · Projet client*
+
+![lemonade_a_beautifully_rendered__high_e_1780935447061.png](/tyyy/images/lemonade_a_beautifully_rendered__high_e_1780935447061.png)
