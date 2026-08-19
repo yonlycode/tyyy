@@ -1,4 +1,5 @@
 import {
+  ClearCache,
   DeleteArticle,
   DeleteProject,
   GetArticle,
@@ -42,5 +43,6 @@ export const api = {
   getLinks: () => GetLinks() as Promise<LinksData>,
   saveLinks: (data: LinksData) => SaveLinks(data as unknown as content.LinksData),
   uploadImage: (fileName: string, data: string) => UploadMedia(fileName, data),
+  clearCache: () => ClearCache(),
   loadConfig: () => GetFullConfig() as Promise<PersistedConfig | null>,
 };

@@ -1,13 +1,16 @@
 import { useState } from "react";
 import type { Config } from "../types";
 import { api } from "../services/api";
+import ClearCacheConfirmModal from "./ClearCacheConfirmModal";
 
 export default function SettingsPage({
   config,
   onBack,
+  onCacheCleared,
 }: {
   config: Config;
   onBack: () => void;
+  onCacheCleared: () => void;
 }) {
   const [editMode, setEditMode] = useState(false);
   const [token, setToken] = useState("");
@@ -18,6 +21,7 @@ export default function SettingsPage({
   const [branch, setBranch] = useState(config.branch);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [confirmClear, setConfirmClear] = useState(false);
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
@@ -26,6 +30,20 @@ export default function SettingsPage({
     try {
       await api.setConfig({ token, owner, repo, baseDir, imgDir, branch });
       onBack();
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function clearCache() {
+    setConfirmClear(false);
+    setError("");
+    setBusy(true);
+    try {
+      await api.clearCache();
+      onCacheCleared();
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -68,11 +86,18 @@ export default function SettingsPage({
             <dt>Token</dt>
             <dd className="token-hidden">••••••••</dd>
           </dl>
+          {error && <p className="error">{error}</p>}
           <div className="actions">
             <button onClick={startEdit}>Edit</button>
+            <button className="danger" onClick={() => setConfirmClear(true)}>
+              Clear cache
+            </button>
             <button className="primary" onClick={onBack}>Done</button>
           </div>
         </div>
+        {confirmClear && (
+          <ClearCacheConfirmModal onCancel={() => setConfirmClear(false)} onConfirm={clearCache} />
+        )}
       </div>
     );
   }
@@ -112,12 +137,18 @@ export default function SettingsPage({
         </label>
         {error && <p className="error">{error}</p>}
         <div className="actions">
+          <button type="button" className="danger" onClick={() => setConfirmClear(true)}>
+            Clear cache
+          </button>
           <button type="button" onClick={cancelEdit}>Cancel</button>
           <button type="submit" className="primary" disabled={busy}>
             {busy ? "Saving…" : "Save & Reconnect"}
           </button>
         </div>
       </form>
+      {confirmClear && (
+        <ClearCacheConfirmModal onCancel={() => setConfirmClear(false)} onConfirm={clearCache} />
+      )}
     </div>
   );
 }

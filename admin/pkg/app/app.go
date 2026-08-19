@@ -320,6 +320,20 @@ func (a *App) UploadMedia(fileName, dataB64 string) (string, error) {
 	return repo.UploadMedia(fileName, data)
 }
 
+// ClearCache removes the persisted config cache file from disk and resets
+// all in-memory state, returning the app to an unconfigured state.
+func (a *App) ClearCache() error {
+	if err := content.ClearConfigCache(); err != nil {
+		return err
+	}
+	a.mu.Lock()
+	a.cfg = content.Config{}
+	a.repo = nil
+	a.cachedConfig = nil
+	a.mu.Unlock()
+	return nil
+}
+
 func (a *App) repoOr() *content.GitHubRepository {
 	a.mu.Lock()
 	repo := a.repo

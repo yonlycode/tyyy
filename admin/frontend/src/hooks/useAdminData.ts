@@ -60,6 +60,14 @@ export function useAdminData() {
     await refreshArticles();
   }, [refreshArticles]);
 
+  // Reload config without touching the article list — used after clearing the
+  // cache, when the repository no longer exists.
+  const refreshConfigOnly = useCallback(async () => {
+    const cfg = await api.getConfig();
+    setConfig(cfg);
+    setCachedConfig(await api.loadConfig());
+  }, []);
+
   return {
     config,
     cachedConfig,
@@ -69,5 +77,6 @@ export function useAdminData() {
     setError,
     loadArticles: refreshArticles,
     onConfigSaved,
+    refreshConfigOnly,
   };
 }

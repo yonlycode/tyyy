@@ -427,3 +427,22 @@ func SaveConfig(cfg Config) error {
 	}
 	return os.WriteFile(cfgPath, data, 0o600)
 }
+
+// ClearConfigCache removes the persisted config cache file
+// (~/.tyyy-admin/config.json). It is a no-op if the file does not exist.
+func ClearConfigCache() error {
+	cfgPath, err := ConfigCachePath()
+	if err != nil {
+		return err
+	}
+	if _, err := os.Stat(cfgPath); err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil
+		}
+		return fmt.Errorf("clear config cache: %w", err)
+	}
+	if err := os.Remove(cfgPath); err != nil {
+		return fmt.Errorf("clear config cache: %w", err)
+	}
+	return nil
+}

@@ -15,7 +15,7 @@ import DeleteConfirmModal from "./components/DeleteConfirmModal";
 type Tab = "articles" | "projects" | "links" | "deployments";
 
 export default function App() {
-  const { config, cachedConfig, articles, error, loading, setError, loadArticles, onConfigSaved } =
+  const { config, cachedConfig, articles, error, loading, setError, loadArticles, onConfigSaved, refreshConfigOnly } =
     useAdminData();
   const [editing, setEditing] = useState<Article | null>(null);
   const [creating, setCreating] = useState(false);
@@ -85,6 +85,13 @@ export default function App() {
 
   async function onSavedConfig() {
     await onConfigSaved();
+    setShowSettings(false);
+  }
+
+  // Clear the persisted cache: remove saved credentials, then reload config so
+  // the app returns to the unconfigured connection screen.
+  async function onCacheCleared() {
+    await refreshConfigOnly();
     setShowSettings(false);
   }
 
@@ -189,12 +196,12 @@ export default function App() {
 
   // Not configured yet — show the connection modal
   if (!config?.configured) {
-    return <SettingsModal onSaved={onSavedConfig} initialConfig={cachedConfig || undefined} />;
+    return <SettingsModal onSaved={onSavedConfig} onCacheCleared={onCacheCleared} initialConfig={cachedConfig || undefined} />;
   }
 
   // Settings modal overlay
   if (showSettings) {
-    return <SettingsPage config={config} onBack={() => setShowSettings(false)} />;
+    return <SettingsPage config={config} onBack={() => setShowSettings(false)} onCacheCleared={onCacheCleared} />;
   }
 
   if (creating) {

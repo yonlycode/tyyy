@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { DEFAULT_CONFIG } from "../types";
 import type { PersistedConfig } from "../types";
 import { api } from "../services/api";
+import ClearCacheConfirmModal from "./ClearCacheConfirmModal";
 
 export default function SettingsModal({
   onSaved,
+  onCacheCleared,
   initialConfig,
 }: {
   onSaved: () => void;
+  onCacheCleared: () => void;
   initialConfig?: PersistedConfig;
 }) {
   const [token, setToken] = useState("");
@@ -18,6 +21,8 @@ export default function SettingsModal({
   const [branch, setBranch] = useState(DEFAULT_CONFIG.branch);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [confirmClear, setConfirmClear] = useState(false);
+  const [cleared, setCleared] = useState(false);
 
   useEffect(() => {
     if (initialConfig) {
@@ -37,6 +42,21 @@ export default function SettingsModal({
     try {
       await api.setConfig({ token, owner, repo, baseDir, imgDir, branch });
       onSaved();
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function clearCache() {
+    setConfirmClear(false);
+    setError("");
+    setBusy(true);
+    try {
+      await api.clearCache();
+      setCleared(true);
+      onCacheCleared();
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -79,12 +99,23 @@ export default function SettingsModal({
           <input value={branch} onChange={(e) => setBranch(e.target.value)} required />
         </label>
         {error && <p className="error">{error}</p>}
+        {cleared && (
+          <p className="hint">
+            Cache cleared. Your saved credentials have been removed from disk.
+          </p>
+        )}
         <div className="actions">
+          <button type="button" className="danger" onClick={() => setConfirmClear(true)}>
+            Clear cache
+          </button>
           <button type="submit" className="primary" disabled={busy}>
             {busy ? "Connecting…" : "Connect"}
           </button>
         </div>
       </form>
+      {confirmClear && (
+        <ClearCacheConfirmModal onCancel={() => setConfirmClear(false)} onConfirm={clearCache} />
+      )}
     </div>
   );
 }
