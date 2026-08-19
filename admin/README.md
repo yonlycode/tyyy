@@ -1,6 +1,5 @@
 # yo-port Admin
 
-
 Standalone **desktop** admin CMS for the **yo-port** portfolio & blog. It lets you create, edit, publish and delete the Markdown content that lives in the GitHub repo — **articles** (`web/content/articles/*.md`) and **projects** (`web/content/projects/*.md`) — manage the **contact links** (`web/content/links.json`) plus upload images, committing changes directly to the `main` branch so the site's CI/CD rebuilds automatically. A dedicated **Deployments** tab shows the status of those builds (recent `deploy.yml` workflow runs).
 
 Built with **[Wails](https://wails.io/)**: a Go backend whose methods are bound directly to a React frontend embedded into a **single native desktop binary** (no server, no browser tab).
