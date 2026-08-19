@@ -36,7 +36,7 @@ export default function RootLayout({
         <ThemeProvider>
           <PageShell>{children}</PageShell>
         </ThemeProvider>
-        <GoogleAnalytics gaId="G-XXXXXXX" />
+        <GoogleAnalytics gaId="G-2ZHCGP7VD4" />
       </body>
     </html>
   );
