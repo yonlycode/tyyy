@@ -180,6 +180,16 @@ func (a *App) ListProjects() ([]*content.Project, error) {
 	return repo.ListProjects()
 }
 
+// ListTags returns the deduplicated set of all tags used across articles and
+// projects, used by the editor's tag autocomplete.
+func (a *App) ListTags() ([]string, error) {
+	repo := a.repoOr()
+	if repo == nil {
+		return nil, errNotConfigured
+	}
+	return repo.ListTags()
+}
+
 // GetLinks returns the contact links data from the repo.
 func (a *App) GetLinks() (*content.LinksData, error) {
 	repo := a.repoOr()

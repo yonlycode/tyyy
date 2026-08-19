@@ -4,17 +4,20 @@ import { api } from "../services/api";
 import ImageUploader from "./ImageUploader";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import MarkdownPreviewModal from "./MarkdownPreviewModal";
+import TagInput from "./TagInput";
 
 export default function ProjectEditor({
   project,
   onBack,
   onSaved,
   onDelete,
+  allTags,
 }: {
   project: Project | null;
   onBack: () => void;
   onSaved: (p: Project) => void;
   onDelete: (p: Project) => Promise<void>;
+  allTags: string[];
 }) {
   const empty: Project = {
     slug: "",
@@ -38,11 +41,6 @@ export default function ProjectEditor({
 
   function setFm(patch: Partial<Project["frontmatter"]>) {
     setForm((f) => ({ ...f, frontmatter: { ...f.frontmatter, ...patch } }));
-  }
-
-  function setTags(raw: string) {
-    const tags = raw.split(",").map((t) => t.trim()).filter(Boolean);
-    setFm({ tags });
   }
 
   async function save(publish: boolean) {
@@ -128,8 +126,12 @@ export default function ProjectEditor({
           </label>
           <div className="row">
             <label>
-              Tags (comma separated)
-              <input value={(form.frontmatter.tags || []).join(", ")} onChange={(e) => setTags(e.target.value)} />
+              Tags
+              <TagInput
+                value={form.frontmatter.tags || []}
+                onChange={(tags) => setFm({ tags })}
+                suggestions={allTags}
+              />
             </label>
             <label className="check inline-check">
               <input

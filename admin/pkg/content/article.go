@@ -101,6 +101,7 @@ type Repository interface {
 	GetProject(slug string) (*Project, error)
 	SaveProject(project *Project, commitMsg string) error
 	DeleteProject(slug, commitMsg string) error
+	ListTags() ([]string, error)
 	GetLinks() (*LinksData, error)
 	SaveLinks(data *LinksData, commitMsg string) error
 	UploadMedia(fileName string, data []byte) (string, error)

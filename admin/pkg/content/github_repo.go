@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
@@ -176,6 +177,36 @@ func (r *GitHubRepository) ListProjects() ([]*Project, error) {
 		out = append(out, proj)
 	}
 	return out, nil
+}
+
+// ListTags returns the deduplicated, alphabetically sorted set of all tags
+// used across articles and projects.
+func (r *GitHubRepository) ListTags() ([]string, error) {
+	articles, err := r.ListArticles()
+	if err != nil {
+		return nil, err
+	}
+	projects, err := r.ListProjects()
+	if err != nil {
+		return nil, err
+	}
+	set := make(map[string]struct{})
+	for _, a := range articles {
+		for _, t := range a.Frontmatter.Tags {
+			set[t] = struct{}{}
+		}
+	}
+	for _, p := range projects {
+		for _, t := range p.Frontmatter.Tags {
+			set[t] = struct{}{}
+		}
+	}
+	tags := make([]string, 0, len(set))
+	for t := range set {
+		tags = append(tags, t)
+	}
+	sort.Strings(tags)
+	return tags, nil
 }
 
 func (r *GitHubRepository) GetArticle(slug string) (*Article, error) {

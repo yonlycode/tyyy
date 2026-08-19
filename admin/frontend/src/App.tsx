@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Article, Deployment, LinksData, Project } from "./types";
 import { api } from "./services/api";
 import { useAdminData } from "./hooks/useAdminData";
@@ -33,6 +33,23 @@ export default function App() {
   const [confirmProjectSlug, setConfirmProjectSlug] = useState<string | null>(null);
   const [linksData, setLinksData] = useState<LinksData | null>(null);
   const [linksLoading, setLinksLoading] = useState(false);
+  const [allTags, setAllTags] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!config?.configured) return;
+    let cancelled = false;
+    api
+      .listTags()
+      .then((tags) => {
+        if (!cancelled) setAllTags(tags);
+      })
+      .catch(() => {
+        if (!cancelled) setAllTags([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [config?.configured]);
 
   async function loadLinks() {
     setLinksLoading(true);
@@ -211,12 +228,13 @@ export default function App() {
         onBack={onBack}
         onSaved={onSaved}
         onDelete={onDeleteArticle}
+        allTags={allTags}
       />
     );
   }
 
   if (editing) {
-    return <ArticleEditor article={editing} onBack={onBack} onSaved={onSaved} onDelete={onDeleteArticle} />;
+    return <ArticleEditor article={editing} onBack={onBack} onSaved={onSaved} onDelete={onDeleteArticle} allTags={allTags} />;
   }
 
   if (creatingProject) {
@@ -226,6 +244,7 @@ export default function App() {
         onBack={onBackProject}
         onSaved={onSavedProject}
         onDelete={onDeleteProjectFromEditor}
+        allTags={allTags}
       />
     );
   }
@@ -237,6 +256,7 @@ export default function App() {
         onBack={onBackProject}
         onSaved={onSavedProject}
         onDelete={onDeleteProjectFromEditor}
+        allTags={allTags}
       />
     );
   }
