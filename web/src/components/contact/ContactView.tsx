@@ -3,19 +3,22 @@
 import styled from '@emotion/styled';
 import { AnimatedFadeIn } from '@/components/AnimatedFadeIn';
 import { m3Theme } from '@/styles/theme';
-import { Container, Section, Eyebrow, SectionTitle, SectionSubtitle } from '@/components/ui';
+import { Container, Section } from '@/components/ui';
+import { PageHero } from '@/components/ui/PageHero';
 import type { LinksData } from '@/lib/links';
 import { LinkIcon } from './LinkIcon';
 
-const Wrapper = styled('div')({
-  maxWidth: '520px',
-  margin: '0 auto',
+/* ── Unified link cards ──────────────────────────────────────────── */
+
+const LinkGrid = styled('div')({
   display: 'flex',
   flexDirection: 'column',
   gap: m3Theme.spacing.md,
+  maxWidth: '520px',
+  margin: '0 auto',
 });
 
-const Card = styled('a')({
+const LinkCard = styled('a')({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -43,7 +46,7 @@ const Card = styled('a')({
   },
 });
 
-const IconWrap = styled('span')({
+const CardIconWrap = styled('span')({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -53,30 +56,30 @@ const IconWrap = styled('span')({
   color: m3Theme.colors.primary,
 });
 
+/* ── Main component ──────────────────────────────────────────────── */
+
 export function ContactView({ data }: { data: LinksData }) {
   return (
     <Section>
       <Container>
-        <AnimatedFadeIn>
-          <div style={{ textAlign: 'center' }}>
-            <Eyebrow>Contact</Eyebrow>
-            <SectionTitle>{data.title}</SectionTitle>
-            {data.subtitle && <SectionSubtitle>{data.subtitle}</SectionSubtitle>}
-          </div>
-        </AnimatedFadeIn>
+        <PageHero eyebrow="Contact" title={data.title} subtitle={data.subtitle} avatar="YF" />
 
-        <Wrapper>
+        <LinkGrid>
           {data.links.map((link, index) => (
-            <AnimatedFadeIn key={link.id} delay={index * 0.08}>
-              <Card href={link.url} target={link.url.startsWith('http') ? '_blank' : undefined} rel="noreferrer">
-                <IconWrap>
+            <AnimatedFadeIn key={link.id} delay={0.15 + index * 0.08}>
+              <LinkCard
+                href={link.url}
+                target={link.url.startsWith('http') ? '_blank' : undefined}
+                rel="noreferrer"
+              >
+                <CardIconWrap>
                   <LinkIcon name={link.icon} />
-                </IconWrap>
+                </CardIconWrap>
                 {link.label}
-              </Card>
+              </LinkCard>
             </AnimatedFadeIn>
           ))}
-        </Wrapper>
+        </LinkGrid>
       </Container>
     </Section>
   );

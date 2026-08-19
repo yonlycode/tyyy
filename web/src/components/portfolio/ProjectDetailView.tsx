@@ -5,7 +5,8 @@ import styled from '@emotion/styled';
 import { AnimatedFadeIn } from '@/components/AnimatedFadeIn';
 import type { Article } from '@/lib/md';
 import { m3Theme } from '@/styles/theme';
-import { Container, Card, Badge } from '@/components/ui';
+import { Container, Badge } from '@/components/ui';
+import { PageHero } from '@/components/ui/PageHero';
 
 const Wrapper = styled('div')({
   paddingBlock: m3Theme.spacing.xxl,
@@ -65,10 +66,14 @@ export function ProjectDetailView({ project }: { project: Article }) {
   return (
     <Wrapper>
       <Container>
+        <PageHero
+          eyebrow="Portfolio"
+          title={project.title}
+        />
+
         <AnimatedFadeIn>
           <BackLink href="/portfolio/">← Retour au portfolio</BackLink>
-          <Card style={{ padding: m3Theme.spacing.xxl }}>
-            <Title>{project.title}</Title>
+          <div>
             <MetaRow>
               <span>{project.date}</span>
               <span>•</span>
@@ -110,7 +115,7 @@ export function ProjectDetailView({ project }: { project: Article }) {
                 ← Retour au portfolio
               </a>
             </FooterBar>
-          </Card>
+          </div>
         </AnimatedFadeIn>
       </Container>
     </Wrapper>

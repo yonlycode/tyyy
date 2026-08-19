@@ -74,7 +74,7 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <Section>
+    <Section >
       <Container>
         <AnimatedFadeIn>
           <SectionHeader>

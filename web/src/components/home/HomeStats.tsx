@@ -13,7 +13,7 @@ const StatsBand = styled('div')({
   borderRadius: m3Theme.radius.extraLarge,
   boxShadow: m3Theme.elevation.level1,
   padding: m3Theme.spacing.lg,
-  marginTop: `calc(-${m3Theme.spacing.section} / 2)`,
+  marginTop: m3Theme.spacing.section,
   position: 'relative',
   zIndex: 2,
   '@media (max-width: 700px)': { gridTemplateColumns: 'repeat(2, 1fr)' },

@@ -1,5 +1,4 @@
 import { HomeHero } from '../components/home/HomeHero';
-import { TechMarquee } from '../components/home/TechMarquee';
 import { HomeStats } from '../components/home/HomeStats';
 import { FeaturesSection } from '../components/home/FeaturesSection';
 import { ArticlesPreview } from '../components/home/ArticlesPreview';
@@ -17,7 +16,6 @@ export default function HomePage() {
   return (
     <main>
       <HomeHero />
-      <TechMarquee />
       <HomeStats />
       <FeaturesSection />
       <ArticlesPreview articles={articles} />

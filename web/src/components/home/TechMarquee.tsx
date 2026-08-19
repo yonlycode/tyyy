@@ -20,7 +20,7 @@ const MarqueeSection = styled('div')({
 const MarqueeTrack = styled('div')({
   display: 'flex',
   width: 'max-content',
-  gap: m3Theme.spacing.xxxl,
+  gap: m3Theme.spacing.lg,
   animation: `${marquee} 28s linear infinite`,
 });
 

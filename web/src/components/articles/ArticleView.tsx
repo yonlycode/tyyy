@@ -5,7 +5,8 @@ import styled from '@emotion/styled';
 import { AnimatedFadeIn } from '@/components/AnimatedFadeIn';
 import type { Article } from '@/lib/md';
 import { m3Theme } from '@/styles/theme';
-import { Container, Card, Badge } from '@/components/ui';
+import { Container, Badge } from '@/components/ui';
+import { PageHero } from '@/components/ui/PageHero';
 
 const Wrapper = styled('div')({
   paddingBlock: m3Theme.spacing.xxl,
@@ -65,10 +66,14 @@ export function ArticleView({ article }: { article: Article }) {
   return (
     <Wrapper>
       <Container>
+        <PageHero
+          eyebrow="Blog"
+          title={article.title}
+        />
+
         <AnimatedFadeIn>
           <BackLink href="/articles/">← Retour aux articles</BackLink>
-          <Card style={{ padding: m3Theme.spacing.xxl }}>
-            <Title>{article.title}</Title>
+          <div>
             <MetaRow>
               <span>{article.date}</span>
               <span>•</span>
@@ -110,7 +115,7 @@ export function ArticleView({ article }: { article: Article }) {
                 ← Tous les articles
               </a>
             </FooterBar>
-          </Card>
+          </div>
         </AnimatedFadeIn>
       </Container>
     </Wrapper>

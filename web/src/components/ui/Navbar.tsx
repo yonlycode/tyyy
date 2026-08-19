@@ -105,8 +105,7 @@ export function Navbar() {
     <NavbarRoot>
       <NavbarInner>
         <Logo href="/">
-          <LogoMark>YF</LogoMark>
-          Yoann Fort
+          <LogoMark>TY3</LogoMark>
         </Logo>
         <Links>
           {links.map((link) => (

@@ -73,59 +73,66 @@ export const SmallButton = styled(Button)({
   borderRadius: m3Theme.radius.small,
 });
 
-/** Filled button rendered as an anchor link */
+/** Filled button rendered as an anchor link — primary CTA */
 export const ButtonLink = styled(Link)({
-  background: m3Theme.colors.primary,
+  background: m3Theme.gradients.glow,
   color: m3Theme.colors.onPrimary,
   border: 'none',
-  borderRadius: m3Theme.radius.medium,
-  padding: '0.875rem 1.5rem',
-  fontSize: '1rem',
-  fontWeight: 500,
+  borderRadius: m3Theme.radius.extraLarge,
+  padding: '1rem 2rem',
+  fontSize: '1.0625rem',
+  fontWeight: m3Theme.font.weights.semibold,
+  letterSpacing: '0.01em',
   cursor: 'pointer',
   textDecoration: 'none',
-  display: 'inline-block',
-  transition: 'background 0.2s ease, transform 0.1s ease',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+  boxShadow: '0 4px 16px rgba(103, 80, 164, 0.35)',
 
   '&:focus-visible': {
     outline: 'none',
-    boxShadow: m3Theme.elevation.focus,
+    boxShadow: `${m3Theme.elevation.focus}, 0 4px 16px rgba(103, 80, 164, 0.35)`,
   },
 
   '&:active': {
-    transform: 'scale(0.98)',
+    transform: 'scale(0.97)',
   },
 
   '&:hover': {
-    background: m3Theme.colors.primaryContainer,
-    color: m3Theme.colors.onPrimaryContainer,
-    transform: 'translateY(-1px)',
+    transform: 'translateY(-2px)',
+    boxShadow: '0 8px 30px rgba(103, 80, 164, 0.45)',
   },
 });
 
-/** Outlined button rendered as an anchor link */
+/** Outlined button rendered as an anchor link — secondary CTA */
 export const OutlineButtonLink = styled(Link)({
   background: 'transparent',
-  border: `2px solid ${m3Theme.colors.primary}`,
-  color: m3Theme.colors.primary,
-  borderRadius: m3Theme.radius.medium,
-  padding: '0.875rem 1.5rem',
-  fontSize: '1rem',
-  fontWeight: 500,
+  border: `1.5px solid ${m3Theme.colors.outline}`,
+  color: m3Theme.colors.onSurface,
+  borderRadius: m3Theme.radius.extraLarge,
+  padding: '1rem 2rem',
+  fontSize: '1.0625rem',
+  fontWeight: m3Theme.font.weights.semibold,
+  letterSpacing: '0.01em',
   cursor: 'pointer',
   textDecoration: 'none',
-  display: 'inline-block',
-  transition: 'background 0.2s ease, color 0.2s ease, transform 0.2s ease, border-color 0.2s ease',
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
 
   '&:hover': {
-    background: m3Theme.colors.primaryContainer,
-    color: m3Theme.colors.onPrimaryContainer,
-    transform: 'translateY(-1px)',
+    background: m3Theme.colors.primarySoft,
+    borderColor: m3Theme.colors.primary,
+    color: m3Theme.colors.primary,
+    transform: 'translateY(-2px)',
   },
 
   '&:focus-visible': {
     outline: 'none',
     boxShadow: m3Theme.elevation.focus,
-    borderColor: m3Theme.colors.primaryContainer,
+    borderColor: m3Theme.colors.primary,
   },
 });

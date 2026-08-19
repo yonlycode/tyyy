@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import styled from '@emotion/styled';
 import { AnimatedFadeIn } from '@/components/AnimatedFadeIn';
@@ -8,13 +9,11 @@ import { m3Theme } from '@/styles/theme';
 import {
   Container,
   Section,
-  SectionHeader,
-  Eyebrow,
-  SectionTitle,
-  SectionSubtitle,
   FeatureCard,
   Badge,
+  FilterBar,
 } from '@/components/ui';
+import { PageHero } from '@/components/ui/PageHero';
 
 const Grid = styled('div')({
   display: 'grid',
@@ -58,45 +57,88 @@ const FooterRow = styled('div')({
   marginTop: m3Theme.spacing.xxl,
 });
 
+const EmptyState = styled('div')({
+  textAlign: 'center',
+  padding: `${m3Theme.spacing.xxl} 0`,
+  color: m3Theme.colors.onSurfaceVariant,
+  fontSize: m3Theme.font.sizes.lg,
+});
+
+/* ── View ──────────────────────────────────────────────────────────── */
+
 export function PortfolioView({ projects }: { projects: ArticleMeta[] }) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTags, setActiveTags] = useState<string[]>([]);
+
+  const allTags = useMemo(() => {
+    const tagSet = new Set<string>();
+    projects.forEach((p) => p.tags.forEach((t) => tagSet.add(t)));
+    return Array.from(tagSet).sort();
+  }, [projects]);
+
+  const filteredProjects = useMemo(() => {
+    const query = searchQuery.toLowerCase().trim();
+    return projects.filter((project) => {
+      const matchesSearch =
+        !query ||
+        project.title.toLowerCase().includes(query) ||
+        project.description.toLowerCase().includes(query);
+      const matchesTags =
+        activeTags.length === 0 ||
+        project.tags.some((tag) => activeTags.includes(tag));
+      return matchesSearch && matchesTags;
+    });
+  }, [projects, searchQuery, activeTags]);
+
   return (
     <Section>
       <Container>
-        <AnimatedFadeIn>
-          <SectionHeader>
-            <Eyebrow>Portfolio</Eyebrow>
-            <SectionTitle>Projets &amp; réalisations</SectionTitle>
-            <SectionSubtitle>
-              Un aperçu des projets significatifs sur lesquels j'ai travaillé, de l'architecture
-              IA à l'optimisation web.
-            </SectionSubtitle>
-          </SectionHeader>
-        </AnimatedFadeIn>
+        <PageHero
+          eyebrow="Portfolio"
+          title="Projets &amp; réalisations"
+          subtitle="Un aperçu des projets significatifs sur lesquels j'ai travaillé, de l'architecture IA à l'optimisation web."
+        />
 
-        <Grid>
-          {projects.map((project, index) => (
-            <AnimatedFadeIn key={project.slug} delay={index * 0.12}>
-              <ProjectLink href={`/portfolio/${project.slug}/`}>
-                <FeatureCard
-                  style={{
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    padding: m3Theme.spacing.lg,
-                  }}
-                >
-                  <ProjectTitle>{project.title}</ProjectTitle>
-                  <ProjectDesc>{project.description}</ProjectDesc>
-                  <TagRow>
-                    {project.tags.map((tag) => (
-                      <Badge key={tag}>{tag}</Badge>
-                    ))}
-                  </TagRow>
-                </FeatureCard>
-              </ProjectLink>
-            </AnimatedFadeIn>
-          ))}
-        </Grid>
+        <FilterBar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          allTags={allTags}
+          selectedTags={activeTags}
+          onTagsChange={setActiveTags}
+          resultsCount={filteredProjects.length}
+          searchPlaceholder="Rechercher un projet…"
+        />
+
+        {filteredProjects.length === 0 ? (
+          <EmptyState>
+            Aucun projet ne correspond à vos critères de recherche.
+          </EmptyState>
+        ) : (
+          <Grid>
+            {filteredProjects.map((project, index) => (
+              <AnimatedFadeIn key={project.slug} delay={index * 0.12}>
+                <ProjectLink href={`/portfolio/${project.slug}/`}>
+                  <FeatureCard
+                    style={{
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      padding: m3Theme.spacing.lg,
+                    }}
+                  >
+                    <ProjectTitle>{project.title}</ProjectTitle>
+                    <ProjectDesc>{project.description}</ProjectDesc>
+                    <TagRow>
+                      {project.tags.map((tag) => (
+                        <Badge key={tag}>{tag}</Badge>
+                      ))}
+                    </TagRow>
+                  </FeatureCard>
+                </ProjectLink>
+              </AnimatedFadeIn>
+            ))}
+          </Grid>
+        )}
 
         <FooterRow>
           <a

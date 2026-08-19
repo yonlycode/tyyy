@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import styled from '@emotion/styled';
 import { AnimatedFadeIn } from '@/components/AnimatedFadeIn';
@@ -8,13 +9,11 @@ import { m3Theme } from '@/styles/theme';
 import {
   Container,
   Section,
-  SectionHeader,
-  Eyebrow,
-  SectionTitle,
-  SectionSubtitle,
   FeatureCard,
   Badge,
+  FilterBar,
 } from '@/components/ui';
+import { PageHero } from '@/components/ui/PageHero';
 
 const ArticleGrid = styled('div')({
   display: 'grid',
@@ -62,60 +61,104 @@ const FooterRow = styled('div')({
   marginTop: m3Theme.spacing.xxl,
 });
 
+const EmptyState = styled('div')({
+  textAlign: 'center',
+  padding: `${m3Theme.spacing.xxl} 0`,
+  color: m3Theme.colors.onSurfaceVariant,
+  fontSize: m3Theme.font.sizes.lg,
+});
+
+/* ── View ──────────────────────────────────────────────────────────── */
+
 export function ArticlesView({ articles }: { articles: ArticleMeta[] }) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTags, setActiveTags] = useState<string[]>([]);
+
+  const allTags = useMemo(() => {
+    const tagSet = new Set<string>();
+    articles.forEach((a) => a.tags.forEach((t) => tagSet.add(t)));
+    return Array.from(tagSet).sort();
+  }, [articles]);
+
+  const filteredArticles = useMemo(() => {
+    const query = searchQuery.toLowerCase().trim();
+    return articles.filter((article) => {
+      const matchesSearch =
+        !query ||
+        article.title.toLowerCase().includes(query) ||
+        article.description.toLowerCase().includes(query);
+      const matchesTags =
+        activeTags.length === 0 ||
+        article.tags.some((tag) => activeTags.includes(tag));
+      return matchesSearch && matchesTags;
+    });
+  }, [articles, searchQuery, activeTags]);
+
   return (
     <Section>
       <Container>
-        <AnimatedFadeIn>
-          <SectionHeader>
-            <Eyebrow>Blog</Eyebrow>
-            <SectionTitle>Articles &amp; billets</SectionTitle>
-            <SectionSubtitle>
-              Mes écrits sur l'architecture IA, la performance et le développement web.
-            </SectionSubtitle>
-          </SectionHeader>
-        </AnimatedFadeIn>
+        <PageHero
+          eyebrow="Blog"
+          title="Articles &amp; billets"
+          subtitle="Mes écrits sur l'architecture IA, la performance et le développement web."
+        />
 
-        <ArticleGrid>
-          {articles.map((article, index) => (
-            <AnimatedFadeIn key={article.slug} delay={index * 0.1}>
-              <ArticleLink href={`/articles/${article.slug}/`}>
-                <FeatureCard style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                  <ArticleTitle>{article.title}</ArticleTitle>
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      gap: m3Theme.spacing.xs,
-                      marginTop: m3Theme.spacing.md,
-                    }}
-                  >
-                    {article.tags.map((tag) => (
-                      <Badge key={tag}>{tag}</Badge>
-                    ))}
-                  </div>
-                  <p
-                    style={{
-                      color: m3Theme.colors.onSurfaceVariant,
-                      fontSize: m3Theme.font.sizes.sm,
-                      lineHeight: 1.7,
-                      marginTop: m3Theme.spacing.md,
-                      marginBottom: 'auto',
-                    }}
-                  >
-                    {article.description}
-                  </p>
-                  <ArticleMeta>
-                    <span style={{ color: m3Theme.colors.onSurfaceVariant, fontSize: m3Theme.font.sizes.xs }}>
-                      {article.date}
-                    </span>
-                    <ReadMore>Lire plus →</ReadMore>
-                  </ArticleMeta>
-                </FeatureCard>
-              </ArticleLink>
-            </AnimatedFadeIn>
-          ))}
-        </ArticleGrid>
+        <FilterBar
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          allTags={allTags}
+          selectedTags={activeTags}
+          onTagsChange={setActiveTags}
+          resultsCount={filteredArticles.length}
+          searchPlaceholder="Rechercher un article…"
+        />
+
+        {filteredArticles.length === 0 ? (
+          <EmptyState>
+            Aucun article ne correspond à vos critères de recherche.
+          </EmptyState>
+        ) : (
+          <ArticleGrid>
+            {filteredArticles.map((article, index) => (
+              <AnimatedFadeIn key={article.slug} delay={index * 0.1}>
+                <ArticleLink href={`/articles/${article.slug}/`}>
+                  <FeatureCard style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <ArticleTitle>{article.title}</ArticleTitle>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        gap: m3Theme.spacing.xs,
+                        marginTop: m3Theme.spacing.md,
+                      }}
+                    >
+                      {article.tags.map((tag) => (
+                        <Badge key={tag}>{tag}</Badge>
+                      ))}
+                    </div>
+                    <p
+                      style={{
+                        color: m3Theme.colors.onSurfaceVariant,
+                        fontSize: m3Theme.font.sizes.sm,
+                        lineHeight: 1.7,
+                        marginTop: m3Theme.spacing.md,
+                        marginBottom: 'auto',
+                      }}
+                    >
+                      {article.description}
+                    </p>
+                    <ArticleMeta>
+                      <span style={{ color: m3Theme.colors.onSurfaceVariant, fontSize: m3Theme.font.sizes.xs }}>
+                        {article.date}
+                      </span>
+                      <ReadMore>Lire plus →</ReadMore>
+                    </ArticleMeta>
+                  </FeatureCard>
+                </ArticleLink>
+              </AnimatedFadeIn>
+            ))}
+          </ArticleGrid>
+        )}
 
         <FooterRow>
           <a
