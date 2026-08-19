@@ -1,21 +1,12 @@
 ---
 title: "TY3 / Portfolio du Rat"
 description: "J'ai construit mon portfolio. Il coûte **0€/an** en infra.
-
-Pas de Vercel. Pas de Netlify. Pas de Supabase. Pas de \"freemium\" qui vous piège avec des quotas qui disparaissent quand vous avez du trafic.
-
-Juste :
-
-**GitHub Pages** (statique, gratuit, pour de vrai)
-**Un repo** avec des fichiers Markdown
-**Un pipeline GitHub Actions** qui rebuild à chaque commit
-**Une app desktop** (Wails/Go/React) qui commit à ma place
-"
+Pas de Vercel. Pas de Netlify. Pas de Supabase. Pas de \"freemium\" qui vous piège avec des quotas qui disparaissent quand vous avez du trafic."
 date: 2026-08-19
 published: true
 ---
 
-J'ai construit mon portfolio. Il coûte **0€/an** en infra.
+Mon portfolio ne coûte rien. Le tien, probablement trop cher.
 
 Pas de Vercel. Pas de Netlify. Pas de Supabase. Pas de "freemium" qui vous piège avec des quotas qui disparaissent quand vous avez du trafic.
 
