@@ -80,7 +80,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build
-        run: wails build -platform ${{ matrix.platform }} -clean
+        run: wails build -platform ${{ matrix.platform }} -tags webkit2_41 -clean
 
       - name: Package macOS
         if: runner.os == 'macOS'

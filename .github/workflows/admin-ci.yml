@@ -47,7 +47,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build
-        run: wails build -platform linux/amd64 -clean
+        run: wails build -platform linux/amd64 -tags webkit2_41 -clean
 
       - name: Vet
         run: go vet ./...
