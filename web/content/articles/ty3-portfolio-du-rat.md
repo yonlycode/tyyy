@@ -1,18 +1,8 @@
 ---
-title: "TY3 / Portfolio du Rat"
-description: 'Article satirique sur le refus de payer pour l''infrastructure d''un portfolio personnel. Adressé aux développeurs qui se sont laissé enfermer dans des abonnements SaaS inutiles.'
+title: "TY3 - Le portfolio du Rat"
+description: "Article satirique sur le refus de payer pour l'infrastructure d'un portfolio personnel. Adressé aux développeurs qui se sont laissé enfermer dans des abonnements SaaS inutiles."
 date: 2026-08-19
-tags:
-  [
-    tyyy,
-    localfirst,
-    anti-saas,
-    github-pages,
-    open-source,
-    infrastructure,
-    self-hosted,
-    sovereignty,
-  ]
+tags: [tyyy, localfirst, anti-saas, github-pages, open-source, infrastructure, self-hosted, sovereignty]
 published: true
 ---
 
@@ -140,7 +130,7 @@ Mon portfolio vit dans un repo Git. Mon contenu, c'est du Markdown brut. Ma « b
 
 Et ça me coûte **zéro euro**.
 
-Le code est public. [github.com/yonlycode](https://github.com/yonlycode). Fork. Copie. Pique. C'est open source.
+Le code est public. [github.com/yonlycode](https://github.com/yonlycode/tyyy). Fork. Copie. Pique. C'est open source.
 
 ## TL;DR
 
