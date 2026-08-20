@@ -130,4 +130,4 @@ Open source — conserver l'attribution en cas de redistribution.
 
 ---
 
-*tyyy — le portfolio du rat de [Yoann Fort](https://github.com/yonlycode)*
+*tyyy — le portfolio du rat de [tyyy](https://github.com/yonlycode)*

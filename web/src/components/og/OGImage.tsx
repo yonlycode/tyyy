@@ -92,7 +92,7 @@ export function OGFrame({
               color: ogColors.muted,
             }}
           >
-            YOANN FORT
+            TYYY
           </div>
         </div>
         <div

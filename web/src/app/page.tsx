@@ -30,7 +30,7 @@ export default function HomePage() {
   const personJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Person',
-    name: 'Yoann Fort',
+    name: 'tyyy',
     url: absoluteUrl('/'),
     jobTitle: 'Architecte IA & Lead LLMOps',
     description: SITE_DESCRIPTION,

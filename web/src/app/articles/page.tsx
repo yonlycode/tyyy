@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo';
 export const metadata = buildMetadata({
   title: 'Articles',
   description:
-    'Tous les articles et billets de blog de Yoann Fort : IA souveraine, LLMOps, modèles locaux, quantisation et développement.',
+    'Tous les articles et billets de blog de tyyy : IA souveraine, LLMOps, modèles locaux, quantisation et développement.',
   path: '/articles',
   type: 'website',
   images: ['/opengraph-image'],

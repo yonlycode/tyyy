@@ -238,4 +238,4 @@ This project is open source. Feel free to explore, fork, or adapt — but please
 
 ---
 
-*Generated with ❤️ by Yoann Fort — Independent Software Engineer & AI Architect*
+*Generated with ❤️ by tyyy — Independent Software Engineer & AI Architect*

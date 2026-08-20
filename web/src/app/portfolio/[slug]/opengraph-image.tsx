@@ -25,7 +25,7 @@ export default async function Image({
       title={project?.title ?? 'Projet'}
       subtitle={project?.description}
       footerLeft={project?.date ?? ''}
-      footerRight="Portfolio · Yoann Fort"
+      footerRight="Portfolio · tyyy"
     />,
     { ...size }
   );

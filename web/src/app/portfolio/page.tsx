@@ -5,7 +5,7 @@ import { buildMetadata } from '@/lib/seo';
 export const metadata = buildMetadata({
   title: 'Portfolio',
   description:
-    'Portfolio de projets et réalisations de Yoann Fort : IA, architectures souveraines, LLMOps et applications web.',
+    'Portfolio de projets et réalisations de tyyy : IA, architectures souveraines, LLMOps et applications web.',
   path: '/portfolio',
   type: 'website',
   images: ['/opengraph-image'],

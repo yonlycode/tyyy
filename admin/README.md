@@ -149,4 +149,4 @@ Same as the parent `yo-port` project — open source, retain attribution if redi
 
 ---
 
-*Admin for yo-port — built with ❤️ by Yoann Fort*
+*Admin for yo-port — built with ❤️ by tyyy*

@@ -7,15 +7,15 @@ export const SITE_URL =
     ? `https://yonlycode.github.io${basePath}`
     : 'http://localhost:3000';
 
-export const SITE_NAME = 'Yoann Fort';
+export const SITE_NAME = 'tyyy';
 
-export const SITE_TITLE = 'Yoann Fort - Architecte IA & Lead LLMOps';
+export const SITE_TITLE = 'tyyy - Architecte IA & Lead LLMOps';
 
 export const SITE_DESCRIPTION =
   "Portfolio professionnel et blog d'architecte IA et software engineer : architectures IA souveraines, LLMOps, quantisation et modèles locaux.";
 
 export const SITE_KEYWORDS = [
-  'Yoann Fort',
+  'tyyy',
   'architecte IA',
   'LLMOps',
   'IA souveraine',

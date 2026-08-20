@@ -93,7 +93,7 @@ export function Footer() {
     <FooterRoot>
       <FooterInner>
         <FooterTop>
-          <FooterBrand>Yoann Fort</FooterBrand>
+          <FooterBrand>tyyy</FooterBrand>
           <FooterLinks>
             <FooterLink href="/">Accueil</FooterLink>
             <FooterLink href="/portfolio/">Portfolio</FooterLink>
@@ -102,7 +102,7 @@ export function Footer() {
           </FooterLinks>
         </FooterTop>
         <FooterBottom>
-          <span>© {year} Yoann Fort. Architecte IA &amp; Lead LLMOps.</span>
+          <span>© {year} tyyy. Architecte IA &amp; Lead LLMOps.</span>
           <Availability>
             <StatusDot />
             Available for work

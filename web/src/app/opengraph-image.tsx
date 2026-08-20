@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 import { OGFrame, OG_SIZE } from '@/components/og/OGImage';
 
-export const alt = 'Yoann Fort - Architecte IA & Lead LLMOps';
+export const alt = 'tyyy - Architecte IA & Lead LLMOps';
 export const size = OG_SIZE;
 export const contentType = 'image/png';
 

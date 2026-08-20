@@ -25,7 +25,7 @@ export default async function Image({
       title={article?.title ?? 'Article'}
       subtitle={article?.description}
       footerLeft={article?.date ?? ''}
-      footerRight={`${article?.readTime ?? ''} · Yoann Fort`}
+      footerRight={`${article?.readTime ?? ''} · tyyy`}
     />,
     { ...size }
   );

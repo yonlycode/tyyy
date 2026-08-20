@@ -60,6 +60,6 @@ La vraie question : *quand est-ce que tu arrêtes de payer pour quelque chose qu
 
 ---
 
-*tyyy — le portfolio du rat de Yoann Fort*
+*tyyy — le portfolio du rat de tyyy*
 
 

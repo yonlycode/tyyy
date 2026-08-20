@@ -33,7 +33,7 @@ export function PrivacyView() {
             <SectionBlock>
               <Heading>Éditeur du site</Heading>
               <Paragraph>
-                <strong>Yoann Fort</strong>
+                <strong>tyyy</strong>
                 <br />
                 Fondateur &amp; Consultant chez Karuka Conseil
                 <br />

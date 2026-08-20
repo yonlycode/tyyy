@@ -15,9 +15,9 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   keywords: SITE_KEYWORDS,
-  authors: [{ name: 'Yoann Fort' }],
-  creator: 'Yoann Fort',
-  publisher: 'Yoann Fort',
+  authors: [{ name: 'tyyy' }],
+  creator: 'tyyy',
+  publisher: 'tyyy',
   robots: {
     index: true,
     follow: true,
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    siteName: 'Yoann Fort',
+    siteName: 'tyyy',
     locale: 'fr_FR',
     url: SITE_URL,
     title: SITE_TITLE,

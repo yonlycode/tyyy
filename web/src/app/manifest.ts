@@ -5,7 +5,7 @@ import { m3Theme } from '@/styles/theme';
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: SITE_NAME,
-    short_name: 'Yoann Fort',
+    short_name: 'tyyy',
     description: SITE_DESCRIPTION,
     start_url: '/',
     scope: '/',
