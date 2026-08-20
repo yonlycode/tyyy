@@ -42,7 +42,7 @@ Parce que j'ai pas envie de taper dans Git pour écrire un article. Parce que VS
 
 Pas de "cloud". Pas de "synchronisation". Juste un commit.
 
-![screenshot-2026-08-19-at-22.02.36.png](/images/screenshot-2026-08-19-at-22.02.36.png)
+![screenshot-2026-08-19-at-22.02.36.png](/tyyy/images/screenshot-2026-08-19-at-22.02.36.png)
 
 **Nom de code : "le portfolio du rat".**
 
