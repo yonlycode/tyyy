@@ -5,6 +5,14 @@ import ImageUploader from "./ImageUploader";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import MarkdownPreviewModal from "./MarkdownPreviewModal";
 import TagInput from "./TagInput";
+import Card from "./ui/Card";
+import Field from "./ui/Field";
+import Toggle from "./ui/Toggle";
+import SlugInput from "./ui/SlugInput";
+import StatusPill from "./ui/StatusPill";
+
+const TITLE_MAX = 120;
+const DESC_MAX = 280;
 
 export default function ProjectEditor({
   project,
@@ -28,6 +36,7 @@ export default function ProjectEditor({
   const [form, setForm] = useState<Project>(project ?? empty);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -35,6 +44,7 @@ export default function ProjectEditor({
   useEffect(() => {
     setForm(project ?? empty);
     setError("");
+    setSaved(false);
   }, [project]);
 
   const isNew = useMemo(() => !project, [project]);
@@ -46,6 +56,7 @@ export default function ProjectEditor({
   async function save(publish: boolean) {
     setError("");
     setBusy(true);
+    setSaved(false);
     try {
       const updated: Project = {
         ...form,
@@ -53,6 +64,7 @@ export default function ProjectEditor({
       };
       await api.saveProject(updated);
       const saved = await api.getProject(updated.slug);
+      setSaved(true);
       onSaved(saved);
     } catch (err) {
       setError((err as Error).message);
@@ -78,9 +90,15 @@ export default function ProjectEditor({
   return (
     <div className="editor">
       <div className="editor-bar">
-        <button onClick={onBack}>← Back</button>
-        <h2>{isNew ? "New project" : form.frontmatter.title || form.slug}</h2>
+        <button className="ghost-btn" onClick={onBack}>
+          ← Back
+        </button>
+        <div className="editor-title">
+          <h2>{isNew ? "New project" : form.frontmatter.title || form.slug}</h2>
+          {!isNew && <StatusPill published={form.frontmatter.published !== false} />}
+        </div>
         <div className="actions">
+          {saved && <span className="save-ok">Saved ✓</span>}
           <button className="primary" disabled={busy || deleting} onClick={() => save(true)}>
             {busy ? "Saving…" : "Publish"}
           </button>
@@ -95,68 +113,84 @@ export default function ProjectEditor({
         </div>
       </div>
 
-      <div className="form-grid">
-        <div className="fields">
-          <div className="row">
-            <label>
-              Slug (file name)
+      <div className="editor-grid">
+        <div className="editor-side">
+          <Card title="Details" subtitle="Appears in the project list and metadata">
+            <Field
+              label="Title"
+              counter={{ value: form.frontmatter.title.length, max: TITLE_MAX }}
+              hint="Used as the headline and SEO title"
+            >
               <input
-                value={form.slug}
-                disabled={!isNew}
-                onChange={(e) =>
-                  setForm((f) => ({
-                    ...f,
-                    slug: e.target.value.replace(/[^a-z0-9-_]/g, "-").toLowerCase(),
-                  }))
-                }
+                value={form.frontmatter.title}
+                maxLength={TITLE_MAX + 40}
+                onChange={(e) => setFm({ title: e.target.value })}
+                placeholder="Project title"
               />
-            </label>
-            <label>
-              Date
-              <input type="date" value={form.frontmatter.date} onChange={(e) => setFm({ date: e.target.value })} />
-            </label>
-          </div>
-          <label>
-            Title
-            <input value={form.frontmatter.title} onChange={(e) => setFm({ title: e.target.value })} />
-          </label>
-          <label>
-            Description
-            <textarea value={form.frontmatter.description} onChange={(e) => setFm({ description: e.target.value })} rows={2} />
-          </label>
-          <div className="row">
-            <label>
-              Tags
+            </Field>
+            <Field label="Slug (file name)" hint={isNew ? "Auto-generated from the title" : "Read-only once published"}>
+              <SlugInput
+                value={form.slug}
+                source={form.frontmatter.title}
+                disabled={!isNew}
+                onChange={(slug) => setForm((f) => ({ ...f, slug }))}
+              />
+            </Field>
+            <div className="field-row">
+              <Field label="Date">
+                <input
+                  type="date"
+                  value={form.frontmatter.date}
+                  onChange={(e) => setFm({ date: e.target.value })}
+                />
+              </Field>
+              <div className="toggle-field">
+                <span className="field-label">Published</span>
+                <Toggle
+                  checked={form.frontmatter.published !== false}
+                  onChange={(c) => setFm({ published: c })}
+                  label={form.frontmatter.published !== false ? "Visible" : "Hidden"}
+                />
+              </div>
+            </div>
+            <Field
+              label="Description"
+              counter={{ value: form.frontmatter.description.length, max: DESC_MAX }}
+              hint="Short excerpt shown in listings and search"
+            >
+              <textarea
+                value={form.frontmatter.description}
+                rows={3}
+                onChange={(e) => setFm({ description: e.target.value })}
+                placeholder="Short description…"
+              />
+            </Field>
+            <Field label="Tags" hint="Press Enter to add">
               <TagInput
                 value={form.frontmatter.tags || []}
                 onChange={(tags) => setFm({ tags })}
                 suggestions={allTags}
               />
-            </label>
-            <label className="check inline-check">
-              <input
-                type="checkbox"
-                checked={form.frontmatter.published !== false}
-                onChange={(e) => setFm({ published: e.target.checked })}
-              />
-              Published
-            </label>
-          </div>
-          <ImageUploader onInserted={(md) => setForm((f) => ({ ...f, body: f.body + "\n" + md + "\n" }))} />
-        </div>
-      </div>
+            </Field>
+          </Card>
 
-      <div className="md-pane">
-        <div className="md-toolbar">
-          <h3>Markdown</h3>
-          <button onClick={() => setShowPreview(true)}>Preview</button>
+          <Card title="Media">
+            <ImageUploader onInserted={(md) => setForm((f) => ({ ...f, body: f.body + "\n" + md + "\n" }))} />
+          </Card>
         </div>
-        <textarea
-          className="md-input"
-          value={form.body}
-          onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
-          placeholder="# Write your project…"
-        />
+
+        <div className="md-pane">
+          <div className="md-toolbar">
+            <h3>Markdown</h3>
+            <button onClick={() => setShowPreview(true)}>Preview</button>
+          </div>
+          <textarea
+            className="md-input"
+            value={form.body}
+            onChange={(e) => setForm((f) => ({ ...f, body: e.target.value }))}
+            placeholder="# Write your project…"
+          />
+        </div>
       </div>
 
       {error && <p className="error">{error}</p>}
