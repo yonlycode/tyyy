@@ -21,6 +21,7 @@ export default function ProjectList({
           + New project
         </button>
       </div>
+      <div className="table-card">
       <table>
         <thead>
           <tr>
@@ -35,7 +36,11 @@ export default function ProjectList({
           {projects.map((p) => {
             const published = p.frontmatter.published !== false;
             return (
-              <tr key={p.slug}>
+              <tr
+                key={p.slug}
+                className="clickable"
+                onClick={() => onEdit(p)}
+              >
                 <td className="title">{p.frontmatter.title || p.slug}</td>
                 <td>{p.frontmatter.date}</td>
                 <td>
@@ -51,11 +56,13 @@ export default function ProjectList({
                   </span>
                 </td>
                 <td className="actions">
-                  <button onClick={() => onEdit(p)}>Edit</button>
                   <button
                     className="danger"
                     disabled={busySlug === p.slug}
-                    onClick={() => onDelete(p)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(p);
+                    }}
                   >
                     Delete
                   </button>
@@ -65,6 +72,7 @@ export default function ProjectList({
           })}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

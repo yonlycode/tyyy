@@ -21,6 +21,7 @@ export default function ArticleList({
           + New article
         </button>
       </div>
+      <div className="table-card">
       <table>
         <thead>
           <tr>
@@ -35,7 +36,11 @@ export default function ArticleList({
           {articles.map((a) => {
             const published = a.frontmatter.published !== false;
             return (
-              <tr key={a.slug}>
+              <tr
+                key={a.slug}
+                className="clickable"
+                onClick={() => onEdit(a)}
+              >
                 <td className="title">{a.frontmatter.title || a.slug}</td>
                 <td>{a.frontmatter.date}</td>
                 <td>
@@ -51,11 +56,13 @@ export default function ArticleList({
                   </span>
                 </td>
                 <td className="actions">
-                  <button onClick={() => onEdit(a)}>Edit</button>
                   <button
                     className="danger"
                     disabled={busySlug === a.slug}
-                    onClick={() => onDelete(a)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(a);
+                    }}
                   >
                     Delete
                   </button>
@@ -65,6 +72,7 @@ export default function ArticleList({
           })}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

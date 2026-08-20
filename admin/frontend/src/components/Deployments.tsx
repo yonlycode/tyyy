@@ -1,4 +1,5 @@
 import type { Deployment } from "../types";
+import { BrowserOpenURL } from "../../wailsjs/runtime/runtime";
 
 function statusClass(status: string, conclusion: string) {
   if (conclusion === "success") return "ok";
@@ -32,6 +33,7 @@ export default function Deployments({
         </button>
       </div>
       {deployments.length === 0 && !busy && <p className="hint">No deployments yet.</p>}
+      <div className="table-card">
       <table>
         <thead>
           <tr>
@@ -45,11 +47,24 @@ export default function Deployments({
         </thead>
         <tbody>
           {deployments.map((d) => (
-            <tr key={d.id}>
+            <tr
+              key={d.id}
+              className="clickable"
+              onClick={() => {
+                if (d.htmlUrl) BrowserOpenURL(d.htmlUrl);
+              }}
+            >
               <td>#{d.runNumber}</td>
               <td className="title">
                 {d.htmlUrl ? (
-                  <a href={d.htmlUrl} target="_blank" rel="noreferrer">
+                  <a
+                    href={d.htmlUrl}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      BrowserOpenURL(d.htmlUrl);
+                    }}
+                  >
                     {d.displayTitle || "Deploy"}
                   </a>
                 ) : (
@@ -68,6 +83,7 @@ export default function Deployments({
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
