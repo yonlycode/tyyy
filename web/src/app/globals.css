@@ -138,6 +138,14 @@ a {
   color: #94A3B8;
 }
 
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5rem auto;
+  border-radius: 12px;
+}
+
 /* Styling for rendered markdown project content */
 .project-body {
   font-size: 1.0625rem;
@@ -195,4 +203,12 @@ a {
   padding: 0.75rem 1.25rem;
   border-radius: 0 12px 12px 0;
   color: #94A3B8;
+}
+
+.project-body img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5rem auto;
+  border-radius: 12px;
 }
