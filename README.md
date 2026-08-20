@@ -47,7 +47,7 @@ Un **CMS de bureau** autonome pour éditer le contenu du repo.
 | **Persistance** | Commits GitHub sur `main` (le PAT reste en mémoire, jamais sur disque) |
 | **Onboarding** | S'appuie sur `deploy.yml` pour installer l'écosystème |
 
-Fonctionnalités : édition de **articles** et **projets**, gestion des **liens de contact** (réordonnables), **upload d'images**, éditeur Markdown avec **aperçu live**, et un onglet **Deployments** qui suit les builds du site.
+Fonctionnalités : édition de **articles** et **projets**, gestion des **liens de contact** (réordonnables), **upload d'images**, éditeur Markdown avec **aperçu live**, un onglet **Deployments** qui suit les builds du site, et des **notifications toast** + **spinners d'activité** sur chaque action de sauvegarde/suppression.
 
 ---
 

@@ -18,6 +18,7 @@ Built with **[Wails](https://wails.io/)**: a Go backend whose methods are bound 
 | **Frontmatter editing** | `title`, `description`, `date`, `tags`, `published` toggle |
 | **Image upload** | Drag & drop / picker → uploaded to `web/public/images`, inserts `![name](/images/x)` |
 | **GitHub commits** | Every save = direct commit to `main` → GH Actions redeploys the site |
+| **Live feedback** | Activity spinners on every save/delete/upload + toast notifications (success/error) on repo actions and list loads |
 | **Deployment tracking** | Tracks recent runs of the `deploy.yml` workflow (status/conclusion) in a dedicated tab |
 | **No backend secrets on disk** | The GitHub PAT is kept in Go process memory only |
 | **Native desktop app** | React build embedded via `go:embed`; Go methods bound via Wails IPC |
@@ -32,6 +33,7 @@ Built with **[Wails](https://wails.io/)**: a Go backend whose methods are bound 
 | **Backend** | Go 1.26, `google/go-github/v60`, `adrg/frontmatter`, `golang.org/x/oauth2` |
 | **Frontend** | React 19, Vite 7, TypeScript 5 |
 | **Markdown preview** | `remark`, `remark-html` |
+| **Notifications** | In-house toast system (no dependency) — `ui/Toast.tsx` + `useToast()` |
 | **Package manager** | Yarn 1.22 (corepack) |
 
 ---
@@ -55,7 +57,9 @@ admin/
     └── src/
         ├── services/api.ts # Thin wrapper around the generated Wails bindings
         ├── types/index.ts  # Article / Project / LinksData / Config types
-        └── components/     # SettingsModal, ArticleList, ArticleEditor, ProjectList, ProjectEditor, LinksEditor, ImageUploader, Deployments
+        ├── hooks/          # useAdminData (data loading + config state)
+        └── components/     # SettingsModal, ArticleList, ArticleEditor, ProjectList, ProjectEditor, LinksEditor, ImageUploader, Deployments, Images
+            └── ui/         # UI kit: Card, Field, Toggle, SlugInput, StatusPill, Spinner, LoaderButton, Toast
 ```
 
 ---
