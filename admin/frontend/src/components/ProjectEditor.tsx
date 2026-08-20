@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Project } from "../types";
 import { api } from "../services/api";
+import { useToast } from "./ui/Toast";
+import LoaderButton from "./ui/LoaderButton";
 import ImageUploader from "./ImageUploader";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import MarkdownPreviewModal from "./MarkdownPreviewModal";
@@ -34,17 +36,16 @@ export default function ProjectEditor({
     body: "",
   };
   const [form, setForm] = useState<Project>(project ?? empty);
-  const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [saved, setSaved] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     setForm(project ?? empty);
-    setError("");
-    setSaved(false);
+    setBusy(false);
+    setDeleting(false);
   }, [project]);
 
   const isNew = useMemo(() => !project, [project]);
@@ -53,10 +54,9 @@ export default function ProjectEditor({
     setForm((f) => ({ ...f, frontmatter: { ...f.frontmatter, ...patch } }));
   }
 
-  async function save(publish: boolean) {
-    setError("");
+  async function save() {
+    const publish = form.frontmatter.published !== false;
     setBusy(true);
-    setSaved(false);
     try {
       const updated: Project = {
         ...form,
@@ -64,10 +64,10 @@ export default function ProjectEditor({
       };
       await api.saveProject(updated);
       const saved = await api.getProject(updated.slug);
-      setSaved(true);
       onSaved(saved);
+      toast.success(publish ? "Projet publié" : "Projet sauvegardé comme brouillon");
     } catch (err) {
-      setError((err as Error).message);
+      toast.error((err as Error).message);
     } finally {
       setBusy(false);
     }
@@ -75,12 +75,12 @@ export default function ProjectEditor({
 
   async function confirmDelete(project: Project) {
     setDeleting(true);
-    setError("");
     try {
       await onDelete(project);
       onBack();
+      toast.success("Projet supprimé");
     } catch (err) {
-      setError((err as Error).message);
+      toast.error((err as Error).message);
       setConfirming(false);
     } finally {
       setDeleting(false);
@@ -98,17 +98,13 @@ export default function ProjectEditor({
           {!isNew && <StatusPill published={form.frontmatter.published !== false} />}
         </div>
         <div className="actions">
-          {saved && <span className="save-ok">Saved ✓</span>}
-          <button className="primary" disabled={busy || deleting} onClick={() => save(true)}>
-            {busy ? "Saving…" : "Publish"}
-          </button>
-          <button disabled={busy || deleting} onClick={() => save(false)}>
-            Save as draft
-          </button>
+          <LoaderButton className="primary" busy={busy} disabled={deleting} busyLabel="Saving…" onClick={save}>
+            Save
+          </LoaderButton>
           {!isNew && (
-            <button className="danger" disabled={busy || deleting} onClick={() => setConfirming(true)}>
-              {deleting ? "Deleting…" : "Delete"}
-            </button>
+            <LoaderButton className="danger" busy={deleting} disabled={busy} busyLabel="Deleting…" onClick={() => setConfirming(true)}>
+              Delete
+            </LoaderButton>
           )}
         </div>
       </div>
@@ -193,7 +189,6 @@ export default function ProjectEditor({
         </div>
       </div>
 
-      {error && <p className="error">{error}</p>}
       {showPreview && (
         <MarkdownPreviewModal
           markdown={form.body}

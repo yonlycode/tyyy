@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Article } from "../types";
 import { api } from "../services/api";
+import { useToast } from "./ui/Toast";
+import LoaderButton from "./ui/LoaderButton";
 import ImageUploader from "./ImageUploader";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import MarkdownPreviewModal from "./MarkdownPreviewModal";
@@ -34,17 +36,16 @@ export default function ArticleEditor({
     body: "",
   };
   const [form, setForm] = useState<Article>(article ?? empty);
-  const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [saved, setSaved] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     setForm(article ?? empty);
-    setError("");
-    setSaved(false);
+    setBusy(false);
+    setDeleting(false);
   }, [article]);
 
   const isNew = useMemo(() => !article, [article]);
@@ -53,10 +54,9 @@ export default function ArticleEditor({
     setForm((f) => ({ ...f, frontmatter: { ...f.frontmatter, ...patch } }));
   }
 
-  async function save(publish: boolean) {
-    setError("");
+  async function save() {
+    const publish = form.frontmatter.published !== false;
     setBusy(true);
-    setSaved(false);
     try {
       const updated: Article = {
         ...form,
@@ -64,10 +64,10 @@ export default function ArticleEditor({
       };
       await api.saveArticle(updated);
       const saved = await api.getArticle(updated.slug);
-      setSaved(true);
       onSaved(saved);
+      toast.success(publish ? "Article publié" : "Article sauvegardé comme brouillon");
     } catch (err) {
-      setError((err as Error).message);
+      toast.error((err as Error).message);
     } finally {
       setBusy(false);
     }
@@ -75,12 +75,12 @@ export default function ArticleEditor({
 
   async function confirmDelete(article: Article) {
     setDeleting(true);
-    setError("");
     try {
       await onDelete(article);
       onBack();
+      toast.success("Article supprimé");
     } catch (err) {
-      setError((err as Error).message);
+      toast.error((err as Error).message);
       setConfirming(false);
     } finally {
       setDeleting(false);
@@ -98,17 +98,13 @@ export default function ArticleEditor({
           {!isNew && <StatusPill published={form.frontmatter.published !== false} />}
         </div>
         <div className="actions">
-          {saved && <span className="save-ok">Saved ✓</span>}
-          <button className="primary" disabled={busy || deleting} onClick={() => save(true)}>
-            {busy ? "Saving…" : "Publish"}
-          </button>
-          <button disabled={busy || deleting} onClick={() => save(false)}>
-            Save as draft
-          </button>
+          <LoaderButton className="primary" busy={busy} disabled={deleting} busyLabel="Saving…" onClick={save}>
+            Save
+          </LoaderButton>
           {!isNew && (
-            <button className="danger" disabled={busy || deleting} onClick={() => setConfirming(true)}>
-              {deleting ? "Deleting…" : "Delete"}
-            </button>
+            <LoaderButton className="danger" busy={deleting} disabled={busy} busyLabel="Deleting…" onClick={() => setConfirming(true)}>
+              Delete
+            </LoaderButton>
           )}
         </div>
       </div>
@@ -196,7 +192,6 @@ export default function ArticleEditor({
         </div>
       </div>
 
-      {error && <p className="error">{error}</p>}
       {showPreview && (
         <MarkdownPreviewModal
           markdown={form.body}

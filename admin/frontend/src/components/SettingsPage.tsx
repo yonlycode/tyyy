@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { Config } from "../types";
 import { api } from "../services/api";
+import { useToast } from "./ui/Toast";
+import LoaderButton from "./ui/LoaderButton";
 import ClearCacheConfirmModal from "./ClearCacheConfirmModal";
 
 export default function SettingsPage({
@@ -19,19 +21,19 @@ export default function SettingsPage({
   const [baseDir, setBaseDir] = useState(config.baseDir);
   const [imgDir, setImgDir] = useState(config.imgDir);
   const [branch, setBranch] = useState(config.branch);
-  const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
+  const toast = useToast();
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
     setBusy(true);
     try {
       await api.setConfig({ token, owner, repo, baseDir, imgDir, branch });
       onBack();
+      toast.success("Paramètres enregistrés");
     } catch (err) {
-      setError((err as Error).message);
+      toast.error((err as Error).message);
     } finally {
       setBusy(false);
     }
@@ -39,13 +41,13 @@ export default function SettingsPage({
 
   async function clearCache() {
     setConfirmClear(false);
-    setError("");
     setBusy(true);
     try {
       await api.clearCache();
       onCacheCleared();
+      toast.success("Cache nettoyé");
     } catch (err) {
-      setError((err as Error).message);
+      toast.error((err as Error).message);
     } finally {
       setBusy(false);
     }
@@ -53,7 +55,6 @@ export default function SettingsPage({
 
   function startEdit() {
     setEditMode(true);
-    setError("");
   }
 
   function cancelEdit() {
@@ -64,7 +65,6 @@ export default function SettingsPage({
     setBaseDir(config.baseDir);
     setImgDir(config.imgDir);
     setBranch(config.branch);
-    setError("");
   }
 
   if (!editMode) {
@@ -86,7 +86,6 @@ export default function SettingsPage({
             <dt>Token</dt>
             <dd className="token-hidden">••••••••</dd>
           </dl>
-          {error && <p className="error">{error}</p>}
           <div className="actions">
             <button onClick={startEdit}>Edit</button>
             <button className="danger" onClick={() => setConfirmClear(true)}>
@@ -135,15 +134,14 @@ export default function SettingsPage({
           Branch
           <input value={branch} onChange={(e) => setBranch(e.target.value)} required />
         </label>
-        {error && <p className="error">{error}</p>}
         <div className="actions">
           <button type="button" className="danger" onClick={() => setConfirmClear(true)}>
             Clear cache
           </button>
           <button type="button" onClick={cancelEdit}>Cancel</button>
-          <button type="submit" className="primary" disabled={busy}>
-            {busy ? "Saving…" : "Save & Reconnect"}
-          </button>
+          <LoaderButton type="submit" className="primary" busy={busy} busyLabel="Saving…">
+            Save & Reconnect
+          </LoaderButton>
         </div>
       </form>
       {confirmClear && (

@@ -1,26 +1,33 @@
 import { useRef, useState } from "react";
 import { api } from "../services/api";
+import { useToast } from "./ui/Toast";
+import LoaderButton from "./ui/LoaderButton";
 
 export default function ImageUploader({ onInserted }: { onInserted: (markdown: string) => void }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
+  const toast = useToast();
 
   async function handleFile(file: File) {
-    setError("");
     setBusy(true);
     try {
       const reader = new FileReader();
       reader.onload = async () => {
-        const base64 = (reader.result as string).split(",")[1];
-        const name = file.name.replace(/[^a-zA-Z0-9._-]/g, "-").toLowerCase();
-        const markdown = await api.uploadImage(name, base64);
-        onInserted(markdown);
+        try {
+          const base64 = (reader.result as string).split(",")[1];
+          const name = file.name.replace(/[^a-zA-Z0-9._-]/g, "-").toLowerCase();
+          const markdown = await api.uploadImage(name, base64);
+          onInserted(markdown);
+          toast.success("Image téléversée");
+        } catch (err) {
+          toast.error((err as Error).message);
+        } finally {
+          setBusy(false);
+        }
       };
       reader.readAsDataURL(file);
     } catch (err) {
-      setError((err as Error).message);
-    } finally {
+      toast.error((err as Error).message);
       setBusy(false);
     }
   }
@@ -33,14 +40,14 @@ export default function ImageUploader({ onInserted }: { onInserted: (markdown: s
         accept="image/*"
         onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
       />
-      <button
+      <LoaderButton
         type="button"
-        disabled={busy}
+        busy={busy}
+        busyLabel="Uploading…"
         onClick={() => inputRef.current?.click()}
       >
-        {busy ? "Uploading…" : "Upload image"}
-      </button>
-      {error && <span className="error">{error}</span>}
+        Upload image
+      </LoaderButton>
     </div>
   );
 }

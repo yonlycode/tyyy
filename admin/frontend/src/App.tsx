@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { Article, Deployment, LinksData, Media, Project } from "./types";
 import { api } from "./services/api";
 import { useAdminData } from "./hooks/useAdminData";
+import { useToast } from "./components/ui/Toast";
 import SettingsModal from "./components/SettingsModal";
 import SettingsPage from "./components/SettingsPage";
 import ArticleList from "./components/ArticleList";
@@ -38,6 +39,15 @@ export default function App() {
   const [media, setMedia] = useState<Media[]>([]);
   const [mediaLoading, setMediaLoading] = useState(false);
   const [confirmMedia, setConfirmMedia] = useState<Media | null>(null);
+  const toast = useToast();
+
+  // Surface data-loading errors (article list, links, projects, images,
+  // deployments) as toasts instead of inline text.
+  useEffect(() => {
+    if (!error) return;
+    toast.error(error);
+    setError("");
+  }, [error, setError, toast]);
 
   useEffect(() => {
     if (!config?.configured) return;
@@ -109,6 +119,7 @@ export default function App() {
     try {
       await api.deleteMedia(item.name);
       await loadMedia();
+      toast.success("Image supprimée");
     } catch (err) {
       setError((err as Error).message);
     }
@@ -177,6 +188,7 @@ export default function App() {
     try {
       await api.deleteArticle(article.slug);
       await loadArticles();
+      toast.success("Article supprimé");
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -224,6 +236,7 @@ export default function App() {
     try {
       await api.deleteProject(project.slug);
       await loadProjects();
+      toast.success("Projet supprimé");
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -334,7 +347,6 @@ export default function App() {
           Images
         </button>
       </nav>
-      {error && <p className="error">{error}</p>}
       {activeTab === "articles" && (
         <>
           {loading && <p className="hint">Loading articles…</p>}

@@ -134,6 +134,100 @@ label.inline-check {
 
 .error { color: var(--danger); font-size: 13px; }
 
+/* ---------- Spinner ---------- */
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.spinner {
+  display: inline-block;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+button:not(:disabled) .spinner { color: var(--text); }
+button.primary:not(:disabled) .spinner { color: #fff; }
+
+/* ---------- Toast ---------- */
+
+.toast-viewport {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+  max-width: 360px;
+}
+
+.toast {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 40px 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  pointer-events: auto;
+  animation: toast-in var(--transition);
+}
+
+.toast--success { border-left-color: var(--ok); }
+.toast--error { border-left-color: var(--danger); }
+.toast--info { border-left-color: var(--primary); }
+
+.toast-message {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.toast-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+  padding: 2px 5px;
+  cursor: pointer;
+}
+.toast-close:hover { color: var(--text); background: none; }
+
+.toast-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--ok);
+  animation: toast-progress 3.5s linear forwards;
+  transform-origin: left;
+}
+.toast--error .toast-progress { background: var(--danger); }
+.toast--info .toast-progress { background: var(--primary); }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toast-progress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
 .list-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .table-card {
   background: var(--surface);
@@ -660,11 +754,6 @@ header .settings-btn {
   align-items: center;
   gap: 10px;
   min-width: 0;
-}
-.save-ok {
-  color: var(--ok);
-  font-size: 13px;
-  font-weight: 600;
 }
 .modal--wide {
   width: 620px;

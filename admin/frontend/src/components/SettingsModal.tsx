@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { DEFAULT_CONFIG } from "../types";
 import type { PersistedConfig } from "../types";
 import { api } from "../services/api";
+import { useToast } from "./ui/Toast";
+import LoaderButton from "./ui/LoaderButton";
 import ClearCacheConfirmModal from "./ClearCacheConfirmModal";
 import Card from "./ui/Card";
 import Field from "./ui/Field";
@@ -22,10 +24,10 @@ export default function SettingsModal({
   const [baseDir, setBaseDir] = useState(DEFAULT_CONFIG.baseDir);
   const [imgDir, setImgDir] = useState(DEFAULT_CONFIG.imgDir);
   const [branch, setBranch] = useState(DEFAULT_CONFIG.branch);
-  const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
   const [cleared, setCleared] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     if (initialConfig) {
@@ -40,13 +42,13 @@ export default function SettingsModal({
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
     setBusy(true);
     try {
       await api.setConfig({ token, owner, repo, baseDir, imgDir, branch });
       onSaved();
+      toast.success("Connecté au dépôt GitHub");
     } catch (err) {
-      setError((err as Error).message);
+      toast.error((err as Error).message);
     } finally {
       setBusy(false);
     }
@@ -54,14 +56,14 @@ export default function SettingsModal({
 
   async function clearCache() {
     setConfirmClear(false);
-    setError("");
     setBusy(true);
     try {
       await api.clearCache();
       setCleared(true);
       onCacheCleared();
+      toast.success("Cache nettoyé");
     } catch (err) {
-      setError((err as Error).message);
+      toast.error((err as Error).message);
     } finally {
       setBusy(false);
     }
@@ -124,7 +126,6 @@ export default function SettingsModal({
           </div>
         </Card>
 
-        {error && <p className="error">{error}</p>}
         {cleared && (
           <p className="hint">
             Cache cleared. Your saved credentials have been removed from disk.
@@ -134,9 +135,9 @@ export default function SettingsModal({
           <button type="button" className="danger" onClick={() => setConfirmClear(true)}>
             Clear cache
           </button>
-          <button type="submit" className="primary" disabled={busy}>
-            {busy ? "Connecting…" : "Connect"}
-          </button>
+          <LoaderButton type="submit" className="primary" busy={busy} busyLabel="Connecting…">
+            Connect
+          </LoaderButton>
         </div>
       </form>
       {confirmClear && (
