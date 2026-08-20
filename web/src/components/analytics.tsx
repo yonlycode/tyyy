@@ -12,7 +12,8 @@ export function GoogleAnalytics({ gaId }: { gaId: string }) {
     const script = document.createElement('script');
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
-    ;(window as any).dataLayer = (window as any).dataLayer || [];
+    document.head.appendChild(script);
+    (window as any).dataLayer = (window as any).dataLayer || [];
     function gtag(...args: any[]) {
       (window as any).dataLayer.push(args);
     }

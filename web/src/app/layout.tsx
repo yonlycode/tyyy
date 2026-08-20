@@ -5,10 +5,13 @@ import type { ReactNode } from 'react';
 import { m3Theme } from '@/styles/theme';
 import './globals.css';
 
+const isProd = process.env.NODE_ENV === 'production';
+const repoName = 'tyyy';
+
 export const metadata = {
   title: 'Yoann Fort - Portfolio & Blog',
   description: "Portfolio professionnel et blog d'architecte IA et software engineer",
-  icons: { icon: '/favicon.png' },
+  icons: { icon: isProd ? `/${repoName}/favicon.png` : '/favicon.png' },
 };
 
 export default function RootLayout({
