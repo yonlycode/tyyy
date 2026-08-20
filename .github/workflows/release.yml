@@ -79,6 +79,9 @@ jobs:
         working-directory: ./admin/frontend
         run: yarn install --frozen-lockfile
 
+      - name: Set app icon
+        run: cp "${{ github.workspace }}/admin/assets/appicon.png" build/appicon.png
+
       - name: Build
         run: wails build -platform ${{ matrix.platform }} -tags webkit2_41 -clean
 
@@ -98,7 +101,7 @@ jobs:
           cp build/bin/tyyy-admin appdir/AppRun
           chmod +x appdir/AppRun
           printf '[Desktop Entry]\nType=Application\nName=Tyyy Admin\nComment=yo-port admin CMS\nIcon=app\nCategories=Utility;\n' > appdir/tyyy-admin.desktop
-          cp "${{ github.workspace }}/admin/build/appicon.png" appdir/app.png
+          cp "${{ github.workspace }}/admin/assets/appicon.png" appdir/app.png
           ./appimagetool appdir "${{ matrix.artifact }}"
           chmod +x "${{ matrix.artifact }}"
           mkdir -p build/bin && mv "${{ matrix.artifact }}" build/bin/
