@@ -362,8 +362,13 @@ func (r *GitHubRepository) saveJSONFile(p string, content []byte, commitMsg stri
 
 // deleteFile removes a markdown file under dir on the current branch.
 func (r *GitHubRepository) deleteFile(dir, slug, sha, commitMsg string) error {
+	return r.deleteByPath(r.articlePath(dir, slug), sha, commitMsg)
+}
+
+// deleteByPath removes an arbitrary file at the given repo path on the current
+// branch. sha is the current SHA of the file, required by the GitHub API.
+func (r *GitHubRepository) deleteByPath(p, sha, commitMsg string) error {
 	ctx := context.Background()
-	p := r.articlePath(dir, slug)
 	payload := &github.RepositoryContentFileOptions{
 		Message: github.String(commitMsg),
 		SHA:     github.String(sha),
@@ -371,6 +376,49 @@ func (r *GitHubRepository) deleteFile(dir, slug, sha, commitMsg string) error {
 	}
 	_, _, err := r.client.Repositories.DeleteFile(ctx, r.cfg.Owner, r.cfg.Repo, p, payload)
 	return err
+}
+
+// Media represents a single image stored in the images dir.
+type Media struct {
+	Name        string `json:"name"`
+	Path        string `json:"path"`
+	Size        int64  `json:"size"`
+	DownloadURL string `json:"downloadUrl"`
+}
+
+// ListMedia returns the images currently stored in the images dir.
+func (r *GitHubRepository) ListMedia() ([]*Media, error) {
+	ctx := context.Background()
+	opts := &github.RepositoryContentGetOptions{Ref: r.cfg.branch()}
+	_, contents, _, err := r.client.Repositories.GetContents(ctx, r.cfg.Owner, r.cfg.Repo, r.cfg.imagesDir(), opts)
+	if err != nil {
+		return nil, err
+	}
+	var out []*Media
+	for _, c := range contents {
+		if c.GetType() != "file" {
+			continue
+		}
+		out = append(out, &Media{
+			Name:        c.GetName(),
+			Path:        c.GetPath(),
+			Size:        int64(c.GetSize()),
+			DownloadURL: c.GetDownloadURL(),
+		})
+	}
+	return out, nil
+}
+
+// DeleteMedia removes an image from the images dir on the current branch.
+func (r *GitHubRepository) DeleteMedia(fileName, commitMsg string) error {
+	ctx := context.Background()
+	p := path.Join(r.cfg.imagesDir(), fileName)
+	opts := &github.RepositoryContentGetOptions{Ref: r.cfg.branch()}
+	existing, _, _, err := r.client.Repositories.GetContents(ctx, r.cfg.Owner, r.cfg.Repo, p, opts)
+	if err != nil {
+		return err
+	}
+	return r.deleteByPath(p, existing.GetSHA(), commitMsg)
 }
 
 // UploadMedia stores an image under the images dir and returns a markdown
@@ -383,7 +431,18 @@ func (r *GitHubRepository) UploadMedia(fileName string, data []byte) (string, er
 		Message: github.String("chore(admin): upload image " + fileName),
 		Branch:  github.String(r.cfg.branch()),
 	}
-	_, _, err := r.client.Repositories.CreateFile(ctx, r.cfg.Owner, r.cfg.Repo, p, payload)
+	// Overwrite if the file already exists instead of failing with a 409.
+	opts := &github.RepositoryContentGetOptions{Ref: r.cfg.branch()}
+	existing, _, _, err := r.client.Repositories.GetContents(ctx, r.cfg.Owner, r.cfg.Repo, p, opts)
+	if err == nil && existing != nil {
+		payload.SHA = github.String(existing.GetSHA())
+		_, _, err = r.client.Repositories.UpdateFile(ctx, r.cfg.Owner, r.cfg.Repo, p, payload)
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("![%s](/images/%s)", fileName, fileName), nil
+	}
+	_, _, err = r.client.Repositories.CreateFile(ctx, r.cfg.Owner, r.cfg.Repo, p, payload)
 	if err != nil {
 		return "", err
 	}

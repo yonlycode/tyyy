@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Article, Deployment, LinksData, Project } from "./types";
+import type { Article, Deployment, LinksData, Media, Project } from "./types";
 import { api } from "./services/api";
 import { useAdminData } from "./hooks/useAdminData";
 import SettingsModal from "./components/SettingsModal";
@@ -9,10 +9,11 @@ import ArticleEditor from "./components/ArticleEditor";
 import ProjectList from "./components/ProjectList";
 import ProjectEditor from "./components/ProjectEditor";
 import Deployments from "./components/Deployments";
+import Images from "./components/Images";
 import LinksEditor from "./components/LinksEditor";
 import DeleteConfirmModal from "./components/DeleteConfirmModal";
 
-type Tab = "articles" | "projects" | "links" | "deployments";
+type Tab = "articles" | "projects" | "links" | "deployments" | "images";
 
 export default function App() {
   const { config, cachedConfig, articles, error, loading, setError, loadArticles, onConfigSaved, refreshConfigOnly } =
@@ -34,6 +35,9 @@ export default function App() {
   const [linksData, setLinksData] = useState<LinksData | null>(null);
   const [linksLoading, setLinksLoading] = useState(false);
   const [allTags, setAllTags] = useState<string[]>([]);
+  const [media, setMedia] = useState<Media[]>([]);
+  const [mediaLoading, setMediaLoading] = useState(false);
+  const [confirmMedia, setConfirmMedia] = useState<Media | null>(null);
 
   useEffect(() => {
     if (!config?.configured) return;
@@ -87,6 +91,29 @@ export default function App() {
     }
   }
 
+  async function loadMedia() {
+    setMediaLoading(true);
+    setError("");
+    try {
+      setMedia(await api.listMedia());
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setMediaLoading(false);
+    }
+  }
+
+  async function onDeleteMediaConfirmed(item: Media) {
+    setConfirmMedia(null);
+    setError("");
+    try {
+      await api.deleteMedia(item.name);
+      await loadMedia();
+    } catch (err) {
+      setError((err as Error).message);
+    }
+  }
+
   function onSelectTab(tab: Tab) {
     setActiveTab(tab);
     if (tab === "deployments" && deployments.length === 0) {
@@ -97,6 +124,9 @@ export default function App() {
     }
     if (tab === "links" && linksData === null) {
       void loadLinks();
+    }
+    if (tab === "images" && media.length === 0) {
+      void loadMedia();
     }
   }
 
@@ -297,6 +327,12 @@ export default function App() {
         >
           Deployments
         </button>
+        <button
+          className={activeTab === "images" ? "active" : ""}
+          onClick={() => onSelectTab("images")}
+        >
+          Images
+        </button>
       </nav>
       {error && <p className="error">{error}</p>}
       {activeTab === "articles" && (
@@ -341,6 +377,19 @@ export default function App() {
           )}
         </>
       )}
+      {activeTab === "images" && (
+        <>
+          {mediaLoading && <p className="hint">Loading images…</p>}
+          <Images
+            media={media}
+            owner={config.owner}
+            repo={config.repo}
+            busy={mediaLoading}
+            onRefresh={loadMedia}
+            onDelete={(item) => setConfirmMedia(item)}
+          />
+        </>
+      )}
       {confirmTarget && (
         <DeleteConfirmModal
           slug={confirmTarget.slug}
@@ -355,6 +404,14 @@ export default function App() {
           kind="project"
           onCancel={() => setConfirmProjectSlug(null)}
           onConfirm={() => onDeleteProjectConfirmed(confirmProjectTarget)}
+        />
+      )}
+      {confirmMedia && (
+        <DeleteConfirmModal
+          slug={confirmMedia.name}
+          kind="image"
+          onCancel={() => setConfirmMedia(null)}
+          onConfirm={() => onDeleteMediaConfirmed(confirmMedia)}
         />
       )}
     </div>

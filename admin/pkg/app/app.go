@@ -330,6 +330,24 @@ func (a *App) UploadMedia(fileName, dataB64 string) (string, error) {
 	return repo.UploadMedia(fileName, data)
 }
 
+// ListMedia returns the images currently stored in the images dir.
+func (a *App) ListMedia() ([]*content.Media, error) {
+	repo := a.repoOr()
+	if repo == nil {
+		return nil, errNotConfigured
+	}
+	return repo.ListMedia()
+}
+
+// DeleteMedia removes an image from the images dir on GitHub.
+func (a *App) DeleteMedia(fileName string) error {
+	repo := a.repoOr()
+	if repo == nil {
+		return errNotConfigured
+	}
+	return repo.DeleteMedia(fileName, "chore(admin): delete image "+fileName)
+}
+
 // ClearCache removes the persisted config cache file from disk and resets
 // all in-memory state, returning the app to an unconfigured state.
 func (a *App) ClearCache() error {

@@ -36,6 +36,13 @@ export interface Deployment {
   htmlUrl: string;
 }
 
+export interface Media {
+  name: string;
+  path: string;
+  size: number;
+  downloadUrl: string;
+}
+
 export interface Link {
   id: string;
   label: string;

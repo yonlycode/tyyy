@@ -359,3 +359,49 @@ header .settings-btn {
 .link-options select { width: 110px; }
 .link-options label.check input { width: 18px; height: 18px; accent-color: var(--primary); }
 
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+.media-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.media-thumb {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  background: var(--surface-2);
+  display: block;
+}
+.media-thumb-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 32px;
+}
+.media-info {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.media-name {
+  font-weight: 600;
+  word-break: break-all;
+}
+.media-meta {
+  color: var(--muted);
+  font-size: 13px;
+}
+.copy-btn {
+  font-size: 12px;
+  padding: 4px 8px;
+}
+

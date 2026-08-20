@@ -105,6 +105,8 @@ type Repository interface {
 	GetLinks() (*LinksData, error)
 	SaveLinks(data *LinksData, commitMsg string) error
 	UploadMedia(fileName string, data []byte) (string, error)
+	ListMedia() ([]*Media, error)
+	DeleteMedia(fileName, commitMsg string) error
 }
 
 func slugFromPath(path string) string {

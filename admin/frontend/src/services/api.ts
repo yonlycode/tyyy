@@ -9,8 +9,10 @@ import {
   GetProject,
   ListArticles,
   ListDeployments,
+  ListMedia,
   ListProjects,
   ListTags,
+  DeleteMedia,
   SaveArticle,
   SaveLinks,
   SaveProject,
@@ -18,7 +20,7 @@ import {
   UploadMedia,
 } from "../../wailsjs/go/app/App";
 import type { content } from "../../wailsjs/go/models";
-import type { Article, Config, Deployment, LinksData, PersistedConfig, Project } from "../types";
+import type { Article, Config, Deployment, LinksData, Media, PersistedConfig, Project } from "../types";
 
 export interface SetConfigPayload {
   token: string;
@@ -45,6 +47,8 @@ export const api = {
   getLinks: () => GetLinks() as Promise<LinksData>,
   saveLinks: (data: LinksData) => SaveLinks(data as unknown as content.LinksData),
   uploadImage: (fileName: string, data: string) => UploadMedia(fileName, data),
+  listMedia: () => ListMedia() as Promise<Media[]>,
+  deleteMedia: (fileName: string) => DeleteMedia(fileName),
   clearCache: () => ClearCache(),
   loadConfig: () => GetFullConfig() as Promise<PersistedConfig | null>,
 };
