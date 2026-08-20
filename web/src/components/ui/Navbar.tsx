@@ -41,7 +41,7 @@ const Logo = styled(Link)({
   letterSpacing: '-0.01em',
 });
 
-const LogoMark = styled('span')({
+export const LogoMark = styled('span')({
   width: '34px',
   height: '34px',
   borderRadius: m3Theme.radius.medium,

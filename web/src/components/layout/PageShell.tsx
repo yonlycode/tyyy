@@ -1,7 +1,6 @@
-'use client';
-
 import type { ReactNode } from 'react';
 import { Navbar, Footer } from '@/components/ui';
+import { getLinks } from '@/lib/links';
 
 const pageStyles = {
   display: 'flex',
@@ -14,7 +13,7 @@ export function PageShell({ children }: { children: ReactNode }) {
     <div style={pageStyles}>
       <Navbar />
       <main style={{ flex: 1 }}>{children}</main>
-      <Footer />
+      <Footer links={getLinks().links} />
     </div>
   );
 }
