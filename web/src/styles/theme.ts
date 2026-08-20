@@ -132,4 +132,10 @@ export const m3Theme = {
     navbar: 100,
     overlay: 1000,
   },
+
+  // ── Breakpoints ───────────────────────────────────────────────────
+  breakpoints: {
+    mobile: 640, // max-width
+    tablet: 900, // max-width
+  },
 };

@@ -34,6 +34,16 @@ const HeroArea = styled('div')({
   background: m3Theme.gradients.hero,
   padding: `${m3Theme.spacing.xxxl} ${m3Theme.spacing.xl}`,
   marginBottom: m3Theme.spacing.xxl,
+
+  [`@media (max-width: ${m3Theme.breakpoints.tablet}px)`]: {
+    padding: `${m3Theme.spacing.xxl} ${m3Theme.spacing.lg}`,
+  },
+
+  [`@media (max-width: ${m3Theme.breakpoints.mobile}px)`]: {
+    padding: `${m3Theme.spacing.xxl} ${m3Theme.spacing.md}`,
+    borderRadius: m3Theme.radius.large,
+    marginBottom: m3Theme.spacing.xl,
+  },
 });
 
 const HeroInner = styled('div')({
@@ -44,9 +54,10 @@ const HeroInner = styled('div')({
 
 const Blob = styled('div')<{ variant: 'a' | 'b'; size: number; top: string; left?: string; right?: string }>(
   ({ variant, size, top, left, right }) => ({
+    '--blob-size': `${size}px`,
     position: 'absolute',
-    width: size,
-    height: size,
+    width: 'var(--blob-size)',
+    height: 'var(--blob-size)',
     top,
     left,
     right,
@@ -60,6 +71,16 @@ const Blob = styled('div')<{ variant: 'a' | 'b'; size: number; top: string; left
     animation: `${variant === 'a' ? float : floatAlt} 20s ease-in-out infinite`,
     pointerEvents: 'none',
     zIndex: 0,
+
+    [`@media (max-width: ${m3Theme.breakpoints.tablet}px)`]: {
+      '--blob-size': `${size * 0.7}px`,
+      filter: 'blur(60px)',
+    },
+
+    [`@media (max-width: ${m3Theme.breakpoints.mobile}px)`]: {
+      '--blob-size': `${size * 0.5}px`,
+      filter: 'blur(45px)',
+    },
   }),
 );
 
@@ -77,6 +98,12 @@ const Avatar = styled('div')({
   color: m3Theme.colors.onPrimary,
   animation: `${avatarGlow} 3.5s ease-in-out infinite`,
   marginBottom: m3Theme.spacing.lg,
+
+  [`@media (max-width: ${m3Theme.breakpoints.mobile}px)`]: {
+    width: '72px',
+    height: '72px',
+    fontSize: m3Theme.font.sizes.xl,
+  },
 });
 
 const HeroTitle = styled('h2')({
@@ -89,6 +116,14 @@ const HeroTitle = styled('h2')({
   backgroundClip: 'text',
   color: 'transparent',
   marginBottom: m3Theme.spacing.sm,
+
+  [`@media (max-width: ${m3Theme.breakpoints.tablet}px)`]: {
+    fontSize: m3Theme.font.sizes['4xl'],
+  },
+
+  [`@media (max-width: ${m3Theme.breakpoints.mobile}px)`]: {
+    fontSize: m3Theme.font.sizes['2xl'],
+  },
 });
 
 /* ── Component ───────────────────────────────────────────────────── */

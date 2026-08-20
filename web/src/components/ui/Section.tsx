@@ -44,4 +44,8 @@ export const SectionSubtitle = styled('p')({
   fontSize: m3Theme.font.sizes.lg,
   lineHeight: m3Theme.font.lineHeights.relaxed,
   color: m3Theme.colors.onSurfaceMuted,
+
+  [`@media (max-width: ${m3Theme.breakpoints.mobile}px)`]: {
+    fontSize: m3Theme.font.sizes.md,
+  },
 });

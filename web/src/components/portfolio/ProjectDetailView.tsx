@@ -10,6 +10,10 @@ import { PageHero } from '@/components/ui/PageHero';
 
 const Wrapper = styled('div')({
   paddingBlock: m3Theme.spacing.xxl,
+
+  [`@media (max-width: ${m3Theme.breakpoints.mobile}px)`]: {
+    paddingBlock: m3Theme.spacing.lg,
+  },
 });
 
 const BackLink = styled(Link)({
