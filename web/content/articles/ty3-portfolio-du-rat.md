@@ -6,16 +6,16 @@ tags: [Local-First, open-source, Portfolio, ratware, ZeroInfra]
 published: true
 ---
 
-Mon portfolio ne coûte rien. Le tien, probablement trop cher.
+## Mon portfolio ne coûte rien. Le tien, probablement trop cher.
 
 Pas de Vercel. Pas de Netlify. Pas de Supabase. Pas de "freemium" qui vous piège avec des quotas qui disparaissent quand vous avez du trafic.
 
 Juste :
 
-**GitHub Pages** (statique, gratuit, pour de vrai)
-**Un repo** avec des fichiers Markdown
-**Un pipeline GitHub Actions** qui rebuild à chaque commit
-**Une app desktop** (Wails/Go/React) qui commit à ma place
+- **GitHub Pages** (statique, gratuit, pour de vrai)
+- **Un repo** avec des fichiers Markdown
+- **Un pipeline GitHub Actions** qui rebuild à chaque commit
+- **Une app desktop** (Wails/Go/React) qui commit à ma place
 
 C'est tout.
 
@@ -25,7 +25,7 @@ Parce que Notion, c'est du SaaS. Et du SaaS, c'est de la dépendance déguisée 
 
 Mon site vit dans un repo Git. Mon contenu, c'est du Markdown brut. Ma "base de données", c'est `links.json`. Si GitHub part en vrille demain (ça n'arrivera pas, mais supposons), j'ai tout en local. Mon portfolio, c'est mon repo. Point.
 
-**L'architecture :**
+## **L'architecture :**
 
 - `web/` → Next.js en export statique. `output: 'export'`. Zéro serveur. Zéro runtime. Des fichiers HTML qui traînent sur GitHub Pages.
 - `admin/` → App desktop native. Go backend + React frontend. Pas de HTTP. Pas d'API key sur un disque. Le PAT GitHub reste en cache pour plus de facilité.
@@ -36,11 +36,13 @@ Mon site vit dans un repo Git. Mon contenu, c'est du Markdown brut. Ma "base de 
 
 J'ai même mis Google Analytics. Client-side uniquement. Pas de cookie banner RGPD. Pas de consentement à accepter. Le script charge, GA track, c'est tout. Anonymisé. Pas de tracking de merde.
 
-**Pourquoi une app desktop ?**
+## **Pourquoi une app desktop ?**
 
 Parce que j'ai pas envie de taper dans Git pour écrire un article. Parce que VS Code + terminal, c'est bien pour coder, pas pour écrire du contenu. L'app, c'est un CMS. Mais un CMS qui n'est pas un SaaS. Qui tourne sur ma machine. Qui commet sur mon repo. Qui fait exactement ce que je lui dis.
 
 Pas de "cloud". Pas de "synchronisation". Juste un commit.
+
+![screenshot-2026-08-19-at-22.02.36.png](/images/screenshot-2026-08-19-at-22.02.36.png)
 
 **Nom de code : "le portfolio du rat".**
 
@@ -59,3 +61,5 @@ La vraie question : *quand est-ce que tu arrêtes de payer pour quelque chose qu
 ---
 
 *tyyy — le portfolio du rat de Yoann Fort*
+
+
