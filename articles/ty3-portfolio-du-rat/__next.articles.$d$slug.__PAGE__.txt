@@ -1,17 +1,19 @@
 1:"$Sreact.fragment"
 2:I[17953,["/tyyy/_next/static/chunks/1io_j8tfwpvgf.js","/tyyy/_next/static/chunks/3ns162_xynzl4.js","/tyyy/_next/static/chunks/1dxzh8yxkvzet.js","/tyyy/_next/static/chunks/0omn3dxtc-w3k.js"],"ArticleView"]
-3:Td20,<p>Mon portfolio ne coûte rien. Le tien, probablement trop cher.</p>
+3:Tdbb,<h2>Mon portfolio ne coûte rien. Le tien, probablement trop cher.</h2>
 <p>Pas de Vercel. Pas de Netlify. Pas de Supabase. Pas de "freemium" qui vous piège avec des quotas qui disparaissent quand vous avez du trafic.</p>
 <p>Juste :</p>
-<p><strong>GitHub Pages</strong> (statique, gratuit, pour de vrai)
-<strong>Un repo</strong> avec des fichiers Markdown
-<strong>Un pipeline GitHub Actions</strong> qui rebuild à chaque commit
-<strong>Une app desktop</strong> (Wails/Go/React) qui commit à ma place</p>
+<ul>
+<li><strong>GitHub Pages</strong> (statique, gratuit, pour de vrai)</li>
+<li><strong>Un repo</strong> avec des fichiers Markdown</li>
+<li><strong>Un pipeline GitHub Actions</strong> qui rebuild à chaque commit</li>
+<li><strong>Une app desktop</strong> (Wails/Go/React) qui commit à ma place</li>
+</ul>
 <p>C'est tout.</p>
 <p>On m'a demandé : "Pourquoi tu fais pas juste un Notion ?"</p>
 <p>Parce que Notion, c'est du SaaS. Et du SaaS, c'est de la dépendance déguisée en commodité.</p>
 <p>Mon site vit dans un repo Git. Mon contenu, c'est du Markdown brut. Ma "base de données", c'est <code>links.json</code>. Si GitHub part en vrille demain (ça n'arrivera pas, mais supposons), j'ai tout en local. Mon portfolio, c'est mon repo. Point.</p>
-<p><strong>L'architecture :</strong></p>
+<h2><strong>L'architecture :</strong></h2>
 <ul>
 <li><code>web/</code> → Next.js en export statique. <code>output: 'export'</code>. Zéro serveur. Zéro runtime. Des fichiers HTML qui traînent sur GitHub Pages.</li>
 <li><code>admin/</code> → App desktop native. Go backend + React frontend. Pas de HTTP. Pas d'API key sur un disque. Le PAT GitHub reste en cache pour plus de facilité.</li>
@@ -20,9 +22,10 @@
 </ul>
 <p><strong>Le budget :</strong> 0€ d'infra. 0€ de base de données. 0€ de backend.</p>
 <p>J'ai même mis Google Analytics. Client-side uniquement. Pas de cookie banner RGPD. Pas de consentement à accepter. Le script charge, GA track, c'est tout. Anonymisé. Pas de tracking de merde.</p>
-<p><strong>Pourquoi une app desktop ?</strong></p>
+<h2><strong>Pourquoi une app desktop ?</strong></h2>
 <p>Parce que j'ai pas envie de taper dans Git pour écrire un article. Parce que VS Code + terminal, c'est bien pour coder, pas pour écrire du contenu. L'app, c'est un CMS. Mais un CMS qui n'est pas un SaaS. Qui tourne sur ma machine. Qui commet sur mon repo. Qui fait exactement ce que je lui dis.</p>
 <p>Pas de "cloud". Pas de "synchronisation". Juste un commit.</p>
+<p><img src="/images/screenshot-2026-08-19-at-22.02.36.png" alt="screenshot-2026-08-19-at-22.02.36.png"></p>
 <p><strong>Nom de code : "le portfolio du rat".</strong></p>
 <p>Oui, c'est volontaire. Je suis rat. J'ai pas envie de payer 40 abonnements pour héberger 3 pages statiques. J'ai pas envie que mon site dépende d'une startup qui peut changer ses tarifs, fermer, ou se faire racheter par un conglomérat qui transformera mon site en portail publicitaire.</p>
 <p>GitHub est un monopole ? Oui. Mais c'est un monopole <strong>open source</strong> avec un repo public. Mon code est là. Mon contenu est là. Mon infrastructure, c'est du Git.</p>
@@ -35,7 +38,7 @@
 8:X
 d:X
 d:C
-0:{"buildId":"oakf_Ukla_JV-6UVjsgEy","data":[{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"article":{"slug":"ty3-portfolio-du-rat","title":"TY3 / Portfolio du Rat","description":"J'ai construit mon portfolio. Il coûte **0€/an** en infra. Pas de Vercel. Pas de Netlify. Pas de Supabase. Pas de \"freemium\" qui vous piège avec des quotas qui disparaissent quand vous avez du trafic.","date":"2026-08-19","tags":["Local-First","open-source","Portfolio","ratware","ZeroInfra"],"canonicalUrl":"","published":true,"readTime":"3 min read","contentHtml":"$3"}}],["$L4","$L5"],"$L6"]}],"isPartial":"$@7","staleTime":"$8","varyParams":null},{"rsc":"$L9","isPartial":"$@a","staleTime":"$8","varyParams":null},{"rsc":"$Lb","isPartial":"$@c","staleTime":"$8","varyParams":"$d"},{"rsc":"$Le","isPartial":"$@f","staleTime":"$8","varyParams":"$d"},{"rsc":"$L10","isPartial":"$@11","staleTime":"$8","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@12","rootVaryParams":null,"needsRuntimeRequest":"$@13"}
+0:{"buildId":"_8g2sN3QeXo9lOmw6wG15","data":[{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"article":{"slug":"ty3-portfolio-du-rat","title":"TY3 / Portfolio du Rat","description":"J'ai construit mon portfolio. Il coûte **0€/an** en infra. Pas de Vercel. Pas de Netlify. Pas de Supabase. Pas de \"freemium\" qui vous piège avec des quotas qui disparaissent quand vous avez du trafic.","date":"2026-08-19","tags":["Local-First","open-source","Portfolio","ratware","ZeroInfra"],"canonicalUrl":"","published":true,"readTime":"3 min read","contentHtml":"$3"}}],["$L4","$L5"],"$L6"]}],"isPartial":"$@7","staleTime":"$8","varyParams":null},{"rsc":"$L9","isPartial":"$@a","staleTime":"$8","varyParams":null},{"rsc":"$Lb","isPartial":"$@c","staleTime":"$8","varyParams":"$d"},{"rsc":"$Le","isPartial":"$@f","staleTime":"$8","varyParams":"$d"},{"rsc":"$L10","isPartial":"$@11","staleTime":"$8","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@12","rootVaryParams":null,"needsRuntimeRequest":"$@13"}
 14:I[97367,["/tyyy/_next/static/chunks/1io_j8tfwpvgf.js","/tyyy/_next/static/chunks/3ns162_xynzl4.js"],"OutletBoundary"]
 15:"$Sreact.suspense"
 17:I[97367,["/tyyy/_next/static/chunks/1io_j8tfwpvgf.js","/tyyy/_next/static/chunks/3ns162_xynzl4.js"],"ViewportBoundary"]
