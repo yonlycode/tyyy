@@ -99,12 +99,14 @@ jobs:
           ARCH=x86_64
           curl -L -o appimagetool https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-$ARCH.AppImage
           chmod +x appimagetool
+          ./appimagetool --appimage-extract >/dev/null
+          mv squashfs-root appimagetool-dir
           mkdir -p appdir
           cp build/bin/tyyy-admin appdir/AppRun
           chmod +x appdir/AppRun
           printf '[Desktop Entry]\nType=Application\nName=Tyyy Admin\nComment=yo-port admin CMS\nIcon=app\nCategories=Utility;\n' > appdir/tyyy-admin.desktop
           cp "${{ github.workspace }}/admin/assets/appicon.png" appdir/app.png
-          ./appimagetool appdir "${{ matrix.artifact }}"
+          ./appimagetool-dir/AppRun appdir "${{ matrix.artifact }}"
           chmod +x "${{ matrix.artifact }}"
           mkdir -p build/bin && mv "${{ matrix.artifact }}" build/bin/
 

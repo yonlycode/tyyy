@@ -154,7 +154,26 @@ func (r *GitHubRepository) ListArticles() ([]*Article, error) {
 		art.SHA = c.GetSHA()
 		out = append(out, art)
 	}
+	sortArticlesByDateDesc(out)
 	return out, nil
+}
+
+// sortArticlesByDateDesc sorts articles from newest to oldest by frontmatter
+// date. Items with no date sort last, keeping their relative order.
+func sortArticlesByDateDesc(arts []*Article) {
+	sort.SliceStable(arts, func(i, j int) bool {
+		di, dj := arts[i].Frontmatter.Date, arts[j].Frontmatter.Date
+		if di == dj {
+			return false
+		}
+		if di == "" {
+			return false
+		}
+		if dj == "" {
+			return true
+		}
+		return di > dj
+	})
 }
 
 // ListProjects returns metadata for every markdown file in the projects dir.
@@ -176,7 +195,26 @@ func (r *GitHubRepository) ListProjects() ([]*Project, error) {
 		proj.SHA = c.GetSHA()
 		out = append(out, proj)
 	}
+	sortProjectsByDateDesc(out)
 	return out, nil
+}
+
+// sortProjectsByDateDesc sorts projects from newest to oldest by frontmatter
+// date. Items with no date sort last, keeping their relative order.
+func sortProjectsByDateDesc(projs []*Project) {
+	sort.SliceStable(projs, func(i, j int) bool {
+		di, dj := projs[i].Frontmatter.Date, projs[j].Frontmatter.Date
+		if di == dj {
+			return false
+		}
+		if di == "" {
+			return false
+		}
+		if dj == "" {
+			return true
+		}
+		return di > dj
+	})
 }
 
 // ListTags returns the deduplicated, alphabetically sorted set of all tags
