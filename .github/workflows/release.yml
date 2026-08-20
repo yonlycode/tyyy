@@ -80,7 +80,9 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Set app icon
-        run: cp "${{ github.workspace }}/admin/assets/appicon.png" build/appicon.png
+        run: |
+          mkdir -p build
+          cp "${{ github.workspace }}/admin/assets/appicon.png" build/appicon.png
 
       - name: Build
         run: wails build -platform ${{ matrix.platform }} -tags webkit2_41 -clean
