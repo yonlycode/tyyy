@@ -102,7 +102,7 @@ export function ProjectDetailView({ project }: { project: Article }) {
               dangerouslySetInnerHTML={{ __html: project.contentHtml }}
             />
             <FooterBar>
-              <a
+              <Link
                 href="/portfolio/"
                 style={{
                   textDecoration: 'none',
@@ -117,7 +117,7 @@ export function ProjectDetailView({ project }: { project: Article }) {
                 }}
               >
                 ← Retour au portfolio
-              </a>
+              </Link>
             </FooterBar>
           </div>
         </AnimatedFadeIn>

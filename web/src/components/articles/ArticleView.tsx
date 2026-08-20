@@ -98,7 +98,7 @@ export function ArticleView({ article }: { article: Article }) {
               dangerouslySetInnerHTML={{ __html: article.contentHtml }}
             />
             <FooterBar>
-              <a
+              <Link
                 href="/articles/"
                 style={{
                   textDecoration: 'none',
@@ -113,7 +113,7 @@ export function ArticleView({ article }: { article: Article }) {
                 }}
               >
                 ← Tous les articles
-              </a>
+              </Link>
             </FooterBar>
           </div>
         </AnimatedFadeIn>

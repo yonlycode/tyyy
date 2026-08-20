@@ -161,7 +161,7 @@ export function ArticlesView({ articles }: { articles: ArticleMeta[] }) {
         )}
 
         <FooterRow>
-          <a
+          <Link
             href="/"
             style={{
               textDecoration: 'none',
@@ -176,7 +176,7 @@ export function ArticlesView({ articles }: { articles: ArticleMeta[] }) {
             }}
           >
             ← Retour à l'accueil
-          </a>
+          </Link>
         </FooterRow>
       </Container>
     </Section>

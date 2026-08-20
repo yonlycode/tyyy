@@ -141,7 +141,7 @@ export function PortfolioView({ projects }: { projects: ArticleMeta[] }) {
         )}
 
         <FooterRow>
-          <a
+          <Link
             href="/"
             style={{
               textDecoration: 'none',
@@ -156,7 +156,7 @@ export function PortfolioView({ projects }: { projects: ArticleMeta[] }) {
             }}
           >
             ← Retour à l'accueil
-          </a>
+          </Link>
         </FooterRow>
       </Container>
     </Section>
