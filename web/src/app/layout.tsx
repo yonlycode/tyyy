@@ -8,6 +8,7 @@ import './globals.css';
 export const metadata = {
   title: 'Yoann Fort - Portfolio & Blog',
   description: "Portfolio professionnel et blog d'architecte IA et software engineer",
+  icons: { icon: '/favicon.png' },
 };
 
 export default function RootLayout({
