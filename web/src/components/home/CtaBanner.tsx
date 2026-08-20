@@ -61,7 +61,7 @@ export function CtaBanner() {
                 Discutons de votre infrastructure, de vos coûts d'inférence et de votre stratégie de
                 souveraineté numérique.
               </CtaText>
-              <ButtonLink href="/privacy/">
+              <ButtonLink href="/contact/">
                 Me contacter
               </ButtonLink>
             </BannerInner>

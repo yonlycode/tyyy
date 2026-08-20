@@ -184,8 +184,8 @@ const MobileLink = styled(Link, {
 
 const links = [
   { href: '/', label: 'Accueil' },
-  { href: '/portfolio/', label: 'Portfolio' },
   { href: '/articles/', label: 'Articles' },
+  { href: '/portfolio/', label: 'Portfolio' },
   { href: '/contact/', label: 'Contact' },
 ];
 
