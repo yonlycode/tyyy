@@ -44,6 +44,8 @@ Le portfolio & blog public, généré en **export statique** (SSG) et déployé 
 
 Un **CMS de bureau** autonome pour éditer le contenu du repo.
 
+![screenshot-2026-08-19-at-22.02.36.png](/tyyy/images/screenshot-2026-08-19-at-22.02.36.png)
+
 | | |
 |---|---|
 | **Shell desktop** | Wails v2 (backend Go, aucun serveur HTTP) |
