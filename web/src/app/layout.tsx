@@ -1,17 +1,51 @@
+import type { Metadata } from 'next';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
-import { GoogleAnalytics } from '@/components/analytics';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { PageShell } from '@/components/layout/PageShell';
 import type { ReactNode } from 'react';
 import { m3Theme } from '@/styles/theme';
+import { SITE_URL, SITE_NAME, SITE_TITLE, SITE_DESCRIPTION, SITE_KEYWORDS } from '@/lib/seo';
 import './globals.css';
 
-const isProd = process.env.NODE_ENV === 'production';
-const repoName = 'tyyy';
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  keywords: SITE_KEYWORDS,
+  authors: [{ name: 'Yoann Fort' }],
+  creator: 'Yoann Fort',
+  publisher: 'Yoann Fort',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  openGraph: {
+    type: 'website',
+    siteName: 'Yoann Fort',
+    locale: 'fr_FR',
+    url: SITE_URL,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
+};
 
-export const metadata = {
-  title: 'Yoann Fort - Portfolio & Blog',
-  description: "Portfolio professionnel et blog d'architecte IA et software engineer",
-  icons: { icon: isProd ? `/${repoName}/favicon.png` : '/favicon.png' },
+export const viewport = {
+  themeColor: m3Theme.colors.primary,
 };
 
 export default function RootLayout({
@@ -45,7 +79,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-export const viewport = {
-  themeColor: m3Theme.colors.primary,
-};
