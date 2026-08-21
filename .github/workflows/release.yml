@@ -33,7 +33,7 @@ jobs:
           - name: macos-arm64
             os: macos-latest
             platform: darwin/arm64
-            artifact: "tyyy-admin-${{ github.ref_name }}-macos-arm64"
+            artifact: "tyyy-admin-${{ github.ref_name }}-macos-arm64.dmg"
           - name: linux-amd64
             os: ubuntu-latest
             platform: linux/amd64
@@ -91,10 +91,18 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           set -euo pipefail
-          # Wails builds a macOS .app bundle; extract the self-contained
-          # executable (frontend is embedded via //go:embed) instead of zipping.
-          cp "build/bin/tyyy-admin.app/Contents/MacOS/tyyy-admin" "build/bin/${{ matrix.artifact }}"
-          chmod +x "build/bin/${{ matrix.artifact }}"
+          # Build a distributable .dmg from the Wails .app bundle. hdiutil
+          # writes a fixed temp image (its name ends in .dmg, so there is no
+          # double extension), which we then rename to the release artifact.
+          dmg="build/bin/tyyy-admin-image.dmg"
+          out="build/bin/${{ matrix.artifact }}"
+          rm -f "$dmg" "$out"
+          hdiutil create -volname "tyyy-admin" \
+            -srcfolder "build/bin/tyyy-admin.app" \
+            -format UDZO \
+            "$dmg"
+          mv "$dmg" "$out"
+          chmod +x "$out"
 
       - name: Package Linux (AppImage)
         if: runner.os == 'Linux'
