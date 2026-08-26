@@ -83,9 +83,8 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Set app icon
-        run: |
-          mkdir -p build
-          cp "${{ github.workspace }}/admin/assets/appicon.png" build/appicon.png
+        shell: bash
+        run: cp -f "${{ github.workspace }}/admin/assets/appicon.png" build/appicon.png
 
       - name: Build
         run: wails3 build

@@ -20,7 +20,7 @@ admin-build: ## Build the desktop app -> admin/build/bin/yo-port-admin.app
 	cd admin && wails3 build
 
 admin-run: ## Open the built desktop app
-	open admin/build/bin/yo-port-admin.app
+	open admin/bin/tyyy-admin
 
 # ---------- Web site (Next.js) ----------
 
