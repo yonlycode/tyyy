@@ -88,7 +88,7 @@ jobs:
           cp "${{ github.workspace }}/admin/assets/appicon.png" build/appicon.png
 
       - name: Build
-        run: wails3 build -clean
+        run: wails3 build
 
       - name: Package macOS
         if: runner.os == 'macOS'
