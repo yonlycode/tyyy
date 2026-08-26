@@ -1,12 +1,11 @@
 {
-  "$schema": "https://wails.io/schemas/config.v2.json",
   "name": "tyyy-admin",
   "outputfilename": "tyyy-admin",
-  "frontend:install": "yarn install",
-  "frontend:build": "yarn build",
-  "frontend:dev:watcher": "yarn dev",
-  "frontend:dev:serverUrl": "auto",
-  "author": {
-    "name": "tyyy"
+  "frontend": {
+    "dir": "./frontend",
+    "install": "yarn install",
+    "build": "yarn build",
+    "dev": "yarn dev",
+    "devServerUrl": "http://localhost:5173"
   }
 }

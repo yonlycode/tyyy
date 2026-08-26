@@ -30,8 +30,11 @@ jobs:
           cache: "yarn"
           cache-dependency-path: admin/frontend/yarn.lock
 
+      - name: Install Task
+        uses: arduino/setup-task@v2
+
       - name: Install Wails CLI
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+        run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
 
       - name: Install system dependencies
         run: |
@@ -52,7 +55,7 @@ jobs:
           cp "${{ github.workspace }}/admin/assets/appicon.png" build/appicon.png
 
       - name: Build
-        run: wails build -platform linux/amd64 -tags webkit2_41 -clean
+        run: wails3 build -clean
 
       - name: Vet
         run: go vet ./...

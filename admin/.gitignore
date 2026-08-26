@@ -1,5 +1,16 @@
 /yo-port-admin
 /build
+/build/bin
+/build/darwin/icons.icns
+/build/darwin/Assets.car
+/build/darwin/Info.plist
+/build/darwin/Info.dev.plist
+/build/linux/*.desktop
+/build/linux/appimage
+/build/windows/icon.ico
+/build/windows/nsis
 /frontend/dist
 /frontend/node_modules
-/frontend/wailsjs
+/frontend/bindings
+/bin
+/.task

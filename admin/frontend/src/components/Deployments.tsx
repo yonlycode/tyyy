@@ -1,5 +1,5 @@
+import { Browser } from "@wailsio/runtime";
 import type { Deployment } from "../types";
-import { BrowserOpenURL } from "../../wailsjs/runtime/runtime";
 
 function statusClass(status: string, conclusion: string) {
   if (conclusion === "success") return "ok";
@@ -51,7 +51,7 @@ export default function Deployments({
               key={d.id}
               className="clickable"
               onClick={() => {
-                if (d.htmlUrl) BrowserOpenURL(d.htmlUrl);
+                if (d.htmlUrl) Browser.OpenURL(d.htmlUrl);
               }}
             >
               <td>#{d.runNumber}</td>
@@ -62,7 +62,7 @@ export default function Deployments({
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      BrowserOpenURL(d.htmlUrl);
+                      Browser.OpenURL(d.htmlUrl);
                     }}
                   >
                     {d.displayTitle || "Deploy"}

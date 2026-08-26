@@ -9,15 +9,15 @@ help: ## Show available targets
 # ---------- Admin (Wails desktop app: Go + React embedded) ----------
 
 admin-install: ## Install Wails CLI + admin dependencies (Go + frontend)
-	go install github.com/wailsapp/wails/v2/cmd/wails@latest
+	go install github.com/wailsapp/wails/v3/cmd/wails3@latest
 	cd admin && go mod download
 	cd admin/frontend && yarn install
 
 admin-dev: ## Run admin in dev mode (HMR, opens the app window)
-	cd admin && wails dev
+	cd admin && wails3 dev
 
 admin-build: ## Build the desktop app -> admin/build/bin/yo-port-admin.app
-	cd admin && wails build
+	cd admin && wails3 build
 
 admin-run: ## Open the built desktop app
 	open admin/build/bin/yo-port-admin.app
@@ -44,5 +44,5 @@ web-lint: ## Run ESLint on the web app
 install: admin-install web-install ## Install dependencies for both projects
 
 clean: ## Remove build artifacts and node_modules
-	rm -rf admin/frontend/dist admin/frontend/node_modules admin/frontend/wailsjs admin/build admin/yo-port-admin
+	rm -rf admin/frontend/dist admin/frontend/node_modules admin/frontend/bindings admin/bin admin/build/bin
 	rm -rf web/out web/.next web/node_modules

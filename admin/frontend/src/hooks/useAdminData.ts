@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import type { Article, Config, PersistedConfig } from "../types";
-import { api } from "../services/api";
+import type { Article, PersistedConfig } from "../types";
+import { api, type ConfigResponse } from "../services/api";
 
 // useAdminData centralises all data loading for the admin: the active config,
 // the persisted (cached) config, the article list and the errors that arise
 // while talking to the backend. It exposes actions to reload each slice.
 export function useAdminData() {
-  const [config, setConfig] = useState<Config | null>(null);
+  const [config, setConfig] = useState<ConfigResponse | null>(null);
   const [cachedConfig, setCachedConfig] = useState<PersistedConfig | null>(null);
   const [articles, setArticles] = useState<Article[]>([]);
   const [error, setError] = useState("");

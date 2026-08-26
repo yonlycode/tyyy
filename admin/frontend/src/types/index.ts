@@ -2,8 +2,8 @@ export interface Frontmatter {
   title: string;
   description: string;
   date: string;
-  tags: string[];
-  published?: boolean;
+  tags: string[] | null;
+  published: boolean | null;
 }
 
 export interface Article {
@@ -14,11 +14,19 @@ export interface Article {
   body: string;
 }
 
+export interface ProjectFrontmatter {
+  title: string;
+  description: string;
+  date: string;
+  tags: string[] | null;
+  published: boolean | null;
+}
+
 export interface Project {
   slug: string;
   path: string;
   sha?: string;
-  frontmatter: Frontmatter;
+  frontmatter: ProjectFrontmatter;
   body: string;
 }
 
@@ -31,8 +39,8 @@ export interface Deployment {
   headSha: string;
   headBranch: string;
   event: string;
-  createdAt?: string | null;
-  updatedAt?: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
   htmlUrl: string;
 }
 
@@ -54,7 +62,7 @@ export interface Link {
 export interface LinksData {
   title: string;
   subtitle: string;
-  links: Link[];
+  links: Link[] | null;
 }
 
 export const EMPTY_LINKS: LinksData = {

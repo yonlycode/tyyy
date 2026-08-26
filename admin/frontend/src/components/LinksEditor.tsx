@@ -42,24 +42,26 @@ export default function LinksEditor({
 
   function patchLink(index: number, patch: Partial<Link>) {
     setForm((f) => {
-      const links = f.links.map((l, i) => (i === index ? { ...l, ...patch } : l));
+      const currentLinks = f.links ?? [];
+      const links = currentLinks.map((l, i) => (i === index ? { ...l, ...patch } : l));
       return { ...f, links };
     });
   }
 
   function addLink() {
-    setForm((f) => ({ ...f, links: [...f.links, newLink()] }));
+    setForm((f) => ({ ...f, links: [...(f.links ?? []), newLink()] }));
   }
 
   function removeLink(index: number) {
-    setForm((f) => ({ ...f, links: f.links.filter((_, i) => i !== index) }));
+    setForm((f) => ({ ...f, links: (f.links ?? []).filter((_, i) => i !== index) }));
   }
 
   function moveLink(index: number, dir: -1 | 1) {
     setForm((f) => {
+      const currentLinks = f.links ?? [];
       const target = index + dir;
-      if (target < 0 || target >= f.links.length) return f;
-      const links = [...f.links];
+      if (target < 0 || target >= currentLinks.length) return f;
+      const links = [...currentLinks];
       const [item] = links.splice(index, 1);
       links.splice(target, 0, item);
       return { ...f, links };
@@ -69,14 +71,15 @@ export default function LinksEditor({
   function ensureIds() {
     setForm((f) => ({
       ...f,
-      links: f.links.map((l, i) => ({ ...l, id: l.id || toId(l.label) || `link-${i + 1}` })),
+      links: (f.links ?? []).map((l, i) => ({ ...l, id: l.id || toId(l.label) || `link-${i + 1}` })),
     }));
   }
 
   async function save() {
+    const currentLinks = form.links ?? [];
     const next = {
       ...form,
-      links: form.links.map((l, i) => ({
+      links: currentLinks.map((l, i) => ({
         ...l,
         id: l.id || toId(l.label) || `link-${i + 1}`,
       })),
@@ -132,7 +135,7 @@ export default function LinksEditor({
         }
       >
         <div className="link-list">
-          {form.links.map((link, index) => (
+          {(form.links ?? []).map((link, index) => (
             <div className="link-row" key={link.id || `new-${index}`}>
               <div className="link-order">
                 <button
@@ -146,7 +149,7 @@ export default function LinksEditor({
                 <span className="index">{index + 1}</span>
                 <button
                   className="icon-btn"
-                  disabled={index === form.links.length - 1}
+                  disabled={index === (form.links ?? []).length - 1}
                   onClick={() => moveLink(index, 1)}
                   title="Move down"
                 >
@@ -184,7 +187,7 @@ export default function LinksEditor({
               </div>
             </div>
           ))}
-          {form.links.length === 0 && <p className="empty-state">No links yet — add one above.</p>}
+          {(form.links ?? []).length === 0 && <p className="empty-state">No links yet — add one above.</p>}
         </div>
       </Card>
     </div>

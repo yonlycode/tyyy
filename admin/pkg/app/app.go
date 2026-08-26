@@ -7,6 +7,8 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/wailsapp/wails/v3/pkg/application"
+
 	"admin/pkg/content"
 )
 
@@ -26,9 +28,10 @@ func NewApp() *App {
 	return &App{}
 }
 
-// Startup stores the Wails context for later use.
-func (a *App) Startup(ctx context.Context) {
+// ServiceStartup is called when the application starts.
+func (a *App) ServiceStartup(ctx context.Context, options application.ServiceOptions) error {
 	a.ctx = ctx
+	return nil
 }
 
 // loadCachedConfig reads the persisted config from disk (protected by a.mu).

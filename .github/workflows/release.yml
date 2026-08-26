@@ -62,8 +62,11 @@ jobs:
           cache: "yarn"
           cache-dependency-path: admin/frontend/yarn.lock
 
+      - name: Install Task
+        uses: arduino/setup-task@v2
+
       - name: Install Wails CLI
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+        run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
 
       - name: Install Linux system dependencies
         if: runner.os == 'Linux'
@@ -85,7 +88,7 @@ jobs:
           cp "${{ github.workspace }}/admin/assets/appicon.png" build/appicon.png
 
       - name: Build
-        run: wails build -platform ${{ matrix.platform }} -tags webkit2_41 -clean
+        run: wails3 build -clean
 
       - name: Package macOS
         if: runner.os == 'macOS'
@@ -133,3 +136,56 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           files: admin/build/bin/${{ matrix.artifact }}
+
+  build-android:
+    needs: release
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./admin
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: admin/go.mod
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "yarn"
+          cache-dependency-path: admin/frontend/yarn.lock
+
+      - name: Install Task
+        uses: arduino/setup-task@v2
+
+      - name: Install Wails CLI
+        run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android NDK
+        run: sdkmanager "ndk;26.3.11579264"
+
+      - name: Install frontend dependencies
+        working-directory: ./admin/frontend
+        run: yarn install --frozen-lockfile
+
+      - name: Build Android APK
+        run: wails3 task android:package
+
+      - name: Upload Android APK to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: admin/bin/tyyy-admin.apk

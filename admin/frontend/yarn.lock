@@ -557,6 +557,11 @@
     "@types/babel__core" "^7.20.5"
     react-refresh "^0.18.0"
 
+"@wailsio/runtime@^3.0.0-beta.13":
+  version "3.0.0-beta.13"
+  resolved "https://registry.yarnpkg.com/@wailsio/runtime/-/runtime-3.0.0-beta.13.tgz#11402c9a81321473afcbed35ec2eeca17966185b"
+  integrity sha512-59nmw/qiRN8LukEmIDDmyTZBZJ/pCoxpLowAtnS6VVJvoQhiTryB28menjgNhkbZg36g8nd4GifBlKzjmtycyA==
+
 bail@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/bail/-/bail-2.0.2.tgz#d26f5cd8fe5d6f832a31517b9f7c356040ba6d5d"

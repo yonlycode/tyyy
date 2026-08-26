@@ -18,9 +18,15 @@ import {
   SaveProject,
   SetConfig,
   UploadMedia,
-} from "../../wailsjs/go/app/App";
-import type { content } from "../../wailsjs/go/models";
-import type { Article, Config, Deployment, LinksData, Media, PersistedConfig, Project } from "../types";
+} from "../../bindings/admin/pkg/app/app";
+import type {
+  Article,
+  Config,
+  Deployment,
+  LinksData,
+  Media,
+  Project,
+} from "../../bindings/admin/pkg/content/models";
 
 export interface SetConfigPayload {
   token: string;
@@ -31,24 +37,43 @@ export interface SetConfigPayload {
   branch: string;
 }
 
+export interface PersistedConfig extends Config {
+  configured: boolean;
+}
+
+// CancellablePromise is a thenable, so it's compatible with await/then patterns.
+// We cast through unknown to satisfy TypeScript's strict structural checks.
+function p<T>(cp: { then: Function }): Promise<T> {
+  return cp as unknown as Promise<T>;
+}
+
+export interface ConfigResponse {
+  configured: boolean;
+  owner: string;
+  repo: string;
+  baseDir: string;
+  imgDir: string;
+  branch: string;
+}
+
 export const api = {
-  getConfig: () => GetConfig() as Promise<Config>,
-  setConfig: (cfg: SetConfigPayload) => SetConfig(cfg),
-  listArticles: () => ListArticles() as Promise<Article[]>,
-  listProjects: () => ListProjects() as Promise<Project[]>,
-  listTags: () => ListTags() as Promise<string[]>,
-  listDeployments: (limit = 10) => ListDeployments(limit) as Promise<Deployment[]>,
-  getArticle: (slug: string) => GetArticle(slug) as Promise<Article>,
-  getProject: (slug: string) => GetProject(slug) as Promise<Project>,
-  saveArticle: (article: Article) => SaveArticle(article as unknown as content.Article),
-  saveProject: (project: Project) => SaveProject(project as unknown as content.Project),
-  deleteArticle: (slug: string) => DeleteArticle(slug),
-  deleteProject: (slug: string) => DeleteProject(slug),
-  getLinks: () => GetLinks() as Promise<LinksData>,
-  saveLinks: (data: LinksData) => SaveLinks(data as unknown as content.LinksData),
-  uploadImage: (fileName: string, data: string) => UploadMedia(fileName, data),
-  listMedia: () => ListMedia() as Promise<Media[]>,
-  deleteMedia: (fileName: string) => DeleteMedia(fileName),
-  clearCache: () => ClearCache(),
-  loadConfig: () => GetFullConfig() as Promise<PersistedConfig | null>,
+  getConfig: () => p<ConfigResponse>(GetConfig()),
+  setConfig: (cfg: SetConfigPayload) => p<void>(SetConfig(cfg as unknown as Config)),
+  listArticles: () => p<Article[]>(ListArticles()),
+  listProjects: () => p<Project[]>(ListProjects()),
+  listTags: () => p<string[]>(ListTags()),
+  listDeployments: (limit = 10) => p<Deployment[]>(ListDeployments(limit)),
+  getArticle: (slug: string) => p<Article>(GetArticle(slug)),
+  getProject: (slug: string) => p<Project>(GetProject(slug)),
+  saveArticle: (article: Article) => p<void>(SaveArticle(article)),
+  saveProject: (project: Project) => p<void>(SaveProject(project)),
+  deleteArticle: (slug: string) => p<void>(DeleteArticle(slug)),
+  deleteProject: (slug: string) => p<void>(DeleteProject(slug)),
+  getLinks: () => p<LinksData>(GetLinks()),
+  saveLinks: (data: LinksData) => p<void>(SaveLinks(data)),
+  uploadImage: (fileName: string, data: string) => p<string>(UploadMedia(fileName, data)),
+  listMedia: () => p<Media[]>(ListMedia()),
+  deleteMedia: (fileName: string) => p<void>(DeleteMedia(fileName)),
+  clearCache: () => p<void>(ClearCache()),
+  loadConfig: () => p<PersistedConfig | null>(GetFullConfig()),
 };
