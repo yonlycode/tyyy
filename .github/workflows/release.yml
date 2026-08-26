@@ -65,9 +65,6 @@ jobs:
       - name: Install Task
         uses: arduino/setup-task@v2
 
-      - name: Install Wails CLI
-        run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
-
       - name: Install Linux system dependencies
         if: runner.os == 'Linux'
         run: |
@@ -77,6 +74,9 @@ jobs:
             libwebkitgtk-6.0-dev \
             libayatana-appindicator3-dev \
             librsvg2-dev
+
+      - name: Install Wails CLI
+        run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
 
       - name: Install frontend dependencies
         working-directory: ./admin/frontend
@@ -161,6 +161,15 @@ jobs:
 
       - name: Install Task
         uses: arduino/setup-task@v2
+
+      - name: Install Linux system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgtk-4-dev \
+            libwebkitgtk-6.0-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
 
       - name: Install Wails CLI
         run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
