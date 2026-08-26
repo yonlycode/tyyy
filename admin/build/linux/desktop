@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=My Product
+Comment=A temp-probe application
+# The Exec line includes %u to pass the URL to the application
+Exec=/usr/local/bin/temp-probe %u
+Terminal=false
+Type=Application
+Icon=temp-probe
+Categories=Utility;
+StartupWMClass=temp-probe
+
+ 
