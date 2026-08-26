@@ -30,9 +30,6 @@ jobs:
           cache: "yarn"
           cache-dependency-path: admin/frontend/yarn.lock
 
-      - name: Install Task
-        uses: arduino/setup-task@v2
-
       - name: Install Wails CLI
         run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
 
@@ -40,8 +37,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            libgtk-3-dev \
-            libwebkit2gtk-4.1-dev \
+            libgtk-4-dev \
+            libwebkitgtk-6.0-dev \
             libayatana-appindicator3-dev \
             librsvg2-dev
 
