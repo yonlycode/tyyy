@@ -129,6 +129,25 @@ a {
   border-radius: 6px;
 }
 
+.article-body pre {
+  background: #0F172A;
+  border: 1px solid #1E293B;
+  border-radius: 12px;
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.article-body pre code {
+  background: transparent;
+  padding: 0;
+  color: #C7D2FE;
+  font-size: inherit;
+  white-space: pre;
+}
+
 .article-body blockquote {
   border-left: 3px solid #6366F1;
   background: #111827;
