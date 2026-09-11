@@ -22,6 +22,53 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - **Markdown processing:** `gray-matter` + `remark` + `remark-html` + `reading-time`
 - **Styling:** Material Design 3 color tokens (`src/styles/theme.ts`), all components styled via Emotion
 - **Component pattern:** `AnimatedFadeIn` wrapper using `motion.div` with `initial={{opacity:0, y:15}}`, `animate={{opacity:1, y:0}}`
+
+## 🎨 Convention de style : séparation logique / style
+
+**Règle : un composant ne contient jamais de `styled()`.** Les composants Emotion
+vivent dans un module de styles colocataire, au format `<Nom>.styles.ts`.
+
+```
+src/components/ui/Navbar.tsx          → logique + JSX uniquement
+src/components/ui/Navbar.styles.ts    → tous les styled() + keyframes()
+```
+
+### Que met-on dans `<Nom>.styles.ts`
+- les `styled(...)` (et leurs variantes dérivées : `styled(Button)({...})`)
+- les `keyframes`
+- les types de props utilisés **uniquement** par les styles
+- `import { m3Theme } from '@/styles/theme'` — jamais de valeur hard-codée
+- `'use client';` en tête de fichier (le module est consommé par des client components)
+
+### Que reste-t-il dans `<Nom>.tsx`
+- les hooks, l'état, les handlers, le routage
+- les props publiques du composant et sa signature
+- le JSX, qui importe les primitives depuis `./<Nom>.styles`
+
+### Deux formes de fichiers
+| Cas | Fichiers | Exemple |
+|---|---|---|
+| **Primitive pure** (aucune logique, que des styled) | `<Nom>.styles.ts` seul, pas de `.tsx` | `Button`, `Card`, `Badge`, `Container`, `Section` |
+| **Composant mixte** (logique + styles) | `<Nom>.tsx` + `<Nom>.styles.ts` | `Navbar`, `MultiSelect`, `Footer`, `Stat` |
+
+### Barrel (`src/components/ui/index.ts`)
+- primitive pure → `export * from './Button.styles';`
+- composant mixte → `export * from './Navbar';` **seulement**
+
+Le module de styles d'un composant mixte n'est **jamais** réexposé par le barrel :
+c'est un détail d'implémentation. Un consommateur qui a besoin d'une primitive
+interne (ex. `LogoMark`) l'importe par son chemin direct :
+
+```ts
+import { LogoMark } from './Navbar.styles';
+```
+
+### Conventions de noms
+- Props de style transitoires préfixées par `$` (`$active`, `$open`) pour ne pas
+  fuir dans le DOM.
+- Un styled ne doit **pas** porter le même nom qu'un type importé du domaine
+  (piège : `const ArticleMeta = styled(...)` collisionnait avec `type ArticleMeta`
+  de `@/lib/md` — renommé en `MetaRow`).
 - **Data fetching:** Server-side at build time via `getSortedArticles()` / `getArticleBySlug()` reading from `/content`
 - **Static generation:** `generateStaticParams` + `export output: 'export'` with `trailingSlash: true`
 - **Analytics:** GA4 via `@next/third-parties/google` (`<GoogleAnalytics/>`), injected from `src/app/layout.tsx`
@@ -104,7 +151,9 @@ Toutes les variantes comptent comme le même pattern :
     icon.png / apple-icon.png → favicons (copies of public/favicon.png)
   components/
     providers/  → ThemeProvider (Emotion wrapper)
-    ui/         → Button, Card, Badge, Navbar, Footer, PageHero (all Emotion styled)
+    ui/         → primitives UI. Chaque module a son <Nom>.styles.ts (Emotion) ;
+                 les primitives sans logique n'ont QUE le .styles.ts (Button, Card,
+                 Badge, Container, Section)
     contact/    → ContactView (linktree page) + LinkIcon (inline SVG icons)
     og/         → OGFrame shared template for generated OG images
     AnimatedFadeIn.tsx → motion.fade wrapper

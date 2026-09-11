@@ -2,71 +2,20 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import styled from '@emotion/styled';
 import { AnimatedFadeIn } from '@/components/AnimatedFadeIn';
 import type { ArticleMeta } from '@/lib/md';
 import { m3Theme } from '@/styles/theme';
-import {
-  Container,
-  Section,
-  FeatureCard,
-  Badge,
-  FilterBar,
-} from '@/components/ui';
+import { Container, Section, FeatureCard, Badge, FilterBar } from '@/components/ui';
 import { PageHero } from '@/components/ui/PageHero';
-
-const ArticleGrid = styled('div')({
-  display: 'grid',
-  gridTemplateColumns: 'repeat(3, 1fr)',
-  gap: m3Theme.spacing.lg,
-  '@media (max-width: 900px)': { gridTemplateColumns: '1fr' },
-});
-
-const ArticleLink = styled(Link)({
-  textDecoration: 'none',
-  display: 'block',
-  height: '100%',
-});
-
-const ArticleTitle = styled('h3')({
-  fontSize: m3Theme.font.sizes.xl,
-  color: m3Theme.colors.onSurface,
-  lineHeight: 1.35,
-  margin: 0,
-  transition: 'color 0.2s ease',
-  [`${ArticleLink}:hover &`]: { color: m3Theme.colors.primary },
-});
-
-const ArticleMeta = styled('div')({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  gap: m3Theme.spacing.md,
-  marginTop: m3Theme.spacing.lg,
-  paddingTop: m3Theme.spacing.md,
-  borderTop: `1px solid ${m3Theme.colors.outlineVariant}`,
-});
-
-const ReadMore = styled('span')({
-  color: m3Theme.colors.primary,
-  fontSize: m3Theme.font.sizes.sm,
-  fontWeight: m3Theme.font.weights.semibold,
-  transition: 'color 0.2s ease',
-  [`${ArticleLink}:hover &`]: { color: m3Theme.colors.brandAccent },
-});
-
-const FooterRow = styled('div')({
-  display: 'flex',
-  justifyContent: 'center',
-  marginTop: m3Theme.spacing.xxl,
-});
-
-const EmptyState = styled('div')({
-  textAlign: 'center',
-  padding: `${m3Theme.spacing.xxl} 0`,
-  color: m3Theme.colors.onSurfaceVariant,
-  fontSize: m3Theme.font.sizes.lg,
-});
+import {
+  ArticleGrid,
+  ArticleLink,
+  ArticleTitle,
+  EmptyState,
+  FooterRow,
+  MetaRow,
+  ReadMore,
+} from './ArticlesView.styles';
 
 /* ── View ──────────────────────────────────────────────────────────── */
 
@@ -147,12 +96,12 @@ export function ArticlesView({ articles }: { articles: ArticleMeta[] }) {
                     >
                       {article.description}
                     </p>
-                    <ArticleMeta>
+                    <MetaRow>
                       <span style={{ color: m3Theme.colors.onSurfaceVariant, fontSize: m3Theme.font.sizes.xs }}>
                         {article.date}
                       </span>
                       <ReadMore>Lire plus →</ReadMore>
-                    </ArticleMeta>
+                    </MetaRow>
                   </FeatureCard>
                 </ArticleLink>
               </AnimatedFadeIn>
