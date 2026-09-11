@@ -28,6 +28,50 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - **SEO:** centralized `src/lib/seo.ts` helper (`buildMetadata`, `absoluteUrl`, site config) used by every page
 - **CI/CD:** GitHub Actions deploy to GitHub Pages (`.github/workflows/deploy.yml`) — builds with `yarn`
 
+## ✍️ Rédaction des articles (`content/articles/*.md`)
+
+### 🚫 Pattern banni — « ce n'est pas X. C'est Y. »
+
+**Interdit dans toute prose générée ou réécrite.** Cette figure (négation puis correction, en deux temps) est un tic de rédaction IA : elle oblige le lecteur à maintenir une négation en mémoire avant de recevoir l'information, et elle installe un homme de paille pour mieux le faire tomber.
+
+Toutes les variantes comptent comme le même pattern :
+
+| Variante | Exemple à bannir |
+|---|---|
+| Présent | « Ce qui a bougé **n'est pas** le matériel. **C'est** une décision d'ingénierie. » |
+| Imparfait | « Ce qu'il fallait, **ce n'était pas** plus de puissance. **C'était** un moteur qui… » |
+| Passé au « mais » | « La question **n'est plus** « ça rentre dans les 24 Go », **mais** « l'engine sait-il… » » |
+| Miroir (affirmation puis fragment négatif) | « C'est ça, la vraie rupture. **Pas** un pic de benchmark. Une courbe qui ne plie pas. » |
+| Escalade par négations | « **Pas** de moitié. **Pas** de 20 %. D'un facteur quatre à sept… » |
+
+**Ce qu'on fait à la place** — le fait doit porter l'argument tout seul :
+
+- **Attaquer par le fait concret** : « À ces chiffres, le local fait mieux que le cloud, chez soi, sans facture récurrente. »
+- **Déplacer vers la conséquence** : « Sans cette densité, le modèle ne tient tout simplement pas. »
+- **Tourner en question** : « La question change alors de nature : l'engine sait-il exploiter les 124 Go disponibles sans se faire mentir par le noyau ? »
+- **Faire porter la contraste par le sujet, pas par la négation** : « Le matériel, lui, n'a pas bougé d'un pouce. Ce qui a changé tient dans une décision d'ingénierie. »
+- **Varier le rythme** : si deux phrases d'affilée corrigent une idée, en supprimer une.
+
+**Ce qui N'EST PAS banni** (précision idiomatique, à conserver) :
+
+- La négation *terminale* qui écarte une confusion réelle : « Regardez la pente, **pas** les ratios. » · « `gttsize` et `ttm.pages_limit` sont des dimensions, **pas** des constantes. » · « Quatre conversations, **pas** quarante. »
+- Le constat factuel d'absence : « **Pas de** response store. » · « **Pas de** préemption, **pas de** paging. »
+- Toute phrase où l'on ne peut pas retirer la négation sans perdre de l'information.
+
+**Test rapide** : si la première phrase de la figure ne contient aucune information et n'existe que pour être niée, elle doit partir.
+
+### Contrat de contenu
+
+- **Frontmatter strict** : `title`, `description`, `date` (`YYYY-MM-DD`), `tags`, `published`. Rien d'autre — pas de `platform`, `status`, `context`, `word_count` (le champ `description` porte le rôle du « contexte » ; le temps de lecture est calculé par `reading-time`).
+- **`published: false`** masque l'article partout (filtre dans `getSortedArticles()`), y compris sitemap et OG.
+- **Slug** : kebab-case sans accents, sujet + angle, ex. `baidu-unlimited-ocr-r-swa-kv-cache`.
+- **Tags** : minuscules en kebab-case (`local-first`, `local-inference`, `sovereignty`).
+- **`description`** : 175–200 caractères. Au-delà, l'image OG déborde (template `OGFrame` : titre 60px / `maxWidth` 960, sous-titre 30px / `maxWidth` 900, zone utile 502px).
+- **H1 en tête de corps** : le titre est répété en `#` après le frontmatter (commun à tous les articles).
+- **Pas de ligne de hashtags en fin d'article** : les tags sont déjà rendus en badges par `ArticleView`.
+- **Tables et blocs de code** : supportés via `remark-gfm`. Le style vit dans `src/app/globals.css` (`.article-body table`, `.article-body pre`) — à étendre plutôt que de bricoler en inline.
+- **Vérifier après ajout** : `yarn build` (l'article doit apparaître dans `/articles`, le sitemap et générer son `opengraph-image`).
+
 ## SEO & Metadata
 - **Site URL:** `https://yonlycode.github.io/tyyy/` (GitHub Pages + `basePath: '/tyyy'`). All absolute URLs are built via `absoluteUrl()` in `src/lib/seo.ts`; `metadataBase` is set in `src/app/layout.tsx`.
 - **Per-page metadata:** every page exports `metadata` via `buildMetadata({ title, description, path, type, images, ... })`. Dynamic pages (`articles/[slug]`, `portfolio/[slug]`) use `generateMetadata` with `publishedTime`, `tags`, canonical (`canonicalUrl` frontmatter override), and article-type OG.

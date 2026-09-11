@@ -12,11 +12,11 @@ published: true
 
 C'est la phrase qu'on m'a opposée pendant trois ans à chaque fois que je parlais d'IA souveraine. Sortie d'un modèle sérieux sur une machine qui n'appartient pas à un datacenter, c'était forcément : un peu de bricole, beaucoup de frustration, et un retour à l'API au bout de deux semaines.
 
-Elle vient de cesser d'être vraie. Pas de moitié. Pas de 20 %. **D'un facteur quatre à sept selon la profondeur du contexte.**
+Elle vient de cesser d'être vraie, et de loin : **d'un facteur quatre à sept selon la profondeur du contexte.**
 
 Chez moi, sur une machine qui tient sur un bureau, un modèle de 180 milliards de paramètres répond plus vite que les serveurs d'OpenRouter. Et il le fait sans qu'un octet de mes prompts ne quitte la maison.
 
-Ce qui a bougé n'est pas le matériel. C'est une décision d'ingénierie.
+Le matériel, lui, n'a pas bougé d'un pouce. Ce qui a changé tient dans une décision d'ingénierie.
 
 ## Strix Halo : la machine qu'on disait trop faible
 
@@ -24,11 +24,11 @@ AMD Ryzen AI Max+ 395. Nom de code **Strix Halo**, architecture GPU **gfx1151**,
 
 Pas de VRAM dédiée. C'est justement le sujet.
 
-Sur une carte graphique classique, le modèle vit dans la VRAM, et le jour où il n'y rentre plus vous regardez votre facture. Sur Strix Halo, le GPU et le CPU partagent le même pool. La question n'est plus « est-ce que ça rentre dans les 24 Go », mais « est-ce que l'engine sait gérer 124 Go utilisables sans se faire mentir par le noyau ».
+Sur une carte graphique classique, le modèle vit dans la VRAM, et le jour où il n'y rentre plus vous regardez votre facture. Sur Strix Halo, le GPU et le CPU partagent le même pool. La question change alors de nature : l'engine sait-il exploiter les 124 Go disponibles sans se faire mentir par le noyau ?
 
 La réponse longue, c'est que pendant longtemps il ne le savait pas. Les runtimes généralistes traitent un APU comme un GPU d'entrée de gamme avec beaucoup de RAM. Ils ont tort, et ça coûte cher en performance.
 
-Ce qu'il fallait, ce n'était pas plus de puissance. C'était un moteur qui arrête de faire semblant que son code tourne partout.
+Il manquait autre chose que de la puissance : un moteur qui arrête de faire semblant que son code tourne partout.
 
 ## Les chiffres : 32K de contexte, quatre moteurs, un survivant
 
@@ -59,7 +59,7 @@ Regardez la pente, pas les ratios. Les trois concurrents **s'effondrent** quand 
 
 La documentation d'EngramHalo le dit elle-même : un prompt de 156K lui prend environ **douze minutes**. Le même ordre de grandeur ici, c'est **96 secondes**.
 
-C'est ça, la vraie rupture. Pas un pic de benchmark sur un prompt court. Une courbe qui ne plie pas.
+La vraie rupture est là : une courbe qui ne plie pas. N'importe qui sort un pic sur un prompt court ; tenir à 131 072 tokens, c'est autre chose.
 
 ### Le decode, la colonne honnête
 
@@ -162,7 +162,7 @@ Pas du nom du format. Le bits-per-weight est calculé depuis la table des tenseu
 
 Le checkpoint fait 115.55 GiB, plus un sidecar de qualité de 2.31 GiB. Le bundle complet demande ~118 GiB. Le sidecar est un patch d'overlay : 723 tenseurs re-quantifiés contre des statistiques d'activation mesurées, plus les douze `o_proj` promus en 8 bits. Il coûte **0.09 GB net**, parce qu'il n'ajoute pas de poids — il dépense mieux les mêmes bits.
 
-La 4 bits n'est pas une optimisation ici, c'est une **condition de correction** : 125B de paramètres plus une table d'embeddings n-gram de 51B, c'est 335 GiB en BF16 et 173 GiB en FP8, contre 124 Go de mémoire unifiée.
+Ici, la 4 bits relève d'abord de la **condition de correction** : 125B de paramètres plus une table d'embeddings n-gram de 51B, ça fait 335 GiB en BF16 et 173 GiB en FP8, contre 124 Go de mémoire unifiée. Sans cette densité, le modèle ne tient tout simplement pas.
 
 ## Closed-source : la tension qu'il faut poser, pas esquiver
 
@@ -172,7 +172,7 @@ Et puis j'ai regardé ce que « dépendance » veut vraiment dire.
 
 Le binaire tourne sur **ma** machine. Les 118 Go de poids sont sur **mon** disque. Le modèle est épinglé à une révision HuggingFace précise. Et avec `HALOGEN_DOWNLOAD` non défini, le conteneur **n'ouvre aucune connexion sortante**. Point. Pas de télémétrie, pas de licence check à distance, pas de coupure de service possible depuis l'extérieur.
 
-Ce qui rend esclave, ce n'est pas la licence. C'est l'API à distance. C'est le fait que votre capacité à travailler dépend d'un service que vous ne contrôlez pas, facturé à la requête, coupable de latence, de hausse tarifaire et d'indisponibilité.
+Le point de dépendance est l'API à distance : votre capacité à travailler se retrouve pendue à un service que vous ne contrôlez pas, facturé à la requête, coupable de latence, de hausse tarifaire et d'indisponibilité. Une licence, elle, n'a jamais coupé personne un mardi matin.
 
 Un moteur closed-source sur votre propre silicium, c'est une boîte noire **chez vous**. Vous pouvez la couper, la surveiller, la remplacer, la mesurer. Un modèle open source derrière une API cloud, c'est une boîte ouverte **chez les autres**. Le second cas est le pire des deux, quelle que soit la licence.
 
@@ -254,9 +254,9 @@ Pendant trois ans, l'arbitrage local contre cloud se résumait à : *la souverai
 
 Ce trade n'existe plus. Pas partout, pas pour tout le monde, pas à n'importe quelle échelle. Mais sur une machine à base de Strix Halo, avec un moteur écrit pour cette puce, on tient **1 424 tok/s de préfill à 32K**, **~42 tok/s de décodage servi**, et **2 secondes de reprise sur une conversation de 100 000 tokens**.
 
-Ce n'est plus du dépannage. C'est meilleur que le cloud, chez soi, sans facture récurrente.
+À ces chiffres, le local fait mieux que le cloud, chez soi, sans facture récurrente.
 
-Ce qui reste à prouver n'est pas la performance. C'est que l'industrie va arrêter de traiter le local comme une curiosité de hobbyiste maintenant que la dernière excuse technique est tombée.
+La performance, elle, est établie. Ce qui reste à démontrer est du côté des têtes : savoir si l'industrie arrêtera de traiter le local comme une curiosité de hobbyiste, maintenant que la dernière excuse technique est tombée.
 
 Si vous avez un Strix Halo qui prend la poussière, ou si vous avez fait tourner autre chose dessus, je suis preneur des chiffres.
 
