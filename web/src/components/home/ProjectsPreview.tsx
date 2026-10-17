@@ -24,19 +24,24 @@ const TintedSection = styled(Section)({
 const ProjectGrid = styled('div')({
   display: 'grid',
   gridTemplateColumns: 'repeat(3, 1fr)',
-  gap: m3Theme.spacing.lg,
-  '@media (max-width: 900px)': { gridTemplateColumns: '1fr' },
+  gap: m3Theme.spacing.xl,
+  rowGap: m3Theme.spacing.xl,
+  columnGap: m3Theme.spacing.xl,
+  '@media (max-width: 900px)': { gridTemplateColumns: '1fr', gap: m3Theme.spacing.lg },
 });
 
 const ProjectLink = styled(Link)({
   textDecoration: 'none',
-  display: 'block',
+  display: 'flex',
+  flexDirection: 'column',
   height: '100%',
+  flex: 1,
 });
 
 const ProjectCard = styled('div')({
   position: 'relative',
   height: '100%',
+  flex: 1,
   display: 'flex',
   flexDirection: 'column',
   background: m3Theme.colors.surfaceElevated,
@@ -111,6 +116,8 @@ const ProjectFooter = styled('div')({
   gap: m3Theme.spacing.md,
   marginTop: m3Theme.spacing.lg,
   paddingTop: m3Theme.spacing.md,
+  paddingBottom: m3Theme.spacing.xs,
+  minHeight: '48px',
   borderTop: `1px solid ${m3Theme.colors.surfaceBorder}`,
 });
 
@@ -175,20 +182,29 @@ export function ProjectsPreview({ projects }: { projects: ArticleMeta[] }) {
 
         <ProjectGrid>
           {projects.map((project, i) => (
-            <AnimatedFadeIn key={project.slug} delay={0.1 + i * 0.12}>
+            <AnimatedFadeIn
+              key={project.slug}
+              delay={0.1 + i * 0.12}
+              style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+            >
               <ProjectLink href={`/portfolio/${project.slug}/`}>
                 <ProjectCard>
                   <Index>{String(i + 1).padStart(2, '0')}</Index>
-                  <CategoryBadge>Projet</CategoryBadge>
+                  <CategoryBadge>{(project.tags && project.tags[0]) || 'Projet'}</CategoryBadge>
                   <ProjectTitle>{project.title}</ProjectTitle>
                   <ProjectDesc>{project.description}</ProjectDesc>
                   <ProjectFooter>
                     <ProjectDate>{project.date}</ProjectDate>
-                    <TagRow>
-                      {project.tags.slice(0, 2).map((tag) => (
-                        <Tag key={tag}>{tag}</Tag>
-                      ))}
-                    </TagRow>
+                    {project.tags && project.tags.length > 0 && (
+                      <TagRow>
+                        {(project.tags.length > 1
+                          ? project.tags.slice(1, 3)
+                          : project.tags.slice(0, 1)
+                        ).map((tag) => (
+                          <Tag key={tag}>{tag}</Tag>
+                        ))}
+                      </TagRow>
+                    )}
                   </ProjectFooter>
                 </ProjectCard>
               </ProjectLink>

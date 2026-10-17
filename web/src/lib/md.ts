@@ -23,6 +23,17 @@ export interface Article extends ArticleMeta {
   contentHtml: string;
 }
 
+function stripMarkdown(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/__([^_]+)__/g, '$1')
+    .replace(/_([^_]+)_/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .trim();
+}
+
 export function getSortedArticles(type: 'articles' | 'projects' = 'articles'): ArticleMeta[] {
   const dirPath = path.join(contentDirectory, type);
   if (!fs.existsSync(dirPath)) return [];
@@ -40,7 +51,7 @@ export function getSortedArticles(type: 'articles' | 'projects' = 'articles'): A
       return {
         slug,
         title: data.title || slug,
-        description: data.description || '',
+        description: stripMarkdown(data.description || ''),
         date: data.date ? new Date(data.date).toISOString().split('T')[0] : '',
         tags: data.tags || [],
         canonicalUrl: data.canonicalUrl || '',
@@ -67,7 +78,7 @@ export async function getArticleBySlug(slug: string, type: 'articles' | 'project
   return {
     slug,
     title: data.title || slug,
-    description: data.description || '',
+    description: stripMarkdown(data.description || ''),
     date: data.date ? new Date(data.date).toISOString().split('T')[0] : '',
     tags: data.tags || [],
     canonicalUrl: data.canonicalUrl || '',
