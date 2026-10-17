@@ -11,20 +11,16 @@ import { PageHero } from '@/components/ui/PageHero';
 
 const Grid = styled('div')({
   display: 'grid',
-  gridTemplateColumns: 'repeat(3, 1fr)',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
   gap: m3Theme.spacing.xl,
-  rowGap: m3Theme.spacing.xl,
-  columnGap: m3Theme.spacing.xl,
+  width: '100%',
   '@media (max-width: 900px)': {
     gridTemplateColumns: 'repeat(2, 1fr)',
     gap: m3Theme.spacing.lg,
-    rowGap: m3Theme.spacing.lg,
-    columnGap: m3Theme.spacing.lg,
   },
   '@media (max-width: 620px)': {
     gridTemplateColumns: '1fr',
     gap: m3Theme.spacing.lg,
-    rowGap: m3Theme.spacing.lg,
   },
 });
 
@@ -34,9 +30,14 @@ const ProjectLink = styled(Link)({
   flexDirection: 'column',
   height: '100%',
   flex: 1,
+  borderRadius: '20px',
+  outline: 'none',
+  '&:focus-visible': {
+    boxShadow: m3Theme.elevation.focus,
+  },
 });
 
-const ProjectCard = styled('div')({
+const ProjectCard = styled('article')({
   position: 'relative',
   height: '100%',
   flex: 1,
@@ -45,8 +46,8 @@ const ProjectCard = styled('div')({
   background: 'rgba(15, 21, 38, 0.75)',
   backdropFilter: 'blur(12px)',
   WebkitBackdropFilter: 'blur(12px)',
-  borderRadius: m3Theme.radius.large,
-  padding: m3Theme.spacing.lg,
+  borderRadius: '20px',
+  padding: '2.25rem',
   border: '1px solid rgba(255, 255, 255, 0.08)',
   borderLeft: `3px solid ${m3Theme.colors.surfaceBorder}`,
   overflow: 'hidden',
@@ -54,28 +55,38 @@ const ProjectCard = styled('div')({
   transition: `border-color ${m3Theme.animation.base}, transform ${m3Theme.animation.base}, box-shadow ${m3Theme.animation.base}`,
   userSelect: 'none',
 
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '3px',
+    background: 'linear-gradient(90deg, var(--brand), var(--brand-secondary))',
+    opacity: 0,
+    transition: 'opacity 0.25s ease',
+  },
+
   [`${ProjectLink}:hover &`]: {
     borderColor: m3Theme.colors.surfaceBorderHover,
     borderLeftColor: m3Theme.colors.accent,
     transform: 'translateY(-4px)',
-    boxShadow: `0 8px 28px rgba(0, 212, 170, 0.12), ${m3Theme.elevation.level2}`,
-  },
-
-  [`${ProjectLink}:focus-visible &`]: {
-    outline: 'none',
-    boxShadow: m3Theme.elevation.focus,
+    boxShadow: `0 12px 32px rgba(0, 212, 170, 0.15), ${m3Theme.elevation.level2}`,
+    '&::before': {
+      opacity: 1,
+    },
   },
 });
 
 const Index = styled('span')({
   position: 'absolute',
-  top: m3Theme.spacing.md,
-  right: m3Theme.spacing.lg,
+  top: '1.25rem',
+  right: '1.5rem',
   fontFamily: m3Theme.font.mono,
-  fontSize: m3Theme.font.sizes['4xl'],
+  fontSize: m3Theme.font.sizes['3xl'],
   fontWeight: m3Theme.font.weights.extrabold,
   lineHeight: 1,
-  color: m3Theme.colors.primarySoft,
+  color: 'rgba(255, 255, 255, 0.05)',
   userSelect: 'none',
 });
 
@@ -84,14 +95,15 @@ const CategoryBadge = styled('span')({
   alignSelf: 'flex-start',
   fontFamily: m3Theme.font.mono,
   fontSize: m3Theme.font.sizes.xs,
-  fontWeight: 600,
+  fontWeight: 700,
   letterSpacing: '0.08em',
   textTransform: 'uppercase',
   color: m3Theme.colors.accent,
   background: m3Theme.colors.successSoft,
-  padding: '0.2rem 0.6rem',
-  borderRadius: m3Theme.radius.small,
+  padding: '0.25rem 0.65rem',
+  borderRadius: '9999px',
   marginBottom: m3Theme.spacing.md,
+  border: '1px solid rgba(0, 212, 170, 0.2)',
 });
 
 const ProjectTitle = styled('h3')({
@@ -99,7 +111,8 @@ const ProjectTitle = styled('h3')({
   color: m3Theme.colors.onSurface,
   lineHeight: 1.35,
   margin: 0,
-  fontWeight: m3Theme.font.weights.semibold,
+  fontWeight: m3Theme.font.weights.bold,
+  letterSpacing: '-0.02em',
   transition: 'color 0.2s ease',
   [`${ProjectLink}:hover &`]: { color: m3Theme.colors.accent },
 });
@@ -142,13 +155,14 @@ const TagRow = styled('div')({
 const Tag = styled('span')({
   display: 'inline-flex',
   alignItems: 'center',
-  borderRadius: m3Theme.radius.small,
-  padding: '0.25rem 0.6rem',
+  borderRadius: '6px',
+  padding: '0.2rem 0.55rem',
   fontSize: '0.75rem',
   fontWeight: 500,
   fontFamily: m3Theme.font.mono,
   color: m3Theme.colors.onSurfaceMuted,
   border: `1px solid ${m3Theme.colors.surfaceBorder}`,
+  background: 'rgba(255, 255, 255, 0.03)',
 });
 
 const FooterRow = styled('div')({
@@ -194,9 +208,9 @@ export function PortfolioView({ projects }: { projects: ArticleMeta[] }) {
     <Section>
       <Container>
         <PageHero
-          eyebrow="Portfolio"
-          title="Projets &amp; réalisations"
-          subtitle="Un aperçu des projets significatifs sur lesquels j'ai travaillé, de l'architecture IA à l'optimisation web."
+          eyebrow="RÉALISATIONS DU LAB"
+          title="Projets & Systèmes en Production"
+          subtitle="Appliances physiques, architectures d'agents autonomes et plateformes web critiques. Zéro fiction, des systèmes qui tournent."
         />
 
         <FilterBar
@@ -206,7 +220,7 @@ export function PortfolioView({ projects }: { projects: ArticleMeta[] }) {
           selectedTags={activeTags}
           onTagsChange={setActiveTags}
           resultsCount={filteredProjects.length}
-          searchPlaceholder="Rechercher un projet…"
+          searchPlaceholder="Rechercher un projet ou une technologie…"
         />
 
         {filteredProjects.length === 0 ? (
@@ -218,23 +232,22 @@ export function PortfolioView({ projects }: { projects: ArticleMeta[] }) {
             {filteredProjects.map((project, index) => (
               <AnimatedFadeIn
                 key={project.slug}
-                delay={index * 0.12}
+                delay={index * 0.05}
                 style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
               >
                 <ProjectLink href={`/portfolio/${project.slug}/`}>
                   <ProjectCard>
                     <Index>{String(index + 1).padStart(2, '0')}</Index>
-                    <CategoryBadge>{(project.tags && project.tags[0]) || 'Projet'}</CategoryBadge>
+                    <CategoryBadge>
+                      {(project.tags && project.tags[0]) || 'PROJET'}
+                    </CategoryBadge>
                     <ProjectTitle>{project.title}</ProjectTitle>
                     <ProjectDesc>{project.description}</ProjectDesc>
                     <ProjectFooter>
                       <ProjectDate>{project.date}</ProjectDate>
                       {project.tags && project.tags.length > 0 && (
                         <TagRow>
-                          {(project.tags.length > 1
-                            ? project.tags.slice(1, 4)
-                            : project.tags.slice(0, 1)
-                          ).map((tag) => (
+                          {project.tags.slice(0, 3).map((tag) => (
                             <Tag key={tag}>{tag}</Tag>
                           ))}
                         </TagRow>
@@ -249,20 +262,24 @@ export function PortfolioView({ projects }: { projects: ArticleMeta[] }) {
 
         <FooterRow>
           <Link
-            href="/"
+            href="/articles/"
             style={{
               textDecoration: 'none',
-              border: `2px solid ${m3Theme.colors.primary}`,
-              color: m3Theme.colors.primary,
-              borderRadius: m3Theme.radius.medium,
-              padding: '0.875rem 1.5rem',
-              fontSize: '1rem',
-              fontWeight: 500,
+              border: '1px solid var(--border)',
+              backgroundColor: 'var(--surface)',
+              color: 'var(--brand)',
+              borderRadius: '9999px',
+              padding: '0.875rem 1.75rem',
+              fontSize: '0.95rem',
+              fontWeight: 600,
               cursor: 'pointer',
-              display: 'inline-block',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.2s ease',
             }}
           >
-            ← Retour à l'accueil
+            Lire nos articles techniques →
           </Link>
         </FooterRow>
       </Container>

@@ -1,78 +1,58 @@
 ---
-title: "Flotte d'Agents Autonomes — Orchestration Hermes, harnesss bornés et infra souveraine"
-description: "Comment Karulab orchestre une flotte d'agents IA sur infrastructure souveraine : Hermes Agent, harnesss bornés (dsh, agy), Forgejo, Coolify, Tailscale et SeaweedFS. Pas de framework magique, des briques qui se tiennent."
+title: "Flotte d'Agents Autonomes Karuka"
+description: "Système multi-agents en production sur notre propre métal : spécialisation chirurgicale des rôles, mesh VPN privé et discipline Git sans concession."
 date: "2026-10-17"
 published: true
 featured: true
 tags:
-  - "Multi-Agents"
   - "Hermes Agent"
-  - "Self-Hosted"
-  - "Infra Souveraine"
+  - "Multi-Agents"
+  - "Forgejo"
   - "Tailscale"
+  - "Go 1.24"
+  - "SeaweedFS"
 ---
 
-## La Problématique : Le piège des agents tout-puissants
+## En bref
 
-Les démonstrateurs d'agents IA « tout-au-prompt » (boucles ouvertes, ReAct non borné) séduisent sur les réseaux sociaux mais s'effondrent dès qu'ils rencontrent le monde réel :
+Conception et exploitation quotidienne de la flotte d'agents IA du Lab **Karuka Conseil**. Loin des scripts jetables et des boucles de prompts sans persistance, nous faisons collaborer des agents spécialisés possédant une véritable fiche de poste, des clés SSH dédiées et un périmètre d'action sous haute sécurité.
 
-* Boucles de réflexion infinies consommatrices de budget.
-* Hallucinations sur les arguments d'outils et corruption d'état.
-* Zéro auditabilité : impossible d'expliquer pourquoi l'agent a touché tel fichier ou posté tel truc.
+---
 
-Notre réponse n'est pas un framework d'agents de plus. C'est une **flotte d'agents aux rôles strictement bornés**, chacun marié à un harness déterministe, sur une infrastructure qu'on auto-héberge de bout en bout.
+## Le Problème
 
-## La Flotte
+99 % des démos multi-agents sur le marché souffrent de trois tares rédhibitoires en milieu professionnel :
 
-Pas un « essaim » générique : des agents nommés, avec un rôle, un harness et un périmètre d'accès explicites.
+1. **L'illusion de l'agent omniscient** : Un seul agent censé tout faire (infra, code, design, compta), qui dérive dès la troisième requête et produit du code fragile.
+2. **Zéro contrôle d'accès** : Des agents branchés sans garde-fous sur des serveurs exposés à tous les vents.
+3. **L'entropie logicielle** : Des modifications poussées directement sur `main` qui cassent la production en 48 heures.
 
-| Agent | Rôle | Hébergement | Harness |
-|---|---|---|---|
-| **Migo** | Maître technique : code, infra, revues | Conteneur dédié | `dsh` (DeepSeek) pour le code |
-| **Malo** | Agent local sur LLM gratuit | MacBook M1 Max | délégation + modèles locaux |
-| **Bueno** | Marketing, rédaction, QA exploratoire, tests E2E navigateur | Conteneur Coolify | `agy` (Gemini) |
-| **Kady** | Le buddy produit (notre produit, pas un agent interne) | Box client / endpoint local | — |
+---
 
-Chaque agent est une instance **Hermes Agent** avec sa propre mémoire persistante, ses skills versionnées dans un repo dédié, et un contrat : l'agent délègue le code à son harness, relit, valide, et ne pousse jamais à l'aveugle.
+## L'Architecture & La Solution
 
-## L'Infrastructure Souveraine
+Nous avons structuré notre flotte autour d'une règle d'airain inébranlable et d'une ségrégation stricte des responsabilités :
 
-Tout tourne sous notre contrôle, rejoints par un tailnet privé :
+> **Bueno propose, Migo applique, Y tranche.**
 
-* **Forgejo** : git, CI Actions, registry npm/OCI, wiki = base de connaissances unique de la flotte.
-* **Coolify** : orchestration des conteneurs (les instances d'agents, les services, les bancs d'essai).
-* **Tailscale** : le réseau. Rien n'est exposé publiquement qui ne devrait pas l'être.
-* **SeaweedFS** : stockage objet pour les artefacts lourds et froids.
-* **MongoDB** : persistance des produits (leads, événements, configs box).
-* **Inférence locale** : llama.cpp sur AMD Strix Halo (mesures publiées sur ce blog) et endpoint LLM du MacBook — plus des API cloud ponctuelles quand le cloud est l'outil adapté.
+### Les Spécialistes en poste
 
-```
-┌─────────────────────────────────────────────────┐
-│                 TAILNET (Tailscale)             │
-│                                                 │
-│  ┌───────────┐  ┌──────────┐  ┌──────────────┐  │
-│  │  Forgejo  │  │ Coolify  │  │  SeaweedFS   │  │
-│  │ git/CI/wiki│  │ conteneurs│  │   objets     │  │
-│  └───────────┘  └────┬─────┘  └──────────────┘  │
-│                      │                          │
-│         ┌────────────┼────────────┐             │
-│    ┌────▼────┐  ┌────▼────┐  ┌────▼─────┐      │
-│    │  Migo   │  │  Bueno  │  │   Kaly   │      │
-│    │ Hermes  │  │ Hermes  │  │  panel   │      │
-│    │  +dsh   │  │  +agy   │  │ Go+Mongo │      │
-│    └─────────┘  └─────────┘  └──────────┘      │
-│         MacBook M1 Max : Malo + endpoint LLM    │
-│         Strix Halo : banc d'essai llama.cpp     │
-└─────────────────────────────────────────────────┘
-```
+* **Y (Yoann Fort) — L'Arbitre** : Fondateur et autorité technique. Il décide de la trajectoire, valide les arbitrages clés et tranche les passages critiques en production.
+* **Migo — Le Gardien de l'Infra** : Tech Lead système. Responsable du Go 1.24, des conteneurs Coolify, des bases de données et de la sécurité réseau. Migo audite impitoyablement et merge le code.
+* **Bueno — Le Produit & la Rigueur UX** : Pilotage du design system (`kady-ui`), de l'ergonomie, de la rédaction, du business et de la QA exploratoire de bout en bout.
+* **Malo — L'Ingénieur Data** : Pipelines d'ingestion documentaire, scraping ciblé et collections MongoDB.
+* **Kady — L'Agent Terrain** : Logiciel embarqué sur nos boîtiers physiques HaaS déployés sur site.
 
-## Les Principes Qui Tiennent
+### Le Socle Technique
 
-* **Un agent, un rôle, un harness.** Bueno ne touche pas l'infra ; Migo ne rédige pas les posts LinkedIn. Les périmètres sont écrits, pas implicites.
-* **Le harness est borné par construction.** Les tâches sont déléguées à un worker headless (dsh, agy) avec un contrat explicite : ces fichiers, pas de commit, pas de push. L'agent relit et valide avant tout merge.
-* **La connaissance est versionnée.** Skills des agents et wiki d'infra vivent dans Forgejo, pas dans la tête d'un agent. Un agent reconstruit se reconstruit documenté.
-* **Le cloud est un outil, pas une fondation.** Les API propriétaires passent par des points de passage identifiés et budgétés ; l'orchestration, la donnée et la mémoire restent à la maison.
+* **Moteur d'exécution** : Hermes Agent (Nous Research), avec gestion d'outils réels, persistance contextuelle et isolation des sessions de travail.
+* **Réseau fermé** : Aucune IP publique exposée. Les machines communiquent exclusivement au travers d'un mesh VPN chiffré **Tailscale**.
+* **Forge souveraine** : Instance Forgejo locale accessible par SSH dédié (port 22222). Les agents travaillent sur des branches isolées (`<user>/<feature>`) et soumettent des Pull Requests ; le push direct sur `main` est banni.
+* **Stockage objet** : Cluster SeaweedFS privé pour les sauvegardes et les artefacts distribués.
 
-## État Réel Du Projet
+---
 
-La flotte tourne au quotidien (cette page a été documentée par un de ses membres). Nous n'avons pas de « taux de succès de 98 % » à vous vendre : nous avons des agents qui font le travail, une infra qui tient, et des process qui se renforcent à chaque incident. C'est moins sexy qu'un essaim de huit agents fantômes, c'est surtout vrai.
+## Ce Qui Est Réel & En Production
+
+* **Refonte de stack complète** : Migration Go 1.24 de Karulab et développement de la bibliothèque de 14 Web Components Lit 3 (`kady-ui`) menés en parallèle avec revue croisée continue entre agents.
+* **Confinement intégral** : 100 % du code et des contextes reste séquestré au sein de l'infrastructure privée Karuka Conseil.
