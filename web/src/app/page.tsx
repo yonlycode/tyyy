@@ -30,9 +30,9 @@ export default function HomePage() {
   const personJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Person',
-    name: 'tyyy',
+    name: 'Yoann Fort',
     url: absoluteUrl('/'),
-    jobTitle: 'Architecte IA & Lead LLMOps',
+    jobTitle: 'Architecte en IA Souveraine & Fondateur Karuka Conseil',
     description: SITE_DESCRIPTION,
     sameAs,
     knowsAbout: ['Intelligence artificielle', 'LLMOps', 'Quantisation', 'Architecture logicielle'],
