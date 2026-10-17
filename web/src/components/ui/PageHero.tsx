@@ -129,10 +129,10 @@ const HeroTitle = styled('h2')({
 /* ── Component ───────────────────────────────────────────────────── */
 
 interface PageHeroProps {
-  eyebrow: string;
-  title: string;
+  eyebrow?: string;
+  title: string | React.ReactNode;
   subtitle?: string;
-  avatar?: string; // initials to display, e.g. "YF" — omitted for non-personal pages
+  avatar?: string;
 }
 
 export function PageHero({ eyebrow, title, subtitle, avatar }: PageHeroProps) {
