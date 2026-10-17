@@ -6,149 +6,162 @@ import styled from '@emotion/styled';
 import { AnimatedFadeIn } from '@/components/AnimatedFadeIn';
 import type { ArticleMeta } from '@/lib/md';
 import { m3Theme } from '@/styles/theme';
-import { Container, Section, FilterBar } from '@/components/ui';
+import { Container, Badge } from '@/components/ui';
 import { PageHero } from '@/components/ui/PageHero';
+import { FilterBar } from '@/components/ui/FilterBar';
+
+const Section = styled('section')({
+  paddingBlock: m3Theme.spacing.xxl,
+});
 
 const ArticleGrid = styled('div')({
   display: 'grid',
-  gridTemplateColumns: 'repeat(3, 1fr)',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
   gap: m3Theme.spacing.xl,
-  rowGap: m3Theme.spacing.xl,
-  columnGap: m3Theme.spacing.xl,
-  '@media (max-width: 900px)': {
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: m3Theme.spacing.lg,
-    rowGap: m3Theme.spacing.lg,
-    columnGap: m3Theme.spacing.lg,
-  },
-  '@media (max-width: 620px)': {
+  width: '100%',
+
+  [`@media (max-width: ${m3Theme.breakpoints.mobile})`]: {
     gridTemplateColumns: '1fr',
     gap: m3Theme.spacing.lg,
-    rowGap: m3Theme.spacing.lg,
   },
 });
 
 const ArticleLink = styled(Link)({
   textDecoration: 'none',
+  color: 'inherit',
   display: 'flex',
-  flexDirection: 'column',
   height: '100%',
-  flex: 1,
-});
+  outline: 'none',
+  borderRadius: '20px',
 
-const ArticleCard = styled('div')({
-  position: 'relative',
-  height: '100%',
-  flex: 1,
-  display: 'flex',
-  flexDirection: 'column',
-  background: 'rgba(15, 21, 38, 0.75)',
-  backdropFilter: 'blur(12px)',
-  WebkitBackdropFilter: 'blur(12px)',
-  borderRadius: m3Theme.radius.large,
-  padding: m3Theme.spacing.lg,
-  border: '1px solid rgba(255, 255, 255, 0.08)',
-  boxShadow: m3Theme.elevation.level1,
-  transition: `border-color ${m3Theme.animation.base}, transform ${m3Theme.animation.base}, box-shadow ${m3Theme.animation.base}`,
-  userSelect: 'none',
-
-  [`${ArticleLink}:hover &`]: {
-    borderColor: m3Theme.colors.surfaceBorderHover,
-    transform: 'translateY(-4px)',
-    boxShadow: `0 8px 32px ${m3Theme.colors.primaryGlow}, ${m3Theme.elevation.level2}`,
-  },
-
-  [`${ArticleLink}:focus-visible &`]: {
-    outline: 'none',
+  '&:focus-visible': {
     boxShadow: m3Theme.elevation.focus,
   },
 });
 
-const CategoryBadge = styled('span')({
-  display: 'inline-block',
-  alignSelf: 'flex-start',
-  fontFamily: m3Theme.font.mono,
-  fontSize: m3Theme.font.sizes.xs,
-  fontWeight: 600,
-  letterSpacing: '0.08em',
-  textTransform: 'uppercase',
-  color: m3Theme.colors.primaryHover,
-  background: m3Theme.colors.primarySoft,
-  padding: '0.2rem 0.6rem',
-  borderRadius: m3Theme.radius.small,
-  marginBottom: m3Theme.spacing.md,
+const ArticleCard = styled('article')({
+  background: 'var(--surface)',
+  borderRadius: '20px',
+  padding: '2.25rem',
+  border: '1px solid var(--border)',
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+  position: 'relative',
+  overflow: 'hidden',
+  boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.04)',
+  transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease',
+
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '3px',
+    background: 'linear-gradient(90deg, var(--brand), var(--brand-secondary))',
+    opacity: 0,
+    transition: 'opacity 0.25s ease',
+  },
+
+  [`${ArticleLink}:hover &`]: {
+    transform: 'translateY(-4px)',
+    borderColor: 'var(--brand)',
+    boxShadow: '0 16px 36px -6px rgba(0, 0, 0, 0.12), 0 0 16px -4px rgba(0, 212, 170, 0.2)',
+
+    '&::before': {
+      opacity: 1,
+    },
+  },
 });
 
-const ArticleTitle = styled('h3')({
-  fontSize: m3Theme.font.sizes.xl,
-  color: m3Theme.colors.onSurface,
-  lineHeight: 1.35,
-  margin: 0,
-  fontWeight: m3Theme.font.weights.semibold,
+const CategoryBadge = styled('div')({
+  display: 'inline-flex',
+  alignItems: 'center',
+  alignSelf: 'flex-start',
+  fontSize: '0.75rem',
+  fontWeight: 700,
+  textTransform: 'uppercase',
+  letterSpacing: '0.05em',
+  color: 'var(--brand)',
+  backgroundColor: 'rgba(0, 212, 170, 0.1)',
+  border: '1px solid rgba(0, 212, 170, 0.25)',
+  borderRadius: '9999px',
+  padding: '0.3rem 0.85rem',
+  marginBottom: '1.25rem',
+});
+
+const ArticleTitle = styled('h2')({
+  fontSize: '1.4rem',
+  fontWeight: 800,
+  letterSpacing: '-0.02em',
+  color: 'var(--ink)',
+  lineHeight: 1.3,
+  margin: '0 0 1rem 0',
   transition: 'color 0.2s ease',
-  [`${ArticleLink}:hover &`]: { color: m3Theme.colors.primaryHover },
+
+  [`${ArticleLink}:hover &`]: {
+    color: 'var(--brand)',
+  },
 });
 
 const ArticleDesc = styled('p')({
-  color: m3Theme.colors.onSurfaceMuted,
-  fontSize: m3Theme.font.sizes.sm,
-  lineHeight: 1.7,
-  marginTop: m3Theme.spacing.md,
-  marginBottom: 'auto',
+  fontSize: '0.975rem',
+  color: 'var(--ink-muted)',
+  lineHeight: 1.65,
+  margin: 0,
   flex: 1,
+  display: '-webkit-box',
+  WebkitLineClamp: 3,
+  WebkitBoxOrient: 'vertical',
+  overflow: 'hidden',
 });
 
 const TagRow = styled('div')({
   display: 'flex',
   flexWrap: 'wrap',
-  gap: m3Theme.spacing.xs,
-  marginTop: m3Theme.spacing.md,
+  gap: '0.45rem',
+  marginTop: '1.5rem',
 });
 
 const Tag = styled('span')({
-  display: 'inline-flex',
-  alignItems: 'center',
-  borderRadius: m3Theme.radius.small,
-  padding: '0.2rem 0.5rem',
+  backgroundColor: 'var(--surface-elevated)',
+  color: 'var(--ink-muted)',
   fontSize: '0.75rem',
   fontWeight: 500,
-  fontFamily: m3Theme.font.mono,
-  color: m3Theme.colors.onSurfaceDim,
-  background: 'rgba(255, 255, 255, 0.04)',
-  border: '1px solid rgba(255, 255, 255, 0.06)',
+  borderRadius: '6px',
+  padding: '0.2rem 0.6rem',
+  border: '1px solid var(--border-subtle)',
 });
 
 const ArticleMeta = styled('div')({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  gap: m3Theme.spacing.md,
-  marginTop: m3Theme.spacing.lg,
-  paddingTop: m3Theme.spacing.md,
-  paddingBottom: m3Theme.spacing.xs,
-  minHeight: '48px',
-  borderTop: `1px solid ${m3Theme.colors.surfaceBorder}`,
+  gap: '1rem',
+  marginTop: '1.75rem',
+  paddingTop: '1.25rem',
+  borderTop: '1px solid var(--border-subtle)',
 });
 
 const ArticleDate = styled('span')({
-  color: m3Theme.colors.onSurfaceDim,
-  fontSize: m3Theme.font.sizes.xs,
-  fontFamily: m3Theme.font.mono,
+  color: 'var(--ink-subtle)',
+  fontSize: '0.85rem',
+  fontWeight: 500,
   whiteSpace: 'nowrap',
 });
 
 const ReadMore = styled('span')({
-  color: m3Theme.colors.primaryHover,
-  fontSize: m3Theme.font.sizes.sm,
-  fontWeight: m3Theme.font.weights.semibold,
-  transition: 'color 0.2s ease, gap 0.2s ease',
+  color: 'var(--brand)',
+  fontSize: '0.875rem',
+  fontWeight: 700,
+  transition: 'gap 0.2s ease',
   display: 'inline-flex',
   alignItems: 'center',
-  gap: m3Theme.spacing.xs,
+  gap: '0.35rem',
 
   [`${ArticleLink}:hover &`]: {
-    color: m3Theme.colors.primary,
-    gap: m3Theme.spacing.sm,
+    gap: '0.65rem',
   },
 });
 
@@ -161,8 +174,8 @@ const FooterRow = styled('div')({
 const EmptyState = styled('div')({
   textAlign: 'center',
   padding: `${m3Theme.spacing.xxl} 0`,
-  color: m3Theme.colors.onSurfaceVariant,
-  fontSize: m3Theme.font.sizes.lg,
+  color: 'var(--ink-muted)',
+  fontSize: '1.15rem',
 });
 
 /* ── View ──────────────────────────────────────────────────────────── */
@@ -195,9 +208,9 @@ export function ArticlesView({ articles }: { articles: ArticleMeta[] }) {
     <Section>
       <Container>
         <PageHero
-          eyebrow="Blog"
-          title="Articles &amp; billets"
-          subtitle="Mes écrits sur l'architecture IA, la performance et le développement web."
+          eyebrow="LAB & INGÉNIERIE"
+          title="Articles & Retours du Lab"
+          subtitle="Architectures souveraines, inférence locale et flottes multi-agents sans filtre. Des retours d'expérience bruts, 100 % ancrés sur notre code en production."
         />
 
         <FilterBar
@@ -207,7 +220,7 @@ export function ArticlesView({ articles }: { articles: ArticleMeta[] }) {
           selectedTags={activeTags}
           onTagsChange={setActiveTags}
           resultsCount={filteredArticles.length}
-          searchPlaceholder="Rechercher un article…"
+          searchPlaceholder="Rechercher un article ou un mot-clé…"
         />
 
         {filteredArticles.length === 0 ? (
@@ -219,25 +232,25 @@ export function ArticlesView({ articles }: { articles: ArticleMeta[] }) {
             {filteredArticles.map((article, index) => (
               <AnimatedFadeIn
                 key={article.slug}
-                delay={index * 0.1}
+                delay={index * 0.05}
                 style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
               >
                 <ArticleLink href={`/articles/${article.slug}/`}>
                   <ArticleCard>
-                    <CategoryBadge>{(article.tags && article.tags[0]) || 'Article'}</CategoryBadge>
+                    <CategoryBadge>{(article.tags && article.tags[0]) || 'LAB'}</CategoryBadge>
                     <ArticleTitle>{article.title}</ArticleTitle>
                     <ArticleDesc>{article.description}</ArticleDesc>
                     {article.tags && article.tags.length > 0 && (
                       <TagRow>
                         {article.tags.slice(0, 3).map((tag) => (
-                          <Tag key={tag}>{tag}</Tag>
+                          <Tag key={tag}>#{tag}</Tag>
                         ))}
                       </TagRow>
                     )}
                     <ArticleMeta>
                       <ArticleDate>{article.date}</ArticleDate>
                       <ReadMore>
-                        Lire la suite <span aria-hidden="true">→</span>
+                        Lire l'article <span aria-hidden="true">→</span>
                       </ReadMore>
                     </ArticleMeta>
                   </ArticleCard>
@@ -249,20 +262,24 @@ export function ArticlesView({ articles }: { articles: ArticleMeta[] }) {
 
         <FooterRow>
           <Link
-            href="/"
+            href="/#projets"
             style={{
               textDecoration: 'none',
-              border: `2px solid ${m3Theme.colors.primary}`,
-              color: m3Theme.colors.primary,
-              borderRadius: m3Theme.radius.medium,
-              padding: '0.875rem 1.5rem',
-              fontSize: '1rem',
-              fontWeight: 500,
+              border: '1px solid var(--border)',
+              backgroundColor: 'var(--surface)',
+              color: 'var(--ink)',
+              borderRadius: '9999px',
+              padding: '0.875rem 1.75rem',
+              fontSize: '0.95rem',
+              fontWeight: 600,
               cursor: 'pointer',
-              display: 'inline-block',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.2s ease',
             }}
           >
-            ← Retour à l'accueil
+            Découvrir les réalisations du Lab →
           </Link>
         </FooterRow>
       </Container>

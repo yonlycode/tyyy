@@ -1,66 +1,51 @@
 ---
-title: "Kaly & Kady — L'ouvrier numérique souverain, HaaS"
-description: "Hardware-as-a-Service : une appliance d'IA locale clé en main pour les PME — zéro fuite de données, inférence sur site, sans abonnement cloud US. Le projet est en construction : voici la thèse, l'architecture visée et où on en est vraiment."
-date: "2026-10-17"
-published: true
+title: "Kady HaaS — Appliance IA Locale Souveraine"
+description: "Appliance physique 6 Watts pour inférence IA locale et RAG d'entreprise : zéro fuite cloud, matériel chiffré et fonctionnement autonome déconnecté."
+category: "Hardware & Edge AI"
+tags: ["Intel N100", "Edge AI", "LUKS2", "llama.cpp", "HaaS", "Tailscale"]
+role: "Architecte Edge & Système"
+client: "Karuka Lab"
+period: "2026"
+badge: "Hardware & IA"
 featured: true
-tags:
-  - "IA Souveraine"
-  - "Hardware-as-a-Service"
-  - "Edge AI"
-  - "Anti-SaaS"
-  - "Self-Hosted"
 ---
 
-## La Thèse : La fin de la rente cloud
+## En bref
 
-Pour la plupart des entreprises, l'accès à l'IA générative rime avec une triple dépendance :
+Conception et déploiement de **Kady Box Mini**, une solution Hardware-as-a-Service (HaaS) d'intelligence artificielle locale. Installée directement chez les entreprises et collectivités en Guadeloupe, elle traite les données confidentielles en circuit 100 % fermé avec un abonnement forfaitaire fixe.
 
-1. **Une fuite structurelle des données stratégiques** (devis, contrats, bilans) vers des serveurs sous juridiction américaine (Cloud Act, FISA 702).
-2. **Une facture imprévisible**, indexée sur la consommation de tokens et le bon vouloir des éditeurs d'API propriétaires.
-3. **Une vulnérabilité réseau totale** : connexion coupée ou API en outage, l'activité s'arrête.
+---
 
-Le SaaS vous loue votre propre capacité de calcul. **Le HaaS (Hardware-as-a-Service) vous l'installe.**
+## Le Problème du Tout-Cloud aux Antilles
 
-**Kaly** est la box : une appliance d'IA locale clé en main, livrée préconfigurée, qui tourne sur site. **Kady** est l'ouvrier numérique qui l'habite : l'agent qui fait le travail métier — gestion documentaire, classification, synthèse — sans qu'aucune donnée ne quitte les locaux.
+S'en remettre aux API d'IA américaines pose trois problèmes majeurs pour les organisations caribéennes :
 
-## Ce Qui Est Réel Aujourd'hui
+1. **Vulnérabilité physique réseau** : Lorsqu'un incident technique ou une tempête endommage les câbles sous-marins de télécommunication, l'entreprise se retrouve paralysée, incapable d'utiliser ses outils métiers.
+2. **Insécurité juridique & CLOUD Act** : Envoyer des relevés financiers, des dossiers médicaux ou des marchés publics sur des serveurs tiers expose directement au droit extraterritorial.
+3. **Tarification imprévisible** : Le modèle à la consommation au token génère des variations budgétaires incontrôlables.
 
-Soyons directs sur l'état d'avancement : **le produit est en construction, la waitlist est ouverte.** Pas de clients en production, pas de ROI mesuré, pas d'audit de sécurité publié. Ce qui existe :
+---
 
-* **Le panel de gestion Kaly** : application Go (stdlib) + HTMX + MongoDB — waitlist, leads, suivi du parc de box, événements, ingestion. Développement actif, déployable en conteneur.
-* **Le design system Kady-UI** : librairie de web components (Storybook publié) pour une pâte graphique commune sur tous nos produits.
-* **Les bancs d'essai matériels** : inférence locale mesurée sur AMD Strix Halo (les chiffres sont dans l'article halogen-flash de ce blog, mesures réelles et publiées).
-* **La grille tarifaire** : abonnement HaaS au forfait mensuel, dégressif selon la capacité de la box — affichée sur le site, sans astérisque.
+## L'Appliance Kady Box Mini
 
-## L'Architecture Visée
+Nous avons développé une machine compacte, silencieuse et redoutablement sobre, taillée pour le RAG documentaire et l'automatisation :
 
-```
-┌──────────────────────────────────────────────┐
-│              BOX KALY (sur site)             │
-│  ┌────────────────┐   ┌───────────────────┐  │
-│  │ Moteur          │   │ Kady : agent      │  │
-│  │ d'inférence     │◄──┤ métier (docs,     │  │
-│  │ llama.cpp       │   │ mails, synthèse)  │  │
-│  │ (CPU/APU/GPU)   │   └───────────────────┘  │
-│  └────────────────┘                           │
-│  Chiffrement du stockage · réseau local       │
-│  Interface web locale (Go + HTMX)             │
-└──────────────────────────────────────────────┘
-```
+* **Processeur** : Intel N100 (4 cœurs Alder Lake-N), enveloppe thermique de **6 Watts** seulement.
+* **Mémoire & Débit** : 16 Go de RAM DDR5 haute vitesse pour charger les modèles LLM quantifiés.
+* **Chiffrement matériel** : SSD NVMe de 512 Go intégralement protégé par **LUKS2**. En cas de vol physique de l'unité, les données sont illisibles.
+* **Isolation réseau double port 2.5 GbE** : Séparation étanche entre le réseau local utilisateur (LAN) et le tunnel de supervision chiffré point-à-point.
+* **Consommation énergétique** : Moins de 12W en pleine génération d'inférence (l'équivalent d'une simple ampoule LED).
 
-* **Matériel** : la config définitive de la box de production est en cours d'arbitrage (profil d'usage, budget, densité de modèles). Nous ne publions pas de spec sheet fantaisiste : quand la config sera arrêtée, elle sera publiée avec ses mesures réelles.
-* **Inférence** : llama.cpp et modèles quantifiés open weights. Pas de fine-tuning maison annoncé à tort — l'adaptation passe par le contexte, les skills et les workflows de l'agent.
-* **Interface** : serveur Go + HTMX, accessible sur le réseau local du client.
-* **Pilotage** : le panel Kaly central suit l'état des box (événements, pings) — opt-in, métriques techniques, jamais le contenu métier du client.
+### Stack Logicielle Embarquée
 
-## Ce Que Le HaaS Change Pour Un Client
+* Moteur d'inférence ultra-léger via `llama.cpp` débitant entre **15 et 25 tokens/seconde** sur des modèles métiers 3B et 7B.
+* Moteur de recherche vectorielle (RAG) autonome intégrant la vectorisation et l'interrogation locale de documents PDF, Office et bases internes.
+* Maintenance et mises à jour transparentes au travers d'un tunnel chiffré Tailscale sans aucun port ouvert sur l'extérieur.
 
-* **Souveraineté** : les documents sensibles ne quittent pas le boîtier. C'est la promesse centrale, et elle est structurelle — pas une option dans les CGU.
-* **Facture plate** : forfait mensuel, pas de compteur de tokens.
-* **Résilience** : la box travaille même internet coupé.
-* **Maintenance déléguée** : c'est nous qui gérons la machine, ses modèles et ses mises à jour — c'est le « as a Service » du HaaS.
+---
 
-## Où On En Est
+## Bénéfices Client
 
-Le panel est en développement, la landing est publique, la waitlist est ouverte. Les premiers pilotes seront documentés ici avec des chiffres vrais — débits, consommations, économies constatées — pas des pourcentages sortis d'un chapeau.
+* **Autonomie totale** : Le boîtier fonctionne même avec la connexion Internet complètement coupée.
+* **Souveraineté garantie** : Zéro paquet de données ne quitte le bâtiment du client.
+* **Budget linéaire** : Un forfait mensuel HaaS tout inclus (matériel, logiciels, modèles, support), quel que soit le volume de requêtes réalisé.

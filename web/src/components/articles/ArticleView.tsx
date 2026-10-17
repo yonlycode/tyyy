@@ -3,276 +3,282 @@
 import Link from 'next/link';
 import styled from '@emotion/styled';
 import { AnimatedFadeIn } from '@/components/AnimatedFadeIn';
-import type { Article } from '@/types/article';
+import type { Article } from '@/lib/md';
+import { m3Theme } from '@/styles/theme';
+import { Container, Badge } from '@/components/ui';
+import { PageHero } from '@/components/ui/PageHero';
 
-interface ArticleViewProps {
-  article: Article;
-}
+const Wrapper = styled('div')({
+  paddingBlock: m3Theme.spacing.xxl,
+});
 
-const Container = styled.article`
-  max-width: 820px;
-  margin: 0 auto;
-  padding: 8rem 2rem 7rem;
+const ArticleContainer = styled('div')({
+  maxWidth: '820px',
+  margin: '0 auto',
+});
 
-  @media (max-width: 768px) {
-    padding: 6.5rem 1.25rem 4rem;
-  }
-`;
+const BackLink = styled(Link)({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: '0.5rem',
+  color: 'var(--ink-muted)',
+  textDecoration: 'none',
+  fontWeight: 600,
+  fontSize: '0.875rem',
+  marginBottom: '2.5rem',
+  padding: '0.45rem 1.1rem',
+  borderRadius: '9999px',
+  backgroundColor: 'var(--surface)',
+  border: '1px solid var(--border)',
+  boxShadow: '0 2px 8px -2px rgba(0, 0, 0, 0.05)',
+  transition: 'all 0.2s ease',
 
-const BackNav = styled.div`
-  margin-bottom: 2.5rem;
-`;
+  '&:hover': {
+    color: 'var(--brand)',
+    borderColor: 'var(--brand)',
+    transform: 'translateX(-3px)',
+  },
+  '&:focus-visible': {
+    outline: 'none',
+    boxShadow: m3Theme.elevation.focus,
+  },
+});
 
-const BackLink = styled(Link)`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--ink-muted);
-  text-decoration: none;
-  padding: 0.45rem 1rem;
-  border-radius: 9999px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  transition: all 0.2s ease;
+const HeaderCallout = styled('div')({
+  position: 'relative',
+  padding: '1.75rem 2rem',
+  borderRadius: '16px',
+  backgroundColor: 'var(--surface)',
+  border: '1px solid var(--border)',
+  borderLeft: '4px solid var(--brand)',
+  boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+  marginTop: '1.75rem',
+  marginBottom: '3rem',
 
-  &:hover {
-    color: var(--brand);
-    border-color: var(--brand);
-    transform: translateX(-3px);
-  }
-`;
+  '& p': {
+    margin: 0,
+    fontSize: '1.15rem',
+    lineHeight: 1.75,
+    color: 'var(--ink)',
+    fontWeight: 450,
+  },
+});
 
-const Header = styled.header`
-  margin-bottom: 3.5rem;
-  padding-bottom: 2.5rem;
-  border-bottom: 1px solid var(--border-subtle);
-`;
+const MetaRow = styled('div')({
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  gap: '0.75rem',
+  marginTop: '1.25rem',
+  color: 'var(--ink-muted)',
+  fontSize: '0.875rem',
+});
 
-const MetaBar = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-  font-size: 0.875rem;
-  color: var(--ink-muted);
-`;
+const MetaPill = styled('span')({
+  padding: '0.3rem 0.75rem',
+  borderRadius: '6px',
+  backgroundColor: 'var(--surface-elevated)',
+  border: '1px solid var(--border)',
+  fontWeight: 500,
+});
 
-const MetaPill = styled.span`
-  padding: 0.3rem 0.75rem;
-  border-radius: 6px;
-  background: var(--surface-elevated);
-  border: 1px solid var(--border);
-  font-weight: 500;
-`;
+const ArticleBody = styled('div')({
+  fontSize: '1.125rem',
+  lineHeight: 1.85,
+  color: 'var(--ink)',
+  letterSpacing: '-0.01em',
 
-const TagBadge = styled.span`
-  padding: 0.3rem 0.75rem;
-  border-radius: 6px;
-  background: rgba(0, 212, 170, 0.1);
-  border: 1px solid rgba(0, 212, 170, 0.25);
-  color: var(--brand);
-  font-weight: 600;
-  font-size: 0.8rem;
-`;
+  '& h2': {
+    fontSize: '1.85rem',
+    fontWeight: 800,
+    color: 'var(--ink)',
+    margin: '3.5rem 0 1.25rem',
+    paddingTop: '1.5rem',
+    borderTop: '1px solid var(--border-subtle)',
+    lineHeight: 1.25,
+    letterSpacing: '-0.025em',
+  },
 
-const Title = styled.h1`
-  font-size: 2.75rem;
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  color: var(--ink);
-  line-height: 1.18;
-  margin-bottom: 1.75rem;
+  '& h3': {
+    fontSize: '1.4rem',
+    fontWeight: 700,
+    color: 'var(--ink)',
+    margin: '2.5rem 0 1rem',
+    lineHeight: 1.3,
+  },
 
-  @media (max-width: 768px) {
-    font-size: 2.15rem;
-  }
-`;
+  '& p': {
+    margin: '1.6rem 0',
+    color: 'var(--ink)',
+    opacity: 0.92,
+  },
 
-const LeadCallout = styled.div`
-  position: relative;
-  padding: 1.75rem 2rem;
-  border-radius: 16px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--brand);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  '& ul, & ol': {
+    margin: '1.6rem 0',
+    paddingLeft: '1.75rem',
+  },
 
-  p {
-    margin: 0;
-    font-size: 1.15rem;
-    line-height: 1.75;
-    color: var(--ink);
-    font-weight: 450;
-  }
-`;
+  '& li': {
+    marginBottom: '0.75rem',
+    paddingLeft: '0.25rem',
+    color: 'var(--ink)',
+    opacity: 0.92,
+  },
 
-const Content = styled.div`
-  font-size: 1.125rem;
-  line-height: 1.85;
-  color: var(--ink);
-  letter-spacing: -0.01em;
+  '& blockquote': {
+    margin: '2.5rem 0',
+    padding: '1.5rem 1.75rem',
+    borderRadius: '12px',
+    backgroundColor: 'var(--surface)',
+    border: '1px solid var(--border)',
+    borderLeft: '4px solid var(--brand)',
+    fontStyle: 'normal',
+    color: 'var(--ink)',
+    fontWeight: 500,
 
-  h2 {
-    font-size: 1.85rem;
-    font-weight: 800;
-    color: var(--ink);
-    margin: 3.5rem 0 1.25rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border-subtle);
-    line-height: 1.25;
-    letter-spacing: -0.025em;
-  }
+    '& p': {
+      margin: 0,
+      fontSize: '1.15rem',
+    },
+  },
 
-  h3 {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin: 2.5rem 0 1rem;
-    line-height: 1.3;
-  }
+  '& code:not(pre code)': {
+    backgroundColor: 'var(--surface-elevated)',
+    border: '1px solid var(--border)',
+    borderRadius: '6px',
+    padding: '0.2rem 0.5rem',
+    fontSize: '0.9em',
+    color: 'var(--brand)',
+    fontWeight: 600,
+  },
 
-  p {
-    margin: 1.6rem 0;
-    color: var(--ink);
-    opacity: 0.92;
-  }
+  '& pre': {
+    backgroundColor: 'var(--surface) !important',
+    border: '1px solid var(--border)',
+    borderRadius: '14px',
+    padding: '1.25rem 1.5rem',
+    margin: '2.25rem 0',
+    overflowX: 'auto',
+    boxShadow: '0 4px 16px -2px rgba(0, 0, 0, 0.06)',
+  },
 
-  ul, ol {
-    margin: 1.6rem 0;
-    padding-left: 1.75rem;
-  }
+  '& hr': {
+    margin: '3.5rem 0',
+    border: 'none',
+    height: '1px',
+    background: 'linear-gradient(90deg, transparent, var(--border), transparent)',
+  },
 
-  li {
-    margin-bottom: 0.75rem;
-    padding-left: 0.25rem;
-    color: var(--ink);
-    opacity: 0.92;
-  }
+  '& a': {
+    color: 'var(--brand)',
+    textDecoration: 'underline',
+    textUnderlineOffset: '4px',
+    textDecorationThickness: '1.5px',
 
-  blockquote {
-    margin: 2.5rem 0;
-    padding: 1.5rem 1.75rem;
-    border-radius: 12px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--brand);
-    font-style: normal;
-    color: var(--ink);
-    font-weight: 500;
+    '&:hover': {
+      color: 'var(--ink)',
+    },
+  },
 
-    p {
-      margin: 0;
-      font-size: 1.15rem;
-    }
-  }
+  '& strong': {
+    color: 'var(--ink)',
+    fontWeight: 700,
+  },
+});
 
-  code:not(pre code) {
-    background: var(--surface-elevated);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 0.2rem 0.5rem;
-    font-size: 0.9em;
-    color: var(--brand);
-    font-weight: 600;
-  }
+const FooterBar = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginTop: '4rem',
+  paddingTop: '2rem',
+  borderTop: '1px solid var(--border)',
+});
 
-  pre {
-    background: var(--surface) !important;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.25rem 1.5rem;
-    margin: 2.25rem 0;
-    overflow-x: auto;
-    box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.06);
-  }
-
-  hr {
-    margin: 3.5rem 0;
-    border: none;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-  }
-
-  a {
-    color: var(--brand);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-    text-decoration-thickness: 1.5px;
-
-    &:hover {
-      color: var(--ink);
-    }
-  }
-
-  strong {
-    color: var(--ink);
-    font-weight: 700;
-  }
-`;
-
-const Footer = styled.footer`
-  margin-top: 4.5rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.95rem;
-`;
-
-const FooterLink = styled(Link)`
-  color: var(--brand);
-  font-weight: 600;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-export function ArticleView({ article }: ArticleViewProps) {
+export function ArticleView({ article }: { article: Article }) {
   return (
-    <Container>
-      <AnimatedFadeIn>
-        <BackNav>
-          <BackLink href="/articles">
-            <span>←</span> Retour aux articles
-          </BackLink>
-        </BackNav>
+    <Wrapper>
+      <Container>
+        <ArticleContainer>
+          <PageHero
+            eyebrow="LAB & INGÉNIERIE"
+            title={article.title}
+          />
 
-        <Header>
-          <MetaBar>
-            <MetaPill>{article.date}</MetaPill>
-            <MetaPill>{article.readingTime}</MetaPill>
-            {article.tags?.map((tag) => (
-              <TagBadge key={tag}>#{tag}</TagBadge>
-            ))}
-          </MetaBar>
+          <AnimatedFadeIn>
+            <BackLink href="/articles/">
+              <span>←</span> Retour aux articles
+            </BackLink>
+            <div>
+              <MetaRow>
+                <MetaPill>{article.date}</MetaPill>
+                <MetaPill>{article.readTime}</MetaPill>
+                {article.tags.length > 0 && (
+                  <div
+                    style={{
+                      display: 'flex',
+                      gap: '0.5rem',
+                      flexWrap: 'wrap',
+                      marginLeft: '0.25rem',
+                    }}
+                  >
+                    {article.tags.map((tag) => (
+                      <Badge key={tag}>#{tag}</Badge>
+                    ))}
+                  </div>
+                )}
+              </MetaRow>
 
-          <Title>{article.title}</Title>
+              <HeaderCallout>
+                <p>{article.description}</p>
+              </HeaderCallout>
 
-          <LeadCallout>
-            <p>{article.description}</p>
-          </LeadCallout>
-        </Header>
+              <ArticleBody
+                className="article-body"
+                dangerouslySetInnerHTML={{ __html: article.contentHtml }}
+              />
 
-        <Content dangerouslySetInnerHTML={{ __html: article.contentHtml }} />
+              <FooterBar>
+                <Link
+                  href="/articles/"
+                  style={{
+                    textDecoration: 'none',
+                    border: '1px solid var(--border)',
+                    backgroundColor: 'var(--surface)',
+                    color: 'var(--brand)',
+                    borderRadius: '9999px',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '0.9rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <span>←</span> Tous les articles
+                </Link>
 
-        <Footer>
-          <FooterLink href="/articles">
-            <span>←</span> Voir tous les articles
-          </FooterLink>
-          <FooterLink href="/#projets">
-            Découvrir les projets du Lab <span>→</span>
-          </FooterLink>
-        </Footer>
-      </AnimatedFadeIn>
-    </Container>
+                <Link
+                  href="/#projets"
+                  style={{
+                    textDecoration: 'none',
+                    color: 'var(--ink-muted)',
+                    fontSize: '0.9rem',
+                    fontWeight: 500,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                  }}
+                >
+                  Découvrir les projets <span>→</span>
+                </Link>
+              </FooterBar>
+            </div>
+          </AnimatedFadeIn>
+        </ArticleContainer>
+      </Container>
+    </Wrapper>
   );
 }
