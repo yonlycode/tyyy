@@ -1,74 +1,66 @@
 ---
-title: "Kady HaaS — L'ouvrier numérique souverain sur box N100"
-description: "Déploiement d'une appliance d'IA locale clé en main (Hardware-as-a-Service) sur mini-PC Intel N100 : zéro fuite de données, inférence 100% on-premise et automatisation métier sans abonnement cloud US."
-date: "2026-03-15"
+title: "Kaly & Kady — L'ouvrier numérique souverain, HaaS"
+description: "Hardware-as-a-Service : une appliance d'IA locale clé en main pour les PME — zéro fuite de données, inférence sur site, sans abonnement cloud US. Le projet est en construction : voici la thèse, l'architecture visée et où on en est vraiment."
+date: "2026-10-17"
 published: true
 featured: true
 tags:
   - "IA Souveraine"
   - "Hardware-as-a-Service"
-  - "Intel N100"
-  - "llama.cpp"
   - "Edge AI"
-stats:
-  "Coût API": "0 €"
-  "Consommation": "12 W"
-  "Débit Inférence": "28 tok/s"
-  "Fuite Données": "0 octet"
+  - "Anti-SaaS"
+  - "Self-Hosted"
 ---
 
-## Contexte & Enjeu : La fin de la rente cloud
+## La Thèse : La fin de la rente cloud
 
-Pour la plupart des entreprises, l'accès aux capacités d'IA générative rime avec une triple dépendance :
+Pour la plupart des entreprises, l'accès à l'IA générative rime avec une triple dépendance :
 
-1. **Une fuite structurelle des données stratégiques** (devis, contrats, bilans comptables) vers des serveurs situés sous juridiction américaine (Cloud Act, FISA 702).
-2. **Une rente financière imprévisible**, indexée sur la consommation de tokens et le bon vouloir des éditeurs d'API propriétaires.
-3. **Une vulnérabilité réseau totale** : si la connexion internet est coupée ou si l'API subit un outage, l'activité de l'entreprise s'arrête.
+1. **Une fuite structurelle des données stratégiques** (devis, contrats, bilans) vers des serveurs sous juridiction américaine (Cloud Act, FISA 702).
+2. **Une facture imprévisible**, indexée sur la consommation de tokens et le bon vouloir des éditeurs d'API propriétaires.
+3. **Une vulnérabilité réseau totale** : connexion coupée ou API en outage, l'activité s'arrête.
 
-Avec **Kady HaaS** (Hardware-as-a-Service), nous avons pris le contrepied absolu : concevoir un "ouvrier numérique" physique, sous la forme d'une box matérielle dédiée installée directement dans les locaux du client.
+Le SaaS vous loue votre propre capacité de calcul. **Le HaaS (Hardware-as-a-Service) vous l'installe.**
 
----
+**Kaly** est la box : une appliance d'IA locale clé en main, livrée préconfigurée, qui tourne sur site. **Kady** est l'ouvrier numérique qui l'habite : l'agent qui fait le travail métier — gestion documentaire, classification, synthèse — sans qu'aucune donnée ne quitte les locaux.
 
-## Architecture Matérielle : L'efficience du silicium Edge
+## Ce Qui Est Réel Aujourd'hui
 
-L'objectif était d'obtenir une machine compacte, inaudible, consommant moins d'énergie qu'une box internet standard, tout en garantissant une réactivité conversationnelle fluide en temps réel.
+Soyons directs sur l'état d'avancement : **le produit est en construction, la waitlist est ouverte.** Pas de clients en production, pas de ROI mesuré, pas d'audit de sécurité publié. Ce qui existe :
+
+* **Le panel de gestion Kaly** : application Go (stdlib) + HTMX + MongoDB — waitlist, leads, suivi du parc de box, événements, ingestion. Développement actif, déployable en conteneur.
+* **Le design system Kady-UI** : librairie de web components (Storybook publié) pour une pâte graphique commune sur tous nos produits.
+* **Les bancs d'essai matériels** : inférence locale mesurée sur AMD Strix Halo (les chiffres sont dans l'article halogen-flash de ce blog, mesures réelles et publiées).
+* **La grille tarifaire** : abonnement HaaS au forfait mensuel, dégressif selon la capacité de la box — affichée sur le site, sans astérisque.
+
+## L'Architecture Visée
 
 ```
-┌────────────────────────────────────────────────────────┐
-│                    BOX LOCALE KADY                     │
-│                                                        │
-│  ┌───────────────────────┐   ┌──────────────────────┐  │
-│  │ Intel N100 (4C / 4T)  │   │ 16 Go LPDDR5 4800MHz │  │
-│  │ TDP Max : 12W         │◄──┤ Bande passante 38GB/s│  │
-│  └──────────┬────────────┘   └──────────────────────┘  │
-│             │                                          │
-│  ┌──────────▼────────────┐   ┌──────────────────────┐  │
-│  │ NVMe PCIe Gen3 x4     │   │ Puce TPM 2.0         │  │
-│  │ Chiffrement LUKS2     │   │ Clé d'amorçage HW    │  │
-│  └───────────────────────┘   └──────────────────────┘  │
-└────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────┐
+│              BOX KALY (sur site)             │
+│  ┌────────────────┐   ┌───────────────────┐  │
+│  │ Moteur          │   │ Kady : agent      │  │
+│  │ d'inférence     │◄──┤ métier (docs,     │  │
+│  │ llama.cpp       │   │ mails, synthèse)  │  │
+│  │ (CPU/APU/GPU)   │   └───────────────────┘  │
+│  └────────────────┘                           │
+│  Chiffrement du stockage · réseau local       │
+│  Interface web locale (Go + HTMX)             │
+└──────────────────────────────────────────────┘
 ```
 
-* **Processeur** : Intel N100 (architecture Gracemont 10nm, 4 cœurs à 3.4 GHz).
-* **Mémoire** : 16 Go LPDDR5 unifiée à 4800 MT/s, offrant la bande passante nécessaire au streaming rapide des poids de quantisation.
-* **Stockage & Sécurité** : SSD NVMe M.2 512 Go à débit séquentiel élevé, entièrement scellé par chiffrement LUKS2 lié à la puce TPM 2.0 matérielle.
-* **Consommation réelle** : 6 W au repos, 12 W en inférence continue pleine charge.
+* **Matériel** : la config définitive de la box de production est en cours d'arbitrage (profil d'usage, budget, densité de modèles). Nous ne publions pas de spec sheet fantaisiste : quand la config sera arrêtée, elle sera publiée avec ses mesures réelles.
+* **Inférence** : llama.cpp et modèles quantifiés open weights. Pas de fine-tuning maison annoncé à tort — l'adaptation passe par le contexte, les skills et les workflows de l'agent.
+* **Interface** : serveur Go + HTMX, accessible sur le réseau local du client.
+* **Pilotage** : le panel Kaly central suit l'état des box (événements, pings) — opt-in, métriques techniques, jamais le contenu métier du client.
 
----
+## Ce Que Le HaaS Change Pour Un Client
 
-## Stack Logicielle Souveraine
+* **Souveraineté** : les documents sensibles ne quittent pas le boîtier. C'est la promesse centrale, et elle est structurelle — pas une option dans les CGU.
+* **Facture plate** : forfait mensuel, pas de compteur de tokens.
+* **Résilience** : la box travaille même internet coupé.
+* **Maintenance déléguée** : c'est nous qui gérons la machine, ses modèles et ses mises à jour — c'est le « as a Service » du HaaS.
 
-Pour extraire chaque FLOP du silicium sans couche superflue, l'environnement logiciel a été dépouillé de tout composant superflu :
+## Où On En Est
 
-* **OS** : Distribution Linux Debian 12 customisée avec un noyau optimisé basse latence et suppression de tous les services de télémétrie.
-* **Moteur d'inférence** : `llama.cpp` compilé spécifiquement avec les instructions vectorielles `AVX2`, `FMA` et `BMI2` du processeur N100.
-* **Modèle déployé** : Famille Qwen 2.5 et Mistral 7B quantifiés en `Q4_K_M` avec fine-tuning procédural pour la gestion documentaire, la classification d'emails et la synthèse administrative.
-* **Interface locale** : Serveur HTTP léger en Go avec UI HTMX réactive, accessible exclusivement via le réseau local chiffré (mTLS ou VLAN dédié).
-
----
-
-## Résultats & Impact Métier
-
-* **Indépendance absolue** : La box fonctionne même en cas de coupure internet complète du site client.
-* **ROI immédiat** : Modèle HaaS facturé au forfait fixe mensuel. Comparé à 10 licences d'outils cloud américains à 30 $/mois avec surcoût d'API, l'économie nette dépasse 70% dès la première année.
-* **Conformité RGPD garantie** : Aucune donnée ne quitte le boîtier physique. Les audits de sécurité valident un score d'étanchéité de 100%.
+Le panel est en développement, la landing est publique, la waitlist est ouverte. Les premiers pilotes seront documentés ici avec des chiffres vrais — débits, consommations, économies constatées — pas des pourcentages sortis d'un chapeau.

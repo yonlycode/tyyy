@@ -12,7 +12,7 @@ export const SITE_NAME = 'Yoann Fort';
 export const SITE_TITLE = 'Yoann Fort — Architecte en IA Souveraine & Fondateur Karuka Conseil';
 
 export const SITE_DESCRIPTION =
-  'Architecte en IA souveraine, inférence locale bare-metal (APU Strix Halo, N100) et systèmes multi-agents critiques. Fondateur de Karuka Conseil.';
+  "Architecte en IA souveraine, inférence locale bare-metal (AMD Strix Halo, llama.cpp) et flotte d'agents IA auto-hébergée. Fondateur de Karuka Conseil.";
 
 export const SITE_KEYWORDS = [
   'Yoann Fort',
@@ -21,13 +21,11 @@ export const SITE_KEYWORDS = [
   'IA Souveraine',
   'Inférence locale',
   'Bare-metal',
-  'APU Strix Halo',
-  'N100',
-  'Kady HaaS',
+  'AMD Strix Halo',
+  'Kaly HaaS',
+  'llama.cpp',
   'Systèmes multi-agents',
-  'vLLM',
   'LLMOps',
-  'Mastra',
   'Hermes Agent',
   'Hardware Edge',
   'Quantisation',

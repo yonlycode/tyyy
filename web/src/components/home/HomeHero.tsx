@@ -52,7 +52,7 @@ export function HomeHero() {
               </span>
             </>
           }
-          subtitle="Fondateur de Karuka Conseil. J'émancipe les organisations de la rente cloud US en concevant des architectures d'IA souveraines bare-metal : déploiement de box locales Kady (HaaS), optimisation fine de l'inférence APU Strix Halo / N100 sous vLLM et orchestration de flottes multi-agents critiques."
+          subtitle="Fondateur de Karuka Conseil. J'émancipe les organisations de la rente cloud US en concevant des architectures d'IA souveraines bare-metal : box locales Kaly (HaaS), optimisation fine de l'inférence sur AMD Strix Halo sous llama.cpp et orchestration d'une flotte d'agents IA auto-hébergée."
           avatar="YF"
         />
 
@@ -73,9 +73,9 @@ export function HomeHero() {
           <TagsRow>
             <Badge>#IASouveraine</Badge>
             <Badge>#KarukaConseil</Badge>
-            <Badge>#KadyHaaS</Badge>
-            <Badge>#APUStrixHalo</Badge>
-            <Badge>#vLLM</Badge>
+            <Badge>#KalyHaaS</Badge>
+            <Badge>#StrixHalo</Badge>
+            <Badge>#llamacpp</Badge>
             <Badge>#MultiAgents</Badge>
           </TagsRow>
         </AnimatedFadeIn>
