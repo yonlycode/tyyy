@@ -1,69 +1,59 @@
 ---
-title: "Kady HaaS : Pourquoi nous mettons l'IA dans une boîte physique locale"
-description: "Face aux dérives du Cloud SaaS américain (tarification au token imprévisible, CLOUD Act et vulnérabilité des liaisons sous-marines aux Antilles), Karuka Conseil déploie le Hardware-as-a-Service sur site."
+title: "Kady HaaS : Pourquoi nous enfermons l'IA dans une boîte de 6 Watts"
+description: "Face aux délires de facturation cloud, au CLOUD Act et aux câbles sous-marins qui sautent aux Antilles, Karuka Conseil livre l'IA sur site : une appliance physique, silencieuse et déconnectable."
 date: 2026-10-18
 tags: ["haas", "kady", "hardware", "souveraineté", "edge-computing", "rag"]
 published: true
 ---
 
-# Kady HaaS : Pourquoi nous mettons l'IA dans une boîte physique locale
+En 2026, louer son intelligence artificielle au token sur le cloud américain est devenu une hérésie pour n'importe quelle entreprise qui manipule des données sensibles.
 
-Pour les entreprises et les institutions publiques, le modèle de l'IA en 2026 est devenu un piège économique et juridique à ciel ouvert :
+Il y a d'abord l'absurdité financière : des factures variables qui oscillent selon le volume de requêtes et les changements d'humeur des plateformes californiennes. Il y a ensuite le cauchemar juridique : la moindre ligne de bilan comptable, de dossier médical ou de marché public envoyée sur une API externe tombe instantanément sous l'empire du CLOUD Act et des lois extraterritoriales.
 
-1. **Une facture au token imprévisible** qui explose au moindre pic d'usage ou changement arbitraire des grilles tarifaires de la Silicon Valley.
-2. **Une soumission totale aux lois extraterritoriales américaines** (FISA, CLOUD Act) dès qu'un document confidentiel franchit une API SaaS.
-3. **Une dépendance absolue au réseau public** : en Guadeloupe et dans les territoires d'outre-mer, la moindre rupture de câble sous-marin ou incident télécom paralyse immédiatement toute l'activité d'une organisation tributaire du cloud.
+Et aux Antilles, il y a la réalité du terrain : quand une tempête ou un incident de liaison coupe le câble sous-marin, une entreprise dépendante du SaaS s'arrête net. Terminé. Plus d'accès à vos propres outils.
 
-Chez **Karuka Conseil**, notre réponse à cette impasse n'est pas un nième wrapper SaaS dans le cloud. C'est **Kady HaaS (Hardware-as-a-Service)** : une appliance physique, souveraine, installée directement dans les locaux du client.
+Notre réponse chez **Karuka Conseil** n'est pas un nième portail web. C'est **Kady HaaS (Hardware-as-a-Service)** : une appliance physique posée sur votre bureau, qui tourne chez vous, et qui ne demande la permission à personne.
 
 ---
 
-## 1. La Thèse : L'IA On-Premise Clé en Main
+## L'IA sans cloud : l'efficacité brute contre la démesure
 
-Le constat est limpide : un cabinet comptable, une étude notariale, une clinique ou une collectivité territoriale n'a pas le droit moral ni juridique de balancer ses bilans, ses dossiers médicaux ou ses marchés publics sur les serveurs d'OpenAI ou d'Anthropic.
+Beaucoup de cabinets de conseil vous expliqueront qu'il faut un rack de serveurs à 20 000 euros avec des cartes graphiques qui hurlent et consomment 500 watts pour faire tourner un modèle de langage.
 
-Mais ces structures n'ont pas non plus les moyens d'embaucher une équipe d'ingénieurs en LLMOps pour maintenir un cluster GPU Linux en local.
+C'est faux. Pour la majorité des usages métiers — interroger une base documentaire, résumer un contrat de 80 pages, classifier des factures, extraire des données de formulaires —, les modèles ouverts de 3 à 8 milliards de paramètres d'aujourd'hui enterrent les monstres d'hier.
 
-Le modèle HaaS résout cette équation :
-- **Une box physique compacte et silencieuse** posée dans les bureaux ou la baie réseau du client.
-- **Modèles d'inférence open-source (3B à 14B)** tournant 100 % en local sur le matériel embarqué.
-- **Zéro paquet de données qui sort du LAN** : fonctionnement total en circuit fermé (air-gapped possible).
-- **Résilience absolue aux pannes WAN** : l'inférence, la recherche sémantique (RAG) et l'extraction de données fonctionnent même si la connexion internet est coupée.
-- **Abonnement forfaitaire fixe** : matériel, logiciels, modèles, maintenance et support local réunis dans un coût mensuel prévisible, requêtes illimitées.
+Pour notre première machine opérationnelle — la **Kady Box Mini** —, nous avons conçu une architecture au millimètre :
 
----
+- **Processeur** : Intel N100 (4 cœurs Alder Lake-N, TDP record de **6 Watts**).
+- **Mémoire vive** : 16 Go de DDR5 à haute vitesse.
+- **Stockage** : SSD NVMe 512 Go intégralement chiffré en matériel via **LUKS2**.
+- **Réseau double port 2.5 GbE** : une interface branchée sur le réseau local pour vos collaborateurs, une interface isolée pour le tunnel de supervision sécurisé.
+- **Consommation électrique réelle** : Moins de **12 Watts** en pleine charge d'inférence. 5 Watts en veille.
 
-## 2. Le Choix Hardware : L'Efficacité Réelle contre la Démesure GPU
-
-Vendre un serveur à 15 000 € avec une carte graphique énergivore qui consomme 450 watts pour faire du RAG documentaire sur des PDF administratifs est une aberration industrielle.
-
-Pour notre première déclinaison opérationnelle — **Kady Box Mini** —, nous avons fait le choix de l'efficacité brute :
-
-- **CPU** : Intel N100 (4 cœurs, architecture Alder Lake-N, TDP record de **6 Watts**).
-- **RAM** : 16 Go DDR5 rapide.
-- **Stockage** : 512 Go NVMe PCIe avec chiffrement matériel **LUKS2** au repos.
-- **Réseau** : Double port 2.5 GbE (isolation physique étanche entre le réseau local d'entreprise et le lien de télémaintenance sécurisé).
-- **Consommation électrique** : Moins de **12 Watts** en pleine charge d'inférence, environ **5 Watts** au repos.
-
-Sur cette enveloppe thermique minuscule, des modèles de dernière génération hautement optimisés (quantifiés en 4-bit / Q4_K_M via `llama.cpp`) délivrent entre **15 et 25 tokens par seconde**.
-
-C'est plus rapide que la vitesse de lecture d'un être humain. Pour synthétiser un rapport, extraire les lignes d'une facture ou interroger un fonds documentaire juridique interne, c'est instantané.
+Le résultat ? La boîte ne chauffe pas, ne fait aucun bruit, et débite entre **15 et 25 tokens par seconde** sur des modèles quantifiés en 4-bit (`llama.cpp`). C'est plus rapide que la vitesse de lecture d'un être humain. C'est immédiat.
 
 ---
 
-## 3. La Pile Logicielle Kady : Confidentialité par Conception
+## Zéro paquet de données vers l'extérieur
 
-La sécurité physique du matériel ne vaut rien sans une architecture logicielle imperméable :
+Le matériel n'est que la moitié de l'équation. L'autre moitié, c'est l'imperméabilité du logiciel :
 
-1. **Système Minimaliste Durci** : Distribution Linux épurée, services root restreints, disque entièrement chiffré par clé matérielle.
-2. **Moteur d'Inférence Dédié** : Serveur d'inférence local C++ à mémoire unifiée, zéro télémétrie, zéro ping externe.
-3. **RAG Vectoriel Hybride Intégré** : Ingestion documentaire locale, découpage en fragments sémantiques et vectorisation via des modèles d'embedding locaux (sans appel API tiers).
-4. **Supervision à Distance Découplée (Tailscale)** : Les mises à jour du firmware et des modèles sont acheminées au travers d'un tunnel chiffré point-à-point sans jamais exposer de port public sur le réseau du client.
+1. **Fonctionnement en circuit fermé**
+   Tous les calculs se font en local. L'extraction de texte, la recherche vectorielle (RAG), la génération et les embeddings tournent sur la machine. Vous débranchez le câble internet ? Kady continue de répondre sans sourciller.
+
+2. **Chiffrement au repos de niveau militaire**
+   Si quelqu'un pénètre dans vos locaux la nuit et dérobe le boîtier, il ne récupère qu'un bloc de métal inerte. La partition NVMe est chiffrée par clé matérielle ; sans la phrase secrète de déverrouillage au boot, aucune donnée n'est lisible.
+
+3. **Mises à jour par tunnel chiffré point-à-point**
+   Nous assurons la maintenance, l'ajout de nouveaux modèles et le support via un tunnel Tailscale chiffré direct. Zéro port ouvert sur votre box Internet, zéro surface d'attaque exposée.
+
+4. **Un abonnement forfaitaire fixe**
+   Le modèle HaaS regroupe la machine, l'OS durci, les modèles, la maintenance et les garanties matérielles dans un tarif mensuel linéaire. Vous faites dix requêtes ou cent mille requêtes par mois ? Le prix ne bouge pas d'un centime.
 
 ---
 
-## 4. La Fin de l'Imposture du Cloud SaaS
+## Reprendre le contrôle de son cerveau numérique
 
-L'intelligence artificielle n'a pas besoin d'être un service de rente hébergé en Virginie du Nord.
+L'intelligence artificielle n'a pas être une rente versée indéfiniment à un hébergeur de Virginie.
 
-Elle peut — et doit — devenir une commodité industrielle sobre, sécurisée, physiquement présente là où la valeur et les données sont créées. C'est l'engagement de Kady et la vision souveraine que nous bâtissons chez Karuka Conseil.
+Elle peut être un outil d'ingénierie sobre, discret, posé à côté de votre bureau, qui protège vos secrets industriels et vos données citoyennes avec une simplicité désarmante. C'est cela, la souveraineté concrète.
