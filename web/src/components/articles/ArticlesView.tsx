@@ -12,20 +12,34 @@ import { PageHero } from '@/components/ui/PageHero';
 const ArticleGrid = styled('div')({
   display: 'grid',
   gridTemplateColumns: 'repeat(3, 1fr)',
-  gap: m3Theme.spacing.lg,
-  '@media (max-width: 900px)': { gridTemplateColumns: 'repeat(2, 1fr)' },
-  '@media (max-width: 620px)': { gridTemplateColumns: '1fr' },
+  gap: m3Theme.spacing.xl,
+  rowGap: m3Theme.spacing.xl,
+  columnGap: m3Theme.spacing.xl,
+  '@media (max-width: 900px)': {
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: m3Theme.spacing.lg,
+    rowGap: m3Theme.spacing.lg,
+    columnGap: m3Theme.spacing.lg,
+  },
+  '@media (max-width: 620px)': {
+    gridTemplateColumns: '1fr',
+    gap: m3Theme.spacing.lg,
+    rowGap: m3Theme.spacing.lg,
+  },
 });
 
 const ArticleLink = styled(Link)({
   textDecoration: 'none',
-  display: 'block',
+  display: 'flex',
+  flexDirection: 'column',
   height: '100%',
+  flex: 1,
 });
 
 const ArticleCard = styled('div')({
   position: 'relative',
   height: '100%',
+  flex: 1,
   display: 'flex',
   flexDirection: 'column',
   background: 'rgba(15, 21, 38, 0.75)',
@@ -111,6 +125,8 @@ const ArticleMeta = styled('div')({
   gap: m3Theme.spacing.md,
   marginTop: m3Theme.spacing.lg,
   paddingTop: m3Theme.spacing.md,
+  paddingBottom: m3Theme.spacing.xs,
+  minHeight: '48px',
   borderTop: `1px solid ${m3Theme.colors.surfaceBorder}`,
 });
 
@@ -201,10 +217,14 @@ export function ArticlesView({ articles }: { articles: ArticleMeta[] }) {
         ) : (
           <ArticleGrid>
             {filteredArticles.map((article, index) => (
-              <AnimatedFadeIn key={article.slug} delay={index * 0.1}>
+              <AnimatedFadeIn
+                key={article.slug}
+                delay={index * 0.1}
+                style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+              >
                 <ArticleLink href={`/articles/${article.slug}/`}>
                   <ArticleCard>
-                    <CategoryBadge>Article</CategoryBadge>
+                    <CategoryBadge>{(article.tags && article.tags[0]) || 'Article'}</CategoryBadge>
                     <ArticleTitle>{article.title}</ArticleTitle>
                     <ArticleDesc>{article.description}</ArticleDesc>
                     {article.tags && article.tags.length > 0 && (

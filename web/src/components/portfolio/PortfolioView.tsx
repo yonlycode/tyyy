@@ -12,20 +12,34 @@ import { PageHero } from '@/components/ui/PageHero';
 const Grid = styled('div')({
   display: 'grid',
   gridTemplateColumns: 'repeat(3, 1fr)',
-  gap: m3Theme.spacing.lg,
-  '@media (max-width: 900px)': { gridTemplateColumns: 'repeat(2, 1fr)' },
-  '@media (max-width: 620px)': { gridTemplateColumns: '1fr' },
+  gap: m3Theme.spacing.xl,
+  rowGap: m3Theme.spacing.xl,
+  columnGap: m3Theme.spacing.xl,
+  '@media (max-width: 900px)': {
+    gridTemplateColumns: 'repeat(2, 1fr)',
+    gap: m3Theme.spacing.lg,
+    rowGap: m3Theme.spacing.lg,
+    columnGap: m3Theme.spacing.lg,
+  },
+  '@media (max-width: 620px)': {
+    gridTemplateColumns: '1fr',
+    gap: m3Theme.spacing.lg,
+    rowGap: m3Theme.spacing.lg,
+  },
 });
 
 const ProjectLink = styled(Link)({
   textDecoration: 'none',
-  display: 'block',
+  display: 'flex',
+  flexDirection: 'column',
   height: '100%',
+  flex: 1,
 });
 
 const ProjectCard = styled('div')({
   position: 'relative',
   height: '100%',
+  flex: 1,
   display: 'flex',
   flexDirection: 'column',
   background: 'rgba(15, 21, 38, 0.75)',
@@ -106,6 +120,8 @@ const ProjectFooter = styled('div')({
   gap: m3Theme.spacing.md,
   marginTop: m3Theme.spacing.lg,
   paddingTop: m3Theme.spacing.md,
+  paddingBottom: m3Theme.spacing.xs,
+  minHeight: '48px',
   borderTop: `1px solid ${m3Theme.colors.surfaceBorder}`,
 });
 
@@ -200,20 +216,29 @@ export function PortfolioView({ projects }: { projects: ArticleMeta[] }) {
         ) : (
           <Grid>
             {filteredProjects.map((project, index) => (
-              <AnimatedFadeIn key={project.slug} delay={index * 0.12}>
+              <AnimatedFadeIn
+                key={project.slug}
+                delay={index * 0.12}
+                style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+              >
                 <ProjectLink href={`/portfolio/${project.slug}/`}>
                   <ProjectCard>
                     <Index>{String(index + 1).padStart(2, '0')}</Index>
-                    <CategoryBadge>Projet</CategoryBadge>
+                    <CategoryBadge>{(project.tags && project.tags[0]) || 'Projet'}</CategoryBadge>
                     <ProjectTitle>{project.title}</ProjectTitle>
                     <ProjectDesc>{project.description}</ProjectDesc>
                     <ProjectFooter>
                       <ProjectDate>{project.date}</ProjectDate>
-                      <TagRow>
-                        {project.tags.slice(0, 3).map((tag) => (
-                          <Tag key={tag}>{tag}</Tag>
-                        ))}
-                      </TagRow>
+                      {project.tags && project.tags.length > 0 && (
+                        <TagRow>
+                          {(project.tags.length > 1
+                            ? project.tags.slice(1, 4)
+                            : project.tags.slice(0, 1)
+                          ).map((tag) => (
+                            <Tag key={tag}>{tag}</Tag>
+                          ))}
+                        </TagRow>
+                      )}
                     </ProjectFooter>
                   </ProjectCard>
                 </ProjectLink>

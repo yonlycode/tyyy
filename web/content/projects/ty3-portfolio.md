@@ -1,6 +1,6 @@
 ---
 title: "TY3 - Le portfolio du rat"
-description: "Un portfolio & blog personnel — **minimal et frugal en infra** — édité depuis une **app desktop native** qui pilote le contenu du repo GitHub."
+description: "Un portfolio & blog personnel — minimal et frugal en infra — édité depuis une app desktop native qui pilote le contenu du repo GitHub."
 date: 2026-08-19
 published: true
 featured: false
