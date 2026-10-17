@@ -6,13 +6,7 @@ import styled from '@emotion/styled';
 import { AnimatedFadeIn } from '@/components/AnimatedFadeIn';
 import type { ArticleMeta } from '@/lib/md';
 import { m3Theme } from '@/styles/theme';
-import {
-  Container,
-  Section,
-  FeatureCard,
-  Badge,
-  FilterBar,
-} from '@/components/ui';
+import { Container, Section, FilterBar } from '@/components/ui';
 import { PageHero } from '@/components/ui/PageHero';
 
 const Grid = styled('div')({
@@ -29,26 +23,116 @@ const ProjectLink = styled(Link)({
   height: '100%',
 });
 
+const ProjectCard = styled('div')({
+  position: 'relative',
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  background: 'rgba(15, 21, 38, 0.75)',
+  backdropFilter: 'blur(12px)',
+  WebkitBackdropFilter: 'blur(12px)',
+  borderRadius: m3Theme.radius.large,
+  padding: m3Theme.spacing.lg,
+  border: '1px solid rgba(255, 255, 255, 0.08)',
+  borderLeft: `3px solid ${m3Theme.colors.surfaceBorder}`,
+  overflow: 'hidden',
+  boxShadow: m3Theme.elevation.level1,
+  transition: `border-color ${m3Theme.animation.base}, transform ${m3Theme.animation.base}, box-shadow ${m3Theme.animation.base}`,
+  userSelect: 'none',
+
+  [`${ProjectLink}:hover &`]: {
+    borderColor: m3Theme.colors.surfaceBorderHover,
+    borderLeftColor: m3Theme.colors.accent,
+    transform: 'translateY(-4px)',
+    boxShadow: `0 8px 28px rgba(0, 212, 170, 0.12), ${m3Theme.elevation.level2}`,
+  },
+
+  [`${ProjectLink}:focus-visible &`]: {
+    outline: 'none',
+    boxShadow: m3Theme.elevation.focus,
+  },
+});
+
+const Index = styled('span')({
+  position: 'absolute',
+  top: m3Theme.spacing.md,
+  right: m3Theme.spacing.lg,
+  fontFamily: m3Theme.font.mono,
+  fontSize: m3Theme.font.sizes['4xl'],
+  fontWeight: m3Theme.font.weights.extrabold,
+  lineHeight: 1,
+  color: m3Theme.colors.primarySoft,
+  userSelect: 'none',
+});
+
+const CategoryBadge = styled('span')({
+  display: 'inline-block',
+  alignSelf: 'flex-start',
+  fontFamily: m3Theme.font.mono,
+  fontSize: m3Theme.font.sizes.xs,
+  fontWeight: 600,
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase',
+  color: m3Theme.colors.accent,
+  background: m3Theme.colors.successSoft,
+  padding: '0.2rem 0.6rem',
+  borderRadius: m3Theme.radius.small,
+  marginBottom: m3Theme.spacing.md,
+});
+
 const ProjectTitle = styled('h3')({
   fontSize: m3Theme.font.sizes.xl,
   color: m3Theme.colors.onSurface,
   lineHeight: 1.35,
   margin: 0,
+  fontWeight: m3Theme.font.weights.semibold,
+  transition: 'color 0.2s ease',
+  [`${ProjectLink}:hover &`]: { color: m3Theme.colors.accent },
 });
 
 const ProjectDesc = styled('p')({
-  color: m3Theme.colors.onSurfaceVariant,
+  color: m3Theme.colors.onSurfaceMuted,
   fontSize: m3Theme.font.sizes.sm,
   lineHeight: 1.7,
-  margin: `${m3Theme.spacing.md} 0`,
+  marginTop: m3Theme.spacing.md,
+  marginBottom: 'auto',
   flex: 1,
+});
+
+const ProjectFooter = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  gap: m3Theme.spacing.md,
+  marginTop: m3Theme.spacing.lg,
+  paddingTop: m3Theme.spacing.md,
+  borderTop: `1px solid ${m3Theme.colors.surfaceBorder}`,
+});
+
+const ProjectDate = styled('span')({
+  color: m3Theme.colors.onSurfaceDim,
+  fontSize: m3Theme.font.sizes.xs,
+  fontFamily: m3Theme.font.mono,
+  whiteSpace: 'nowrap',
 });
 
 const TagRow = styled('div')({
   display: 'flex',
   flexWrap: 'wrap',
+  justifyContent: 'flex-end',
   gap: m3Theme.spacing.xs,
-  marginTop: 'auto',
+});
+
+const Tag = styled('span')({
+  display: 'inline-flex',
+  alignItems: 'center',
+  borderRadius: m3Theme.radius.small,
+  padding: '0.25rem 0.6rem',
+  fontSize: '0.75rem',
+  fontWeight: 500,
+  fontFamily: m3Theme.font.mono,
+  color: m3Theme.colors.onSurfaceMuted,
+  border: `1px solid ${m3Theme.colors.surfaceBorder}`,
 });
 
 const FooterRow = styled('div')({
@@ -118,22 +202,20 @@ export function PortfolioView({ projects }: { projects: ArticleMeta[] }) {
             {filteredProjects.map((project, index) => (
               <AnimatedFadeIn key={project.slug} delay={index * 0.12}>
                 <ProjectLink href={`/portfolio/${project.slug}/`}>
-                  <FeatureCard
-                    style={{
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      padding: m3Theme.spacing.lg,
-                    }}
-                  >
+                  <ProjectCard>
+                    <Index>{String(index + 1).padStart(2, '0')}</Index>
+                    <CategoryBadge>Projet</CategoryBadge>
                     <ProjectTitle>{project.title}</ProjectTitle>
                     <ProjectDesc>{project.description}</ProjectDesc>
-                    <TagRow>
-                      {project.tags.map((tag) => (
-                        <Badge key={tag}>{tag}</Badge>
-                      ))}
-                    </TagRow>
-                  </FeatureCard>
+                    <ProjectFooter>
+                      <ProjectDate>{project.date}</ProjectDate>
+                      <TagRow>
+                        {project.tags.slice(0, 3).map((tag) => (
+                          <Tag key={tag}>{tag}</Tag>
+                        ))}
+                      </TagRow>
+                    </ProjectFooter>
+                  </ProjectCard>
                 </ProjectLink>
               </AnimatedFadeIn>
             ))}
