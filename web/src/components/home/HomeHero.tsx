@@ -42,10 +42,18 @@ export function HomeHero() {
     <Section>
       <Container>
         <PageHero
-          eyebrow="Home"
-          title="Architecte IA &amp; Lead LLMOps"
-          subtitle="Je conçois des architectures IA souveraines, du hardware au modèle quantifié, pour éliminer la dépendance cloud et diviser les coûts d'inférence par 10."
-          avatar="TY3"
+          eyebrow="Karuka Conseil"
+          title={
+            <>
+              Architecte en IA Souveraine
+              <br />
+              <span style={{ fontSize: '0.8em', opacity: 0.92 }}>
+                Systèmes Critiques &amp; Hardware Edge
+              </span>
+            </>
+          }
+          subtitle="Fondateur de Karuka Conseil. J'émancipe les organisations de la rente cloud US en concevant des architectures d'IA souveraines bare-metal : déploiement de box locales Kady (HaaS), optimisation fine de l'inférence APU Strix Halo / N100 sous vLLM et orchestration de flottes multi-agents critiques."
+          avatar="YF"
         />
 
         <TechMarquee />
@@ -53,20 +61,22 @@ export function HomeHero() {
         <AnimatedFadeIn delay={0.3}>
           <CtaRow>
             <ButtonLink href="/portfolio/">
-              Découvrir mes projets
+              Découvrir les cas d'usage
             </ButtonLink>
             <OutlineButtonLink href="/articles/">
-              Lire mes articles
+              Lire mes analyses tech
             </OutlineButtonLink>
           </CtaRow>
         </AnimatedFadeIn>
 
         <AnimatedFadeIn delay={0.5}>
           <TagsRow>
-            <Badge>#AI</Badge>
-            <Badge>#LLMOps</Badge>
-            <Badge>#OnPremise</Badge>
-            <Badge>#Quantization</Badge>
+            <Badge>#IASouveraine</Badge>
+            <Badge>#KarukaConseil</Badge>
+            <Badge>#KadyHaaS</Badge>
+            <Badge>#APUStrixHalo</Badge>
+            <Badge>#vLLM</Badge>
+            <Badge>#MultiAgents</Badge>
           </TagsRow>
         </AnimatedFadeIn>
 

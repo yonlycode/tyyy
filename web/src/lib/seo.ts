@@ -7,23 +7,31 @@ export const SITE_URL =
     ? `https://yonlycode.github.io${basePath}`
     : 'http://localhost:3000';
 
-export const SITE_NAME = 'tyyy';
+export const SITE_NAME = 'Yoann Fort';
 
-export const SITE_TITLE = 'tyyy - Architecte IA & Lead LLMOps';
+export const SITE_TITLE = 'Yoann Fort — Architecte en IA Souveraine & Fondateur Karuka Conseil';
 
 export const SITE_DESCRIPTION =
-  "Portfolio professionnel et blog d'architecte IA et software engineer : architectures IA souveraines, LLMOps, quantisation et modèles locaux.";
+  'Architecte en IA souveraine, inférence locale bare-metal (APU Strix Halo, N100) et systèmes multi-agents critiques. Fondateur de Karuka Conseil.';
 
 export const SITE_KEYWORDS = [
-  'tyyy',
-  'architecte IA',
+  'Yoann Fort',
+  'Karuka Conseil',
+  'Architecte IA',
+  'IA Souveraine',
+  'Inférence locale',
+  'Bare-metal',
+  'APU Strix Halo',
+  'N100',
+  'Kady HaaS',
+  'Systèmes multi-agents',
+  'vLLM',
   'LLMOps',
-  'IA souveraine',
-  'modèles locaux',
-  'quantisation',
-  'software engineer',
-  'portfolio',
-  'blog tech',
+  'Mastra',
+  'Hermes Agent',
+  'Hardware Edge',
+  'Quantisation',
+  'Portfolio',
 ];
 
 export function absoluteUrl(path = '/', opts: { trailingSlash?: boolean } = {}): string {
