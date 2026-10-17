@@ -1,5 +1,12 @@
 /* Global base styles */
 
+/* Reset box-sizing: fixes horizontal overflow (Container width:100% + paddingInline) */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 :root {
   --background: #080B14;
   --foreground: #F1F5F9;
@@ -48,4 +55,25 @@ main {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #5A4AD1;
+}
+
+/* Article markdown content (HTML injected via dangerouslySetInnerHTML) */
+pre {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+table {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+code {
+  overflow-wrap: anywhere;
 }

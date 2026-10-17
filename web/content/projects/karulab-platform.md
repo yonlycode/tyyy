@@ -1,7 +1,7 @@
 ---
-title: "Plateforme Karulab — Architecture souveraine Go + Mongo + HTMX"
-description: "Plateforme souveraine d'orchestration et de gestion IA conçue selon des principes de frugalité radicale : binaire statique Go, persistance MongoDB et interface réactive sans runtime JavaScript lourd."
-date: "2026-03-22"
+title: "Le Stack Karulab — Go, Mongo, HTMX et frugalité assumée"
+description: "Les principes d'ingénierie de Karulab : binaires Go statiques, persistance MongoDB, interfaces HTMX sans bundle npm, CI mutualisée et design system partagé. Ce qui est construit, comment, et pourquoi."
+date: "2026-10-17"
 published: true
 featured: true
 tags:
@@ -10,64 +10,51 @@ tags:
   - "MongoDB"
   - "HTMX"
   - "Frugalité Logicielle"
-stats:
-  "Taille Binaire": "18 Mo"
-  "RAM Utilisée": "38 Mo"
-  "Latence p99": "12 ms"
-  "Build Frontend": "0 s (No-Node)"
 ---
 
 ## Philosophie : En finir avec l'obésité logicielle
 
-L'ingénierie logicielle contemporaine souffre d'un mal récurrent : des architectures inutilement complexes où une simple interface de gestion d'IA nécessite 500 Mo de conteneurs Node.js, 1500 paquets npm imbriqués et des pipelines de build fragiles.
+L'ingénierie logicielle contemporaine souffre d'un mal récurrent : une simple interface de gestion devient 500 Mo de conteneurs Node, 1 500 paquets npm imbriqués et un pipeline de build fragile.
 
-Pour la **Plateforme Karulab**, nous avons appliqué un principe directeur strict : **le minimalisme architectural au service de la résilience critique**.
+Notre principe directeur : **le minimalisme architectural au service de la résilience**. Chaque brique doit pouvoir tourner sur un serveur modeste ou une appliance locale, se déployer en secondes et se diagnostiquer sans diplôme d'architecte.
 
-La plateforme devait être capable de s'exécuter sur n'importe quel serveur bare-metal ou appliance locale, sans dépendance externe, avec une empreinte mémoire négligeable et une vitesse d'exécution instantanée.
+## Ce Que Nous Construisons Avec Ce Stack
 
----
+* **Le panel Kaly** (en développement actif) : application Go stdlib + HTMX + MongoDB — waitlist, leads, parc de box, événements, grille tarifaire. Un binaire, une base, zéro build frontend.
+* **Kady-UI** : notre design system — librairie de web components publiés sur un registry npm privé (Forgejo), Storybook déployé, pour que Go+HTMX, Next.js et les box aient la même pâte graphique.
+* **ci-shared** : les workflows CI Forgejo mutualisés entre tous nos repos (Go et Node : build, lint, tests, release) — la complexité de CI est versionnée à un seul endroit, pas recopiée repo par repo.
+* **hermes-base** : l'image Docker de base de nos agents IA, avec harness par profil — la même rigueur appliquée à l'infra d'agents.
 
-## L'Architecture Technique en 3 Couches
+## L'Architecture Type
 
 ```
 ┌────────────────────────────────────────────────────────┐
 │                FRONTEND HYPERMÉDIA (HTMX)              │
-│    HTML sémantique, SSE streaming, 0 bundle npm        │
+│    HTML sémantique rendu serveur, 0 bundle npm         │
 └──────────────────────────┬─────────────────────────────┘
-                           │ HTTP / Server-Sent Events
+                           │ HTTP
 ┌──────────────────────────▼─────────────────────────────┐
-│                 CORE BACKEND (GOLANG)                  │
-│  ┌──────────────────────────────────────────────────┐  │
-│  │ Binaire statique unique (18 Mo)                 │  │
-│  │ Router HTTP stdlib + Worker Pool goroutines      │  │
-│  │ Connecteurs natifs vLLM / llama.cpp / Ollama     │  │
-│  └──────────────────────────────────────────────────┘  │
+│                 BACKEND (GOLANG STDLIB)                │
+│   Binaire statique unique · net/http · goroutines      │
 └──────────────────────────┬─────────────────────────────┘
-                           │ Driver natif Go
+                           │ Driver mongo-driver
 ┌──────────────────────────▼─────────────────────────────┐
 │                 PERSISTANCE (MONGODB)                  │
-│      Audit logs, sessions agents, traces d'inférence   │
+│   Leads, événements, configs box, audit logs           │
 └────────────────────────────────────────────────────────┘
 ```
 
-### 1. Le Core Go (Golang) : Performance & Binaire Unique
-* **Zéro dépendance dynamique** : L'ensemble du serveur, des routes API, des templates HTML et des tâches d'arrière-plan compile en un **seul binaire exécutable de 18 Mo**.
-* **Concurrence native** : Exploitation directe des goroutines pour la gestion parallèle des requêtes d'inférence LLM et le multiplexage des flux SSE (Server-Sent Events).
-* **Empreinte mémoire** : Moins de 40 Mo de RAM consommés en production avec 100 sessions d'inférence concurrentes ouvertes.
+* **Go stdlib d'abord** : le routeur, les templates `html/template` (échappement natif), les workers en goroutines. Les dépendances externes sont comptées — le panel n'en a qu'une, le driver Mongo.
+* **HTMX plutôt qu'un framework SPA** : les mises à jour dynamiques ciblées se font en fragments HTML rendus serveur. Pas de hydration, pas de state management, pas de node_modules côté client.
+* **MongoDB** : modélisation documentaire pour ce qui est documentaire (événements, configs hétérogènes), index sur les chemins de requête réels.
+* **Déploiement conteneur** sur Coolify, build direct depuis le Dockerfile, CI qui ne fait que tester et relâcher des tags.
 
-### 2. Le Moteur Hypermédia : HTMX & CSS Pur
-* Aucun framework JavaScript lourd (ni React, ni Vue, ni Angular) dans le dashboard de contrôle.
-* Rendu HTML côté serveur ultra-rapide (< 5 ms par page générée) et mises à jour dynamiques ciblées via **HTMX**.
-* Streaming temps réel des tokens générés par les modèles d'IA via **Server-Sent Events (SSE)** natifs, sans couche WebSocket superflue.
+## Les Vrais Chiffres, Quand Ils Existeront
 
-### 3. Persistance Flexible avec MongoDB
-* Modélisation documentaire naturelle pour les arbres d'exécution des agents IA, les métriques d'inférence et les configurations matérielles.
-* Indexation optimisée pour la recherche de traces et l'auditabilité réglementaire (conformité AI Act européen).
+Nous ne publions pas de « p99 en 12 ms » d'un service qui n'est pas encore en production. Ce qui est vérifié aujourd'hui : le panel compile en un binaire unique, ses tests passent en CI, et ses pages se passent totalement de JavaScript applicatif. Les mesures de performance viendront des environnements réels — box pilotes comprises — et seront publiées avec leur méthode de mesure.
 
----
+## Bénéfices Attendus (et vérifiables)
 
-## Bénéfices Opérationnels & Sécurité
-
-* **Surface d'attaque réduite au minimum** : Pas de vulnérabilités `node_modules`, pas de failles XSS dues à des frameworks client complexes.
-* **Déploiement en 1 seconde** : Copie du binaire `karulab-platform` sur le serveur cible, lancement en service `systemd`, prêt.
-* **Stabilité bare-metal éprouvée** : Capacité à fonctionner sans maintenance sur des environnements Edge contraints pendant des mois sans fuite mémoire ni reboot.
+* **Surface d'attaque réduite** : pas de chaîne d'approvisionnement npm sur le runtime serveur, échappement HTML natif Go.
+* **Déploiement en secondes** : un conteneur, une variable d'environnement de connexion Mongo, prêt.
+* **Frugalité** : le stack vise les machines edge — ce qui tourne sur un mini-PC client tourne aussi sur un VPS à 5 €.
