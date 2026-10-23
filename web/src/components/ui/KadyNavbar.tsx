@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
-import { LogoMark } from './Navbar';
+import { LogoMark } from './LogoMark';
 
 // Le bundle kady-ui vient du package npm @karulab/kady-ui (registry Forgejo)
 // et est enregistré côté client par <KadyElements /> (layout racine, import
