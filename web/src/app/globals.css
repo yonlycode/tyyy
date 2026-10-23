@@ -87,7 +87,7 @@ code {
 }
 
 /* kady-ui coexistence ----------------------------------------------------
-   public/tokens.css définit les variables --kady-* sur :root (dual theme
+   le tokens.css du package @karulab/kady-ui définit les variables --kady-* sur :root (dual theme
    via data-theme) et porte une règle globale `body` (margin, line-height,
    background…). Depuis le socle harmonisé, le thème Emotion du portfolio
    consomme les mêmes tokens : plus besoin de garde-corps dark-only, la page

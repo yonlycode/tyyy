@@ -11,7 +11,7 @@ export default function manifest(): MetadataRoute.Manifest {
     display: 'standalone',
     // Le manifest PWA est du JSON statique : var(--kady-*) y serait invalide
     // (ignoré par le navigateur). Hex statiques = valeurs kady du thème par
-    // défaut (dark Abysse), cf. public/tokens.css.
+    // défaut (dark Abysse), cf. tokens du package @karulab/kady-ui.
     background_color: '#080B14',
     theme_color: '#6B5CE7',
     lang: 'fr',
