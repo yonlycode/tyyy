@@ -42,12 +42,12 @@ const ProjectCard = styled('div')({
   flex: 1,
   display: 'flex',
   flexDirection: 'column',
-  background: 'rgba(15, 21, 38, 0.75)',
+  background: 'color-mix(in srgb, var(--kady-surface) 75%, transparent)',
   backdropFilter: 'blur(12px)',
   WebkitBackdropFilter: 'blur(12px)',
   borderRadius: m3Theme.radius.large,
   padding: m3Theme.spacing.lg,
-  border: '1px solid rgba(255, 255, 255, 0.08)',
+  border: `1px solid ${m3Theme.colors.surfaceBorder}`,
   borderLeft: `3px solid ${m3Theme.colors.surfaceBorder}`,
   overflow: 'hidden',
   boxShadow: m3Theme.elevation.level1,
@@ -58,7 +58,7 @@ const ProjectCard = styled('div')({
     borderColor: m3Theme.colors.surfaceBorderHover,
     borderLeftColor: m3Theme.colors.accent,
     transform: 'translateY(-4px)',
-    boxShadow: `0 8px 28px rgba(0, 212, 170, 0.12), ${m3Theme.elevation.level2}`,
+    boxShadow: `0 8px 28px color-mix(in srgb, var(--kady-accent) 12%, transparent), ${m3Theme.elevation.level2}`,
   },
 
   [`${ProjectLink}:focus-visible &`]: {

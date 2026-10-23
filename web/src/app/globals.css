@@ -8,15 +8,23 @@
 }
 
 :root {
-  --background: #080B14;
-  --foreground: #F1F5F9;
+  /* Socle harmonisé kady-ui : les variables locales délèguent aux tokens
+     --kady-* (public/tokens.css), qui basculent via [data-theme]. */
+  --background: var(--kady-bg-abysse);
+  --foreground: var(--kady-ink);
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, monospace;
 }
 
 html {
   scroll-behavior: smooth;
+  /* color-scheme dynamique : le défaut est dark (défaut des tokens kady),
+     light dès que le toggle kady-navbar pose data-theme="light". */
   color-scheme: dark;
+}
+
+html[data-theme='light'] {
+  color-scheme: light;
 }
 
 body {
@@ -34,8 +42,8 @@ main {
 
 /* Selection */
 ::selection {
-  background-color: rgba(107, 92, 231, 0.35);
-  color: #F1F5F9;
+  background-color: color-mix(in srgb, var(--kady-primary) 35%, transparent);
+  color: var(--kady-ink);
 }
 
 /* Custom Scrollbar */
@@ -45,16 +53,16 @@ main {
 }
 
 ::-webkit-scrollbar-track {
-  background: #080B14;
+  background: var(--kady-paper);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #171F38;
+  background: var(--kady-surface-raised);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #5A4AD1;
+  background: var(--kady-primary-strong);
 }
 
 /* Article markdown content (HTML injected via dangerouslySetInnerHTML) */
@@ -81,14 +89,11 @@ code {
 /* kady-ui coexistence ----------------------------------------------------
    public/tokens.css définit les variables --kady-* sur :root (dual theme
    via data-theme) et porte une règle globale `body` (margin, line-height,
-   background…). Le portfolio garde son thème M3 dark-only : ce garde-corps,
-   plus spécifique (html body), fait gagner globals.css quel que soit
-   l'ordre de chargement des feuilles — la page ne bascule jamais, seul le
-   shadow DOM des composants kady suit data-theme.                        */
-html body {
-  margin: 8px; /* valeur par défaut navigateur, conservée (pas de reset ici) */
-  line-height: normal;
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-}
+   background…). Depuis le socle harmonisé, le thème Emotion du portfolio
+   consomme les mêmes tokens : plus besoin de garde-corps dark-only, la page
+   entière suit data-theme. Les deux feuilles (globals.css, tokens.css)
+   portent désormais les mêmes valeurs (var(--kady-*)), l'ordre de chargement
+   n'a plus d'incidence sur les couleurs ; margin:0 et line-height:1.5 de
+   tokens.css s'appliquent (standard kady, Container gère son paddingInline).
+   Le body ci-dessus reste la source pour display:flex/min-height (layout
+   full-height du portfolio).                                              */

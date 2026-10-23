@@ -89,11 +89,11 @@ export const ButtonLink = styled(Link)({
   alignItems: 'center',
   justifyContent: 'center',
   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-  boxShadow: '0 4px 16px rgba(79, 70, 229, 0.4)',
+  boxShadow: `0 4px 16px ${m3Theme.colors.primaryGlow}`,
 
   '&:focus-visible': {
     outline: 'none',
-    boxShadow: `${m3Theme.elevation.focus}, 0 4px 16px rgba(79, 70, 229, 0.4)`,
+    boxShadow: `${m3Theme.elevation.focus}, 0 4px 16px ${m3Theme.colors.primaryGlow}`,
   },
 
   '&:active': {
@@ -103,7 +103,7 @@ export const ButtonLink = styled(Link)({
   '&:hover': {
     background: m3Theme.colors.primary,
     transform: 'translateY(-2px)',
-    boxShadow: '0 8px 30px rgba(99, 102, 241, 0.45)',
+    boxShadow: '0 8px 30px color-mix(in srgb, var(--kady-primary-hover) 45%, transparent)',
   },
 });
 

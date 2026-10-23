@@ -16,7 +16,7 @@ import {
 
 const TintedSection = styled(Section)({
   background:
-    'linear-gradient(180deg, rgba(99, 102, 241, 0.05) 0%, rgba(11, 15, 25, 0) 100%)',
+    'linear-gradient(180deg, color-mix(in srgb, var(--kady-primary) 5%, transparent) 0%, transparent 100%)',
   borderTop: `1px solid ${m3Theme.colors.surfaceBorder}`,
   borderBottom: `1px solid ${m3Theme.colors.surfaceBorder}`,
 });
@@ -56,7 +56,7 @@ const ProjectCard = styled('div')({
     borderColor: m3Theme.colors.surfaceBorderHover,
     borderLeftColor: m3Theme.colors.success,
     transform: 'translateY(-4px)',
-    boxShadow: `0 8px 28px rgba(52, 211, 153, 0.08), ${m3Theme.elevation.level2}`,
+    boxShadow: `0 8px 28px color-mix(in srgb, var(--kady-success) 8%, transparent), ${m3Theme.elevation.level2}`,
   },
 
   [`${ProjectLink}:focus-visible &`]: {
@@ -84,7 +84,10 @@ const CategoryBadge = styled('span')({
   fontWeight: 600,
   letterSpacing: '0.08em',
   textTransform: 'uppercase',
-  color: m3Theme.colors.success,
+  // accent (teal) et non success (vert) : #16A34A sur tint clair tombe sous
+  // 4.5:1 en petit texte ; le badge jumeau de PortfolioView utilise déjà
+  // accent, accessible dans les deux thèmes.
+  color: m3Theme.colors.accent,
   background: m3Theme.colors.successSoft,
   padding: '0.2rem 0.6rem',
   borderRadius: m3Theme.radius.small,

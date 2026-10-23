@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { PageShell } from '@/components/layout/PageShell';
 import type { ReactNode } from 'react';
-import { m3Theme } from '@/styles/theme';
 import { SITE_URL, SITE_NAME, SITE_TITLE, SITE_DESCRIPTION, SITE_KEYWORDS } from '@/lib/seo';
 import './globals.css';
 
@@ -44,8 +43,14 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport = {
-  themeColor: m3Theme.colors.primary,
+export const viewport: Viewport = {
+  // Le thème du site est piloté par data-theme (toggle kady-navbar), pas par
+  // prefers-color-scheme : ce meta (chrome navigateur) est best-effort, sur
+  // les fonds kady. var(--kady-*) serait invalide ici — hex statiques.
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F8FAFC' },
+    { media: '(prefers-color-scheme: dark)', color: '#080B14' },
+  ],
 };
 
 export default function RootLayout({
@@ -59,14 +64,18 @@ export default function RootLayout({
     <html lang="fr" suppressHydrationWarning>
       <head>
         {/* kady-ui : tokens de design (variables --kady-*), bundle local.
-            Coexistent avec le thème M3 du portfolio (garde-corps dans
-            globals.css). basePath construit comme dans next.config.ts. */}
+            Source de vérité du thème dual du portfolio : le thème Emotion
+            (src/styles/theme.ts) consomme ces variables. basePath construit
+            comme dans next.config.ts. */}
         <link
           rel="stylesheet"
           href={`${process.env.NODE_ENV === 'production' ? '/tyyy' : ''}/tokens.css`}
         />
         {/* Anti-flash : applique le thème persisté par KadyNavbar avant le
-            premier paint (dark = défaut des deux systèmes, rien à poser). */}
+            premier paint (dark = défaut des tokens kady et du thème Emotion,
+            rien à poser ; 'light' doit être posé avant le paint pour éviter
+            le FOUC, la page entière — page + shadow DOM kady — suivant
+            data-theme). */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{if(localStorage.getItem('kady-theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();`,

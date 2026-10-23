@@ -30,12 +30,12 @@ const MarqueeSection = styled('div')({
 
   '&::before': {
     left: 0,
-    background: 'linear-gradient(to right, #0B0F19 0%, transparent 100%)',
+    background: 'linear-gradient(to right, var(--kady-paper) 0%, transparent 100%)',
   },
 
   '&::after': {
     right: 0,
-    background: 'linear-gradient(to left, #0B0F19 0%, transparent 100%)',
+    background: 'linear-gradient(to left, var(--kady-paper) 0%, transparent 100%)',
   },
 });
 

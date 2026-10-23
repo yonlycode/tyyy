@@ -3,21 +3,21 @@
 import styled from '@emotion/styled';
 import { m3Theme } from '@/styles/theme';
 
-/** Base Card component with modern dark glassmorphism */
+/** Base Card component with modern glassmorphism (tokens kady dual theme) */
 export const Card = styled('div')({
-  background: 'rgba(15, 21, 38, 0.75)',
+  background: 'color-mix(in srgb, var(--kady-surface) 75%, transparent)',
   backdropFilter: 'blur(12px)',
   WebkitBackdropFilter: 'blur(12px)',
   borderRadius: m3Theme.radius.large,
   padding: '1.5rem',
-  border: '1px solid rgba(255, 255, 255, 0.08)',
+  border: `1px solid ${m3Theme.colors.surfaceBorder}`,
   boxShadow: m3Theme.elevation.level1,
   transition: 'border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease',
   userSelect: 'none',
 
   '&:hover': {
     borderColor: m3Theme.colors.surfaceBorderHover,
-    boxShadow: `0 8px 30px rgba(107, 92, 231, 0.15), ${m3Theme.elevation.level2}`,
+    boxShadow: `0 8px 30px ${m3Theme.colors.primarySoft}, ${m3Theme.elevation.level2}`,
     transform: 'translateY(-4px)',
   },
 
@@ -30,12 +30,12 @@ export const Card = styled('div')({
 /** Feature Card with refined accent glow for featured content */
 export const FeatureCard = styled('div')({
   position: 'relative',
-  background: 'rgba(15, 21, 38, 0.75)',
+  background: 'color-mix(in srgb, var(--kady-surface) 75%, transparent)',
   backdropFilter: 'blur(12px)',
   WebkitBackdropFilter: 'blur(12px)',
   borderRadius: m3Theme.radius.large,
   padding: '1.5rem',
-  border: '1px solid rgba(255, 255, 255, 0.08)',
+  border: `1px solid ${m3Theme.colors.surfaceBorder}`,
   boxShadow: m3Theme.elevation.level1,
   transition: 'border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease',
   userSelect: 'none',
@@ -54,7 +54,7 @@ export const FeatureCard = styled('div')({
 
 /** Card with border accent for selected state */
 export const BorderCard = styled(Card)({
-  border: '1px solid rgba(255, 255, 255, 0.08)',
+  border: `1px solid ${m3Theme.colors.surfaceBorder}`,
 
   '&:hover': {
     borderColor: m3Theme.colors.primary,

@@ -10,7 +10,7 @@ const NavbarRoot = styled('header')({
   position: 'sticky',
   top: 0,
   zIndex: m3Theme.z.navbar,
-  background: 'rgba(11, 15, 25, 0.8)',
+  background: 'color-mix(in srgb, var(--kady-paper) 80%, transparent)',
   backdropFilter: 'saturate(180%) blur(16px)',
   WebkitBackdropFilter: 'saturate(180%) blur(16px)',
   borderBottom: `1px solid ${m3Theme.colors.surfaceBorder}`,
