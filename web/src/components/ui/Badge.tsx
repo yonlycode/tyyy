@@ -1,42 +1,34 @@
 'use client';
 
-import styled from '@emotion/styled';
-import { m3Theme } from '@/styles/theme';
+import { KadyBadgeHost } from './kady-host';
+
+/* ── Wrapper kady-badge ──────────────────────────────────────────────
+   Badge Emotion (pillule tag/statut) → <kady-badge> (API officielle :
+   variant primary | accent | secondary | success | warning | danger |
+   neutral ; size sm | md ; dot ; slot par défaut).
+   Mapping retenu : inactif → « neutral » (fond ink 6 %, texte muted —
+   l'équivalent kady de l'ancien fond surfaceBorder) ; actif/sélectionné →
+   « secondary » (texte primary sur surface + inset line — l'équivalent de
+   l'ancien primarySoft + texte primaryHover). Signature props conservée
+   (active, onClick, children). */
 
 export interface BadgeProps {
   active?: boolean;
   onClick?: () => void;
   children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-/** Badge component — supports read-only and clickable (active) variants */
-export const Badge = styled('span', {
-  shouldForwardProp: (prop: string) => prop !== 'active' && prop !== 'onClick',
-})<BadgeProps>(
-  ({ active = false, onClick }) => ({
-    display: 'inline-flex',
-    alignItems: 'center',
-    borderRadius: m3Theme.radius.small,
-    padding: '0.25rem 0.75rem',
-    fontSize: '0.875rem',
-    fontWeight: 500,
-    fontFamily: m3Theme.font.mono,
-    background: active ? m3Theme.colors.primarySoft : m3Theme.colors.surfaceBorder,
-    color: active ? m3Theme.colors.primaryHover : m3Theme.colors.onSurfaceMuted,
-    cursor: onClick ? 'pointer' : 'default',
-    transition: `background ${m3Theme.animation.base}, color ${m3Theme.animation.base}, transform ${m3Theme.animation.fast}`,
-    userSelect: 'none' as const,
-
-    ...(onClick
-      ? {
-          '&:hover': {
-            background: active
-              ? m3Theme.colors.primary
-              : m3Theme.colors.surfaceHover,
-            color: active ? m3Theme.colors.onPrimary : m3Theme.colors.onSurface,
-            transform: 'scale(1.05)',
-          },
-        }
-      : {}),
-  }),
-);
+export function Badge({ active = false, onClick, children, ...rest }: BadgeProps) {
+  return (
+    <KadyBadgeHost
+      variant={active ? 'secondary' : 'neutral'}
+      onClick={onClick}
+      style={onClick ? { cursor: 'pointer' } : undefined}
+      {...rest}
+    >
+      {children}
+    </KadyBadgeHost>
+  );
+}

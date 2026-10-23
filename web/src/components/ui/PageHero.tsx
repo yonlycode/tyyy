@@ -4,125 +4,61 @@ import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import { AnimatedFadeIn } from '@/components/AnimatedFadeIn';
 import { m3Theme } from '@/styles/theme';
-import { Eyebrow, SectionSubtitle } from '@/components/ui';
+import { KadyHeroHost } from './kady-host';
 
-/* ── Keyframes ───────────────────────────────────────────────────── */
-
-const float = keyframes`
-  0%   { transform: translate(0, 0) scale(1); }
-  50%  { transform: translate(30px, -40px) scale(1.1); }
-  100% { transform: translate(0, 0) scale(1); }
-`;
-
-const floatAlt = keyframes`
-  0%   { transform: translate(0, 0) scale(1); }
-  50%  { transform: translate(-40px, 30px) scale(1.05); }
-  100% { transform: translate(0, 0) scale(1); }
-`;
+/* ── Wrapper kady-hero ─────────────────────────────────────────────
+   PageHero Emotion (hero centré, blobs animés, dégradés) → <kady-hero>, la
+   section hero officielle de kady-ui (API : attributs eyebrow/title/subtitle
+   avec repli, slots eyebrow, title, subtitle, cta, media, défaut ; grille
+   responsive 2 colonnes).
+   L'API colle : eyebrow et subtitle sont des strings (attributs → rendu
+   interne stylé par kady) ; title peut être un ReactNode (HomeHero passe un
+   fragment avec <br>) → on passe TOUJOURS par le slot « title » pour ne pas
+   perdre le JSX, avec un h2 typé sur les tokens kady (mêmes valeurs que la
+   classe .title interne : font-display, text-3xl/2.75rem, 700, ink) — le
+   contenu slotté n'est pas stylable depuis le shadow DOM, d'où la copie
+   tokenisée. L'avatar (pas d'équivalent dans l'API kady) est projeté dans le
+   slot « media ». Les blobs décoratifs Emotion tombent : le rendu retenu est
+   celui de kady-ui. Signature conservée :
+   { eyebrow?, title: string | ReactNode, subtitle?, avatar? }. */
 
 const avatarGlow = keyframes`
   0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--kady-primary) 40%, transparent), 0 8px 32px color-mix(in srgb, var(--kady-primary) 20%, transparent); }
   50%      { box-shadow: 0 0 0 16px transparent, 0 8px 32px color-mix(in srgb, var(--kady-primary) 30%, transparent); }
 `;
 
-/* ── Styles ──────────────────────────────────────────────────────── */
+/** Titre slotté : calque les styles de la classe .title interne de kady-hero
+ *  (tokens uniquement, zéro hex) pour un rendu identique au repli attribut. */
+const SlottedTitle = styled('h2')({
+  fontFamily: 'var(--kady-font-display)',
+  fontSize: 'var(--kady-text-3xl)',
+  fontWeight: 700,
+  lineHeight: 1.15,
+  color: 'var(--kady-ink)',
+  margin: 0,
 
-const HeroArea = styled('div')({
-  position: 'relative',
-  overflow: 'hidden',
-  borderRadius: m3Theme.radius.extraLarge,
-  background: m3Theme.gradients.hero,
-  padding: `${m3Theme.spacing.xxxl} ${m3Theme.spacing.xl}`,
-  marginBottom: m3Theme.spacing.xxl,
-
-  [`@media (max-width: ${m3Theme.breakpoints.tablet}px)`]: {
-    padding: `${m3Theme.spacing.xxl} ${m3Theme.spacing.lg}`,
-  },
-
-  [`@media (max-width: ${m3Theme.breakpoints.mobile}px)`]: {
-    padding: `${m3Theme.spacing.xxl} ${m3Theme.spacing.md}`,
-    borderRadius: m3Theme.radius.large,
-    marginBottom: m3Theme.spacing.xl,
+  [`@media (min-width: 768px)`]: {
+    fontSize: '2.75rem',
   },
 });
-
-const HeroInner = styled('div')({
-  position: 'relative',
-  zIndex: 1,
-  textAlign: 'center',
-});
-
-const Blob = styled('div')<{ variant: 'a' | 'b'; size: number; top: string; left?: string; right?: string }>(
-  ({ variant, size, top, left, right }) => ({
-    '--blob-size': `${size}px`,
-    position: 'absolute',
-    width: 'var(--blob-size)',
-    height: 'var(--blob-size)',
-    top,
-    left,
-    right,
-    borderRadius: '50%',
-    filter: 'blur(80px)',
-    opacity: 0.2,
-    background:
-      variant === 'a'
-        ? 'radial-gradient(circle, var(--kady-primary), var(--kady-primary-strong))'
-        : 'radial-gradient(circle, var(--kady-accent), var(--kady-accent-strong))',
-    animation: `${variant === 'a' ? float : floatAlt} 20s ease-in-out infinite`,
-    pointerEvents: 'none',
-    zIndex: 0,
-
-    [`@media (max-width: ${m3Theme.breakpoints.tablet}px)`]: {
-      '--blob-size': `${size * 0.7}px`,
-      filter: 'blur(60px)',
-    },
-
-    [`@media (max-width: ${m3Theme.breakpoints.mobile}px)`]: {
-      '--blob-size': `${size * 0.5}px`,
-      filter: 'blur(45px)',
-    },
-  }),
-);
 
 const Avatar = styled('div')({
   width: '88px',
   height: '88px',
-  margin: '0 auto',
-  borderRadius: m3Theme.radius.circular,
+  borderRadius: '50%',
   background: m3Theme.gradients.glow,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   fontSize: m3Theme.font.sizes['2xl'],
   fontWeight: m3Theme.font.weights.extrabold,
-  color: m3Theme.colors.onPrimary,
+  color: 'var(--kady-ink-inverse)',
   animation: `${avatarGlow} 3.5s ease-in-out infinite`,
-  marginBottom: m3Theme.spacing.lg,
 
   [`@media (max-width: ${m3Theme.breakpoints.mobile}px)`]: {
     width: '72px',
     height: '72px',
     fontSize: m3Theme.font.sizes.xl,
-  },
-});
-
-const HeroTitle = styled('h2')({
-  fontSize: m3Theme.font.sizes['6xl'],
-  fontWeight: m3Theme.font.weights.extrabold,
-  lineHeight: m3Theme.font.lineHeights.tight,
-  letterSpacing: '-0.03em',
-  background: m3Theme.gradients.text,
-  WebkitBackgroundClip: 'text',
-  backgroundClip: 'text',
-  color: 'transparent',
-  marginBottom: m3Theme.spacing.sm,
-
-  [`@media (max-width: ${m3Theme.breakpoints.tablet}px)`]: {
-    fontSize: m3Theme.font.sizes['4xl'],
-  },
-
-  [`@media (max-width: ${m3Theme.breakpoints.mobile}px)`]: {
-    fontSize: m3Theme.font.sizes['2xl'],
   },
 });
 
@@ -136,27 +72,12 @@ interface PageHeroProps {
 }
 
 export function PageHero({ eyebrow, title, subtitle, avatar }: PageHeroProps) {
-  const reducedMotion =
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   return (
     <AnimatedFadeIn>
-      <HeroArea>
-        {!reducedMotion && (
-          <>
-            <Blob variant="a" size={320} top="-15%" left="-8%" />
-            <Blob variant="b" size={260} top="40%" right="-10%" />
-          </>
-        )}
-
-        <HeroInner>
-          {avatar && <Avatar>{avatar}</Avatar>}
-          <Eyebrow>{eyebrow}</Eyebrow>
-          <HeroTitle>{title}</HeroTitle>
-          {subtitle && <SectionSubtitle>{subtitle}</SectionSubtitle>}
-        </HeroInner>
-      </HeroArea>
+      <KadyHeroHost eyebrow={eyebrow} subtitle={subtitle}>
+        <SlottedTitle slot="title">{title}</SlottedTitle>
+        {avatar && <Avatar slot="media">{avatar}</Avatar>}
+      </KadyHeroHost>
     </AnimatedFadeIn>
   );
 }

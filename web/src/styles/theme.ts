@@ -2,7 +2,7 @@
  * Thème Emotion du portfolio — socle harmonisé sur les tokens kady-ui.
  *
  * Dual theme : les couleurs ne sont plus des hex en dur mais des
- * var(--kady-*) définis dans public/tokens.css (light + dark, bascule via
+ * var(--kady-*) définis par le package @karulab/kady-ui (dist/tokens.css) (light + dark, bascule via
  * [data-theme] sur <html>, piloté par KadyNavbar + script anti-flash).
  * Les composants Emotion rendent du CSS contenant var()/color-mix() : la
  * cascade résout la valeur au paint, le toggle bascule toute la page sans

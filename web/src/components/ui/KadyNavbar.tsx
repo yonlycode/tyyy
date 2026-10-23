@@ -1,16 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import Script from 'next/script';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { LogoMark } from './Navbar';
 
-// Le bundle kady-ui est embarqué EN LOCAL dans public/ (copie de
-// kady-ui/dist, jamais de CDN). next/script ne préfixe PAS automatiquement
-// le basePath ('/tyyy' en prod, '' en dev — cf. next.config.ts), donc on
-// construit l'URL nous-mêmes (même pattern que src/lib/seo.ts).
-const assetBasePath = process.env.NODE_ENV === 'production' ? '/tyyy' : '';
+// Le bundle kady-ui vient du package npm @karulab/kady-ui (registry Forgejo)
+// et est enregistré côté client par <KadyElements /> (layout racine, import
+// dynamique bundlée) — plus de copie manuelle dans public/ ni de next/script.
 
 // Typage minimal de l'élément <kady-navbar> (API officielle kady-ui :
 // attributs sticky / theme-toggle / links / label ; slots brand, défaut,
@@ -45,8 +42,8 @@ function isActive(href: string, pathname: string | null): boolean {
 // sur <html> (icône soleil/lune) et émet `kady-theme-toggle` { theme } —
 // c'est le consommateur (ici) qui applique l'attribut + localStorage.
 // Depuis le socle harmonisé, data-theme pilote TOUT le site : les composants
-// kady (shadow DOM, tokens via public/tokens.css) ET la page Emotion (le
-// thème m3Theme consomme les mêmes variables --kady-*).
+// kady (shadow DOM, tokens via le package @karulab/kady-ui) ET la page
+// Emotion (le thème m3Theme consomme les mêmes variables --kady-*).
 function applyTheme(theme: 'light' | 'dark') {
   document.documentElement.setAttribute('data-theme', theme);
   try {
@@ -74,15 +71,11 @@ export function KadyNavbar() {
 
   return (
     <>
-      {/* Injection unique du bundle (next/script déduplique par src).
-          type="module" : le script s'exécute après le parsing, Lit définit
-          le custom element et « upgrade » le <kady-navbar> déjà présent
-          dans le HTML — aucun flash, aucun warning d'hydratation. */}
-      <Script
-        src={`${assetBasePath}/kady-ui.js`}
-        type="module"
-        strategy="afterInteractive"
-      />
+      {/* Le bundle est chargé une fois pour toute la page par <KadyElements />
+          (layout racine) : Lit définit le custom element et « upgrade » le
+          <kady-navbar> déjà présent dans le HTML — aucun flash, aucun warning
+          d'hydratation (le listener de thème est posé sur l'hôte, indépendant
+          du moment de l'upgrade). */}
       <KadyNavbarHost ref={hostRef} sticky="" theme-toggle="" label="Navigation">
         {/* Marque du portfolio : visuel actuel conservé (LogoMark « TY3 »). */}
         <Link href="/" slot="brand">

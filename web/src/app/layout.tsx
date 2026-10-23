@@ -2,8 +2,14 @@ import type { Metadata, Viewport } from 'next';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { PageShell } from '@/components/layout/PageShell';
+import { KadyElements } from '@/components/ui/kady-host';
 import type { ReactNode } from 'react';
 import { SITE_URL, SITE_NAME, SITE_TITLE, SITE_DESCRIPTION, SITE_KEYWORDS } from '@/lib/seo';
+// kady-ui (registry npm Forgejo @karulab/kady-ui) : tokens de design --kady-*
+// importés depuis le package — Next les bundle et les fingerprinte, plus de
+// fichier libre dans public/. Import AVANT globals.css : globals délègue aux
+// tokens (var(--kady-*)), l'ordre d'import fixe l'ordre des feuilles CSS.
+import '@karulab/kady-ui/tokens.css';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -63,14 +69,9 @@ export default function RootLayout({
     // data-theme="light" sur <html> avant l'hydratation (pattern standard).
     <html lang="fr" suppressHydrationWarning>
       <head>
-        {/* kady-ui : tokens de design (variables --kady-*), bundle local.
-            Source de vérité du thème dual du portfolio : le thème Emotion
-            (src/styles/theme.ts) consomme ces variables. basePath construit
-            comme dans next.config.ts. */}
-        <link
-          rel="stylesheet"
-          href={`${process.env.NODE_ENV === 'production' ? '/tyyy' : ''}/tokens.css`}
-        />
+        {/* Les tokens kady (--kady-*) arrivent désormais par l'import CSS du
+            package @karulab/kady-ui (voir en tête de fichier) — plus de
+            <link> vers public/tokens.css. */}
         {/* Anti-flash : applique le thème persisté par KadyNavbar avant le
             premier paint (dark = défaut des tokens kady et du thème Emotion,
             rien à poser ; 'light' doit être posé avant le paint pour éviter
@@ -96,6 +97,9 @@ export default function RootLayout({
         />
       </head>
       <body>
+        {/* Enregistre les custom elements kady-ui côté client (import
+            dynamique du bundle du package — cf. kady-host.tsx). */}
+        <KadyElements />
         <ThemeProvider>
           <PageShell>{children}</PageShell>
         </ThemeProvider>
