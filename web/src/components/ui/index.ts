@@ -4,6 +4,7 @@ export * from './Card';
 export * from './Container';
 export * from './FilterBar';
 export * from './Footer';
+export * from './KadyNavbar';
 export * from './MultiSelect';
 export * from './Navbar';
 export * from './SearchInput';

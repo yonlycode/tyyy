@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { Navbar, Footer } from '@/components/ui';
+import { Footer } from '@/components/ui';
+import { KadyNavbar } from '@/components/ui/KadyNavbar';
 import { getLinks } from '@/lib/links';
 
 const pageStyles = {
@@ -11,7 +12,7 @@ const pageStyles = {
 export function PageShell({ children }: { children: ReactNode }) {
   return (
     <div style={pageStyles}>
-      <Navbar />
+      <KadyNavbar />
       <main style={{ flex: 1 }}>{children}</main>
       <Footer links={getLinks().links} />
     </div>
