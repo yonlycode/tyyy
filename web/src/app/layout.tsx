@@ -54,8 +54,24 @@ export default function RootLayout({
   children: ReactNode
 }) {
   return (
-    <html lang="fr">
+    // suppressHydrationWarning : le script anti-flash ci-dessous peut poser
+    // data-theme="light" sur <html> avant l'hydratation (pattern standard).
+    <html lang="fr" suppressHydrationWarning>
       <head>
+        {/* kady-ui : tokens de design (variables --kady-*), bundle local.
+            Coexistent avec le thème M3 du portfolio (garde-corps dans
+            globals.css). basePath construit comme dans next.config.ts. */}
+        <link
+          rel="stylesheet"
+          href={`${process.env.NODE_ENV === 'production' ? '/tyyy' : ''}/tokens.css`}
+        />
+        {/* Anti-flash : applique le thème persisté par KadyNavbar avant le
+            premier paint (dark = défaut des deux systèmes, rien à poser). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{if(localStorage.getItem('kady-theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();`,
+          }}
+        />
         <link
           rel="preconnect"
           href="https://fonts.googleapis.com"

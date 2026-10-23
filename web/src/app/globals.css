@@ -77,3 +77,18 @@ img {
 code {
   overflow-wrap: anywhere;
 }
+
+/* kady-ui coexistence ----------------------------------------------------
+   public/tokens.css définit les variables --kady-* sur :root (dual theme
+   via data-theme) et porte une règle globale `body` (margin, line-height,
+   background…). Le portfolio garde son thème M3 dark-only : ce garde-corps,
+   plus spécifique (html body), fait gagner globals.css quel que soit
+   l'ordre de chargement des feuilles — la page ne bascule jamais, seul le
+   shadow DOM des composants kady suit data-theme.                        */
+html body {
+  margin: 8px; /* valeur par défaut navigateur, conservée (pas de reset ici) */
+  line-height: normal;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
