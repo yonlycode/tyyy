@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import { m3Theme } from '@/styles/theme';
 import type { LinkItem } from '@/lib/links';
 import { LinkIcon } from '@/components/contact/LinkIcon';
-import { LogoMark } from './Navbar';
+import { LogoMark } from './LogoMark';
 
 const FooterRoot = styled('footer')({
   background: m3Theme.colors.footerBg,
