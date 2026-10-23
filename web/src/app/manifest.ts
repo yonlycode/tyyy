@@ -1,6 +1,5 @@
 import type { MetadataRoute } from 'next';
 import { SITE_NAME, SITE_DESCRIPTION } from '@/lib/seo';
-import { m3Theme } from '@/styles/theme';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -10,8 +9,11 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: '/',
     scope: '/',
     display: 'standalone',
-    background_color: m3Theme.colors.surface,
-    theme_color: m3Theme.colors.primary,
+    // Le manifest PWA est du JSON statique : var(--kady-*) y serait invalide
+    // (ignoré par le navigateur). Hex statiques = valeurs kady du thème par
+    // défaut (dark Abysse), cf. public/tokens.css.
+    background_color: '#080B14',
+    theme_color: '#6B5CE7',
     lang: 'fr',
     icons: [
       {

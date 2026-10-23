@@ -44,9 +44,9 @@ function isActive(href: string, pathname: string | null): boolean {
 // Pont thème : <kady-navbar> ne gère AUCUNE persistance. Il lit data-theme
 // sur <html> (icône soleil/lune) et émet `kady-theme-toggle` { theme } —
 // c'est le consommateur (ici) qui applique l'attribut + localStorage.
-// Le thème M3 du portfolio est dark-only : data-theme pilote uniquement les
-// composants kady (dual theme via public/tokens.css) ; le garde-corps
-// `html body` de globals.css empêche la page de basculer.
+// Depuis le socle harmonisé, data-theme pilote TOUT le site : les composants
+// kady (shadow DOM, tokens via public/tokens.css) ET la page Emotion (le
+// thème m3Theme consomme les mêmes variables --kady-*).
 function applyTheme(theme: 'light' | 'dark') {
   document.documentElement.setAttribute('data-theme', theme);
   try {

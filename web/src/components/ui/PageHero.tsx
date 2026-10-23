@@ -21,8 +21,8 @@ const floatAlt = keyframes`
 `;
 
 const avatarGlow = keyframes`
-  0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4), 0 8px 32px rgba(99, 102, 241, 0.2); }
-  50%      { box-shadow: 0 0 0 16px rgba(99, 102, 241, 0), 0 8px 32px rgba(99, 102, 241, 0.3); }
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--kady-primary) 40%, transparent), 0 8px 32px color-mix(in srgb, var(--kady-primary) 20%, transparent); }
+  50%      { box-shadow: 0 0 0 16px transparent, 0 8px 32px color-mix(in srgb, var(--kady-primary) 30%, transparent); }
 `;
 
 /* ── Styles ──────────────────────────────────────────────────────── */
@@ -66,8 +66,8 @@ const Blob = styled('div')<{ variant: 'a' | 'b'; size: number; top: string; left
     opacity: 0.2,
     background:
       variant === 'a'
-        ? 'radial-gradient(circle, #6366F1, #4F46E5)'
-        : 'radial-gradient(circle, #34D399, #059669)',
+        ? 'radial-gradient(circle, var(--kady-primary), var(--kady-primary-strong))'
+        : 'radial-gradient(circle, var(--kady-accent), var(--kady-accent-strong))',
     animation: `${variant === 'a' ? float : floatAlt} 20s ease-in-out infinite`,
     pointerEvents: 'none',
     zIndex: 0,

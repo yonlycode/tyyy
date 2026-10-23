@@ -42,12 +42,12 @@ const ArticleCard = styled('div')({
   flex: 1,
   display: 'flex',
   flexDirection: 'column',
-  background: 'rgba(15, 21, 38, 0.75)',
+  background: 'color-mix(in srgb, var(--kady-surface) 75%, transparent)',
   backdropFilter: 'blur(12px)',
   WebkitBackdropFilter: 'blur(12px)',
   borderRadius: m3Theme.radius.large,
   padding: m3Theme.spacing.lg,
-  border: '1px solid rgba(255, 255, 255, 0.08)',
+  border: `1px solid ${m3Theme.colors.surfaceBorder}`,
   boxShadow: m3Theme.elevation.level1,
   transition: `border-color ${m3Theme.animation.base}, transform ${m3Theme.animation.base}, box-shadow ${m3Theme.animation.base}`,
   userSelect: 'none',
@@ -114,8 +114,8 @@ const Tag = styled('span')({
   fontWeight: 500,
   fontFamily: m3Theme.font.mono,
   color: m3Theme.colors.onSurfaceDim,
-  background: 'rgba(255, 255, 255, 0.04)',
-  border: '1px solid rgba(255, 255, 255, 0.06)',
+  background: 'color-mix(in srgb, var(--kady-ink) 4%, transparent)',
+  border: '1px solid color-mix(in srgb, var(--kady-ink) 6%, transparent)',
 });
 
 const ArticleMeta = styled('div')({
