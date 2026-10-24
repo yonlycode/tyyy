@@ -50,7 +50,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: node:22
+      # trixie (Debian 13) : GTK 4.18 — wails3 beta.0 compile GtkFileDialog
+      # qui exige GTK >= 4.10 ; bookworm (node:22 par défaut) n'a que 4.8
+      # (run #369 : unknown type name 'GtkFileDialog').
+      image: node:22-trixie
     defaults:
       run:
         shell: bash
