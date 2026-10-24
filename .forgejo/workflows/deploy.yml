@@ -1,0 +1,78 @@
+# tyyy — déploiement GitHub Pages (Forgejo Actions).
+# Remplace l'ancien .github/workflows/deploy.yml (runner GitHub +
+# peaceiris/actions-gh-pages), supprimé dans le cadre de la migration Forgejo.
+#
+# Chaîne : push Forgejo sur main (web/**) → build SSG Next (web/out/) →
+# push de web/out/ sur la branche `gh-pages` du dépôt FORGEJO (origin,
+# interne uniquement) → le push-mirror Forgejo→GitHub existant sync
+# automatiquement gh-pages vers le dépôt GitHub → GitHub Pages
+# (https://yonlycode.github.io/tyyy/, basePath /tyyy).
+#
+# Aucun secret à créer : le push reste dans Forgejo et utilise le jeton par
+# défaut du workflow (permissions: contents: write). Le miroir est configuré
+# par l'owner et pousse les branches — rien à embarquer ici.
+#
+# Playbook fleet (validé live) : runs-on: ubuntu-latest (label EXACT du
+# runner act/docker) ; image node:22 complète (node + git embarqués pour les
+# steps `uses:`) ; git sslVerify false + NODE_TLS_REJECT_UNAUTHORIZED=0 pour
+# le cert auto-signé Traefik interne ; pas de pipe terminal (bash -e -o
+# pipefail).
+name: Deploy to GitHub Pages
+
+"on":
+  push:
+    branches: [main]
+    paths: ["web/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  NODE_TLS_REJECT_UNAUTHORIZED: "0"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: node:22
+    steps:
+      - name: git sans vérif TLS (cert auto-signé Traefik)
+        run: git config --global http.sslVerify false
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # actions/checkout persiste le jeton du workflow dans le remote
+          # origin (défaut) → le push final passe par origin, aucun token
+          # dans les URLs ni les logs.
+          persist-credentials: true
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        working-directory: ./web
+        run: yarn install --frozen-lockfile
+
+      - name: Build SSG
+        working-directory: ./web
+        run: yarn build
+
+      - name: Publish web/out to gh-pages (origin Forgejo)
+        run: |
+          set -e -o pipefail
+          # Branche orpheline locale : contenu = web/out/, historique neuf à
+          # chaque deploy (Pages ne consomme que le HEAD de gh-pages).
+          PAGES=$(mktemp -d)
+          git init --quiet --initial-branch=gh-pages "$PAGES"
+          cd "$PAGES"
+          cp -a "$GITHUB_WORKSPACE/web/out/." "$PAGES/"
+          git config user.name  "forgejo-ci"
+          git config user.email "ci@forgejo.intern.karuka-conseil.com"
+          git add -A
+          git commit -q -m "Deploy ${GITHUB_SHA}"
+          # origin = dépôt Forgejo (jeton du workflow persisté par checkout).
+          git push -f --quiet "https://$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" gh-pages:gh-pages
