@@ -8,9 +8,13 @@
 # automatiquement gh-pages vers le dépôt GitHub → GitHub Pages
 # (https://yonlycode.github.io/tyyy/, basePath /tyyy).
 #
-# Aucun secret à créer : le push reste dans Forgejo et utilise le jeton par
-# défaut du workflow (permissions: contents: write). Le miroir est configuré
-# par l'owner et pousse les branches — rien à embarquer ici.
+# Aucun secret GitHub à créer : le push reste dans Forgejo et sync la
+# branche gh-pages vers le miroir GitHub via le push-mirror de l'owner.
+# SECRET DE DÉPÔT REQUIS (Settings → Actions → Secrets) :
+#   DEPLOY_TOKEN — PAT (compte bot/owner, scope write repo sur tyyy-portfolio
+#   uniquement). Indispensable : sur le runner act, le jeton injecté par
+#   actions/checkout n'a aucun scope (cf. skill forgejo-actions — même cause
+#   que secrets.GITHUB_TOKEN → 401 sur l'API).
 #
 # Playbook fleet (validé live) : runs-on: ubuntu-latest (label EXACT du
 # runner act/docker) ; image node:22 complète (node + git embarqués pour les
@@ -62,8 +66,17 @@ jobs:
         run: yarn build
 
       - name: Publish web/out to gh-pages (origin Forgejo)
+        env:
+          # Le token n'existe QUE dans cet environnement — jamais dans une URL,
+          # un argv ou un fichier persistant (GIT_ASKPASS le lit au runtime).
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         run: |
           set -e -o pipefail
+          # Auth git via askpass : git demande les credentials en sous-processus.
+          ASKPASS="$(mktemp)"
+          printf '#!/bin/sh\ncase "$1" in\n  Username*) echo x-access-token ;;\n  Password*) printf "%s\\n" "$DEPLOY_TOKEN" ;;\nesac\n' > "$ASKPASS"
+          chmod 700 "$ASKPASS"
+          export GIT_ASKPASS="$ASKPASS"
           # Branche orpheline locale : contenu = web/out/, historique neuf à
           # chaque deploy (Pages ne consomme que le HEAD de gh-pages).
           PAGES=$(mktemp -d)
@@ -74,7 +87,7 @@ jobs:
           git config user.email "ci@forgejo.intern.karuka-conseil.com"
           git add -A
           git commit -q -m "Deploy ${GITHUB_SHA}"
-          # origin = dépôt Forgejo (jeton du workflow persisté par checkout).
-          # GITHUB_SERVER_URL inclut déjà le schéma (https://…/Karulab/…) —
-          # ne pas re-préfixer, sinon https://https://… (run #1, résolu pas).
+          # origin = dépôt Forgejo ; le jeton du checkout act n'a aucun scope
+          # (cf. en-tête) — GIT_ASKPASS fournit DEPLOY_TOKEN à git.
           git push -f --quiet "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" gh-pages:gh-pages
+          rm -f "$ASKPASS"
