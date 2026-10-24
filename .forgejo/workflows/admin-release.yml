@@ -54,8 +54,9 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./admin
     steps:
+      # PAS de working-directory job-level : appliqué dès la step 1, avant le
+      # checkout → chdir inexistant (exit 126, run #9 sur admin-ci).
       - name: git sans vérif TLS (cert auto-signé Traefik)
         run: git config --global http.sslVerify false
 
@@ -84,6 +85,7 @@ jobs:
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Set app icon
+        working-directory: ./admin
         run: cp -f assets/appicon.png build/appicon.png
 
       - name: Install frontend dependencies
@@ -91,6 +93,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build Linux (task build)
+        working-directory: ./admin
         run: task build
 
       # `task package` complet produirait aussi deb/rpm/aur (nfpm) que
@@ -99,9 +102,11 @@ jobs:
       # et bundlise les helpers WebKit (/usr/lib/.../webkitgtk-6.0/, posés
       # par libwebkitgtk-6.0-dev) — vérifié dans le module beta.0.
       - name: Package Linux (AppImage)
+        working-directory: ./admin
         run: task linux:create:appimage
 
       - name: Stager l'asset
+        working-directory: ./admin
         env:
           TAG: ${{ inputs.tag || forgejo.ref_name }}
         run: |
