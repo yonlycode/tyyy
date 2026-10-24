@@ -75,4 +75,6 @@ jobs:
           git add -A
           git commit -q -m "Deploy ${GITHUB_SHA}"
           # origin = dépôt Forgejo (jeton du workflow persisté par checkout).
-          git push -f --quiet "https://$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" gh-pages:gh-pages
+          # GITHUB_SERVER_URL inclut déjà le schéma (https://…/Karulab/…) —
+          # ne pas re-préfixer, sinon https://https://… (run #1, résolu pas).
+          git push -f --quiet "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" gh-pages:gh-pages
