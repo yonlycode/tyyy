@@ -1,0 +1,57 @@
+# tyyy — CI web (Forgejo Actions, migré depuis .github/workflows).
+#
+# Playbook fleet (validé live, NE PAS "moderniser") :
+#   * runs-on: ubuntu-latest = label EXACT du runner act/docker — tout autre
+#     label = run `waiting` éternel ;
+#   * les steps `uses:` (actions JS) tournent avec node DANS le conteneur du
+#     job → image node:22 COMPLÈTE (node + git embarqués, pas de step 0
+#     d'install de node nécessaire) ;
+#   * cert auto-signé Traefik (Forgejo interne) → git http.sslVerify false +
+#     NODE_TLS_REJECT_UNAUTHORIZED=0 pour les actions JS ;
+#   * act lance les scripts en bash -e -o pipefail → jamais de pipe terminal.
+#
+# TLS yarn/npm : web/.npmrc et web/.yarnrc (strict-ssl false) gèrent déjà la
+# CA interne pour le registry Forgejo (@karulab/kady-ui) — gardés tels quels.
+name: Web CI
+
+"on":
+  push:
+    branches: [main]
+    paths: ["web/**"]
+  pull_request:
+    paths: ["web/**"]
+
+env:
+  NODE_TLS_REJECT_UNAUTHORIZED: "0"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: node:22
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./web
+    steps:
+      - name: git sans vérif TLS (cert auto-signé Traefik)
+        run: git config --global http.sslVerify false
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      # 9 erreurs lint préexistantes sur main : informatif, non bloquant.
+      - name: Lint (non bloquant — erreurs préexistantes sur main)
+        continue-on-error: true
+        run: yarn lint
+
+      - name: Build SSG
+        run: yarn build

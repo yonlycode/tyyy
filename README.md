@@ -13,7 +13,7 @@ La gestion du contenu se fait via **tyyy-Admin**, une petite app de bureau (Wail
 - **Zero frais d'infra** : le site est un export statique servi par GitHub Pages. Rien à héberger, rien à maintenir.
 - **Git comme seule source de vérité** : articles, projets et liens de contact sont des fichiers Markdown/JSON dans `main`. Un commit = une publication.
 - **Édition depuis une app desktop** : pas besoin de taper dans Git ni d'éditer le Markdown à la main — l'admin s'occupe de tout et committe pour vous.
-- **Un pipeline invisible** : sauvegarder dans l'admin → commit sur `main` → GitHub Actions rebuild → le site est à jour.
+- **Un pipeline invisible** : sauvegarder dans l'admin → commit sur `main` → Forgejo Actions rebuild → le site est à jour.
 
 ---
 
@@ -114,13 +114,16 @@ make admin-run        # ouvrir l'app compilée
 
 ---
 
-## 🤖 CI/CD (GitHub Actions)
+## 🤖 CI/CD (Forgejo Actions)
+
+Nouvelle chaîne : **Forgejo Actions** build le SSG puis pousse `web/out/` sur la branche `gh-pages` du **miroir GitHub** → **GitHub Pages** (`https://yonlycode.github.io/tyyy/`).
 
 | Workflow | Déclencheur | Rôle |
 |---|---|---|
-| `deploy.yml` | push sur `main` (chemin `web/**`) | Build SSG + déploiement GitHub Pages |
-| `admin-ci.yml` | push/PR sur `admin/**` | `go vet`, `gofmt`, build Wails (Linux) |
-| `release.yml` | tag `v*` | Build + package l'app desktop (macOS/Linux/Windows) attachés à une release |
+| `.forgejo/workflows/web-ci.yml` | push `main` / PR sur `web/**` | install + lint (non bloquant) + build SSG |
+| `.forgejo/workflows/deploy.yml` | push sur `main` (chemin `web/**`) + dispatch manuel | Build SSG + push `gh-pages` du miroir GitHub → Pages |
+
+Les builds de l'app admin Wails (`admin-ci.yml`, `release.yml`) ont été supprimés — l'app n'est plus buildée en CI ; le code `admin/` reste dans le repo.
 
 ---
 
