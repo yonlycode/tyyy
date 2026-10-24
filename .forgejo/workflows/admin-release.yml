@@ -1,0 +1,239 @@
+# tyyy — Release admin (app desktop Wails v3, Forgejo Actions, migré depuis
+# .github/workflows/release.yml).
+#
+# ⚠️ LINUX ONLY — choix assumé (même raison que admin-ci.yml) : les runners
+#    de la fleet sont Linux/Docker uniquement. L'ancienne release GitHub
+#    produisait macos-arm64 / linux / windows + APK Android ; ici seul le
+#    build Linux (AppImage) est porté : macOS exige un runner macOS (pas de
+#    matériel Apple dans la fleet), le cross-build Windows/Wails et le
+#    NDK Android sont hors périmètre. macOS/Windows = build local
+#    `task package` sur la machine cible (cf. README).
+#
+# Playbook fleet (validé live, NE PAS "moderniser") :
+#   * runs-on: ubuntu-latest (label EXACT) ; image node:22 pour le build
+#     (node présent AVANT toute step `uses:`) ;
+#   * actions upload/download-artifact en v3 UNIQUEMENT (v4 = GHESNotSupported) ;
+#   * bash -e -o pipefail : jamais de pipe terminal (SIGPIPE 141) ;
+#   * cert auto-signé Traefik : git sslVerify false, NODE_TLS_REJECT_UNAUTHORIZED=0,
+#     curl -k sur l'API ;
+#   * Release Gitea/Forgejo : POST release → POST asset ?name= →
+#     PATCH release {"assets":[id]} (sinon asset orphelin — comportement Gitea).
+#
+# SECRET DE DÉPÔT REQUIS (Settings → Actions → Secrets) — à poser par l'owner :
+#   RELEASE_TOKEN — PAT (compte owner/bot, scope write sur ce repo uniquement).
+#   Indispensable : sur le runner act, le jeton injecté automatiquement
+#   (secrets.GITHUB_TOKEN) n'a AUCUN scope API → 401 (validé live, cf. wiki /
+#   skill forgejo-actions ; même cause que DEPLOY_TOKEN pour deploy.yml).
+#   Le script tente RELEASE_TOKEN en priorité et ne retombe sur GITHUB_TOKEN
+#   que si le secret est absent (au cas où un futur runner fournirait un
+#   jeton valide) — dans ce cas un 401 est attendu tant que RELEASE_TOKEN
+#   n'est pas posé.
+name: Admin Release
+
+"on":
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag à publier (ex: v0.2.0) — requis en dispatch manuel"
+        required: false
+        type: string
+
+env:
+  NODE_TLS_REJECT_UNAUTHORIZED: "0"
+
+jobs:
+  # ------------------------------------------------------------
+  # 1) Build Linux + AppImage (mêmes fondations que admin-ci.yml)
+  # ------------------------------------------------------------
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: node:22
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./admin
+    steps:
+      - name: git sans vérif TLS (cert auto-signé Traefik)
+        run: git config --global http.sslVerify false
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Dépendances système (toolchain C + GTK4/WebKit6)
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            build-essential pkg-config curl \
+            libgtk-4-dev \
+            libwebkitgtk-6.0-dev \
+            libayatana-appindicator3-dev \
+            librsvg2-dev
+
+      - name: Setup Go (version = admin/go.mod)
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: admin/go.mod
+
+      - name: Install wails3 + task
+        run: |
+          go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-beta.0
+          go install github.com/go-task/task/v3/cmd/task@v3.54.0
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Set app icon
+        run: cp -f assets/appicon.png build/appicon.png
+
+      - name: Install frontend dependencies
+        working-directory: ./admin/frontend
+        run: yarn install --frozen-lockfile
+
+      - name: Build Linux (task build)
+        run: task build
+
+      # `task package` complet produirait aussi deb/rpm/aur (nfpm) que
+      # l'ancienne CI ne publiait pas → tâche AppImage ciblée uniquement.
+      # wails3 generate appimage télécharge linuxdeploy/AppRun depuis GitHub
+      # et bundlise les helpers WebKit (/usr/lib/.../webkitgtk-6.0/, posés
+      # par libwebkitgtk-6.0-dev) — vérifié dans le module beta.0.
+      - name: Package Linux (AppImage)
+        run: task linux:create:appimage
+
+      - name: Stager l'asset
+        env:
+          TAG: ${{ inputs.tag || forgejo.ref_name }}
+        run: |
+          set -e -o pipefail
+          mkdir -p "$GITHUB_WORKSPACE/dist"
+          SRC="bin/tyyy-admin-x86_64.AppImage"
+          if [ ! -f "$SRC" ]; then
+            echo "::error::AppImage introuvable (attendu : admin/$SRC)"
+            ls -l bin/
+            exit 1
+          fi
+          cp "$SRC" "$GITHUB_WORKSPACE/dist/tyyy-admin-${TAG}-linux-amd64.AppImage"
+          ls -l "$GITHUB_WORKSPACE/dist"
+
+      - name: Upload asset (v3, JAMAIS v4)
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist
+
+  # ------------------------------------------------------------
+  # 2) Release Forgejo : POST release → POST asset → PATCH assets
+  #    (pattern validé live = ci-shared go-release.yml)
+  # ------------------------------------------------------------
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:3.20
+    defaults:
+      run:
+        shell: sh
+    env:
+      TAG: ${{ inputs.tag || forgejo.ref_name }}
+      RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: "Step 0 : node (action JS) + curl + jq"
+        run: apk add --no-cache nodejs npm curl jq
+
+      - name: Download asset (v3, JAMAIS v4)
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+
+      - name: Publier la release + l'asset
+        run: |
+          # --- garde tag v* (workflow_dispatch sans input sinon) ---
+          case "$TAG" in
+            v*) : ;;
+            *)
+              echo "::error::TAG='$TAG' invalide — push d'un tag v* ou workflow_dispatch avec input tag=vX.Y.Z"
+              exit 1
+              ;;
+          esac
+
+          # --- localiser l'AppImage (find -quit : pas de pipe terminal) ---
+          BIN_PATH=$(find dist -type f -name "*.AppImage" -print -quit)
+          if [ -z "$BIN_PATH" ]; then
+            echo "::error::aucun .AppImage dans dist/"
+            find dist -type f
+            exit 1
+          fi
+          chmod +x "$BIN_PATH"
+          ASSET_NAME=$(basename "$BIN_PATH")
+
+          # RELEASE_TOKEN (secret de dépôt, POSÉ PAR L'OWNER) ; GITHUB_TOKEN
+          # uniquement en dernier recours (401 connu sous act — cf. en-tête).
+          TOK="$RELEASE_TOKEN"
+          if [ -z "$TOK" ]; then
+            echo "::warning::secret RELEASE_TOKEN absent — repli sur GITHUB_TOKEN (attendez-vous à un 401 sur cette instance)"
+            TOK="$GITHUB_TOKEN"
+          fi
+          API="$GITHUB_SERVER_URL/api/v1/repos/$GITHUB_REPOSITORY"
+
+          # prerelease auto si tag à suffixe (v1.2.3-rc1, v0.2.0-beta.1…)
+          PRERELEASE=false
+          case "$TAG" in *-*) PRERELEASE=true ;; esac
+
+          BODY="Build Linux (AppImage) de tyyy-admin ${TAG}.
+
+          - \`${ASSET_NAME}\` — AppImage linux/amd64 (GTK4/WebKitGTK 6.0 requis sur la machine cible)
+
+          macOS et Windows ne sont pas construits en CI (runners fleet = Linux/Docker uniquement) : builds locaux via \`task package\` — cf. README."
+
+          # --- 1) POST release (409/422 = existe déjà → GET) ---
+          HTTP=$(curl -k -s -o /tmp/rel.json -w '%{http_code}' \
+            -X POST \
+            -H "Authorization: token $TOK" \
+            -H "Content-Type: application/json" \
+            -d "$(jq -n --arg t "$TAG" --arg b "$BODY" --argjson p "$PRERELEASE" \
+                 '{tag_name:$t, name:$t, body:$b, draft:false, prerelease:$p}')" \
+            "$API/releases")
+          if [ "$HTTP" = "409" ] || [ "$HTTP" = "422" ]; then
+            HTTP=$(curl -k -s -o /tmp/rel.json -w '%{http_code}' \
+              -H "Authorization: token $TOK" \
+              "$API/releases/tags/$TAG")
+          fi
+          if [ "$HTTP" != "200" ] && [ "$HTTP" != "201" ]; then
+            echo "::error::création release HTTP $HTTP"
+            cat /tmp/rel.json
+            exit 1
+          fi
+          REL_ID=$(jq -r '.id' /tmp/rel.json)
+          echo "release id = $REL_ID ($TAG)"
+
+          # --- 2) POST asset ?name= ---
+          HTTP=$(curl -k -s -o /tmp/asset.json -w '%{http_code}' \
+            -X POST \
+            -H "Authorization: token $TOK" \
+            -H "Content-Type: application/octet-stream" \
+            --data-binary "@$BIN_PATH" \
+            "$API/releases/$REL_ID/assets?name=$ASSET_NAME")
+          if [ "$HTTP" != "201" ] && [ "$HTTP" != "200" ]; then
+            echo "::error::upload asset HTTP $HTTP"
+            cat /tmp/asset.json
+            exit 1
+          fi
+          ASSET_ID=$(jq -r '.id' /tmp/asset.json)
+          echo "asset id = $ASSET_ID ($ASSET_NAME)"
+
+          # --- 3) PATCH release {"assets":[id]} (sinon asset orphelin) ---
+          HTTP=$(curl -k -s -o /tmp/patch.json -w '%{http_code}' \
+            -X PATCH \
+            -H "Authorization: token $TOK" \
+            -H "Content-Type: application/json" \
+            -d "{\"assets\":[$ASSET_ID]}" \
+            "$API/releases/$REL_ID")
+          if [ "$HTTP" != "200" ]; then
+            echo "::error::rattachement asset HTTP $HTTP"
+            cat /tmp/patch.json
+            exit 1
+          fi
+          echo "release $TAG publiée avec asset $ASSET_NAME"

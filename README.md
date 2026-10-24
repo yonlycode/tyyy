@@ -122,8 +122,29 @@ Nouvelle chaîne : **Forgejo Actions** build le SSG puis pousse `web/out/` sur l
 |---|---|---|
 | `.forgejo/workflows/web-ci.yml` | push `main` / PR sur `web/**` | install + lint (non bloquant) + build SSG |
 | `.forgejo/workflows/deploy.yml` | push sur `main` (chemin `web/**`) + dispatch manuel | Build SSG + push `gh-pages` du miroir GitHub → Pages |
+| `.forgejo/workflows/admin-ci.yml` | push `main` / PR sur `admin/**` | Build Linux de l'app Wails (`task build`) + vet |
+| `.forgejo/workflows/admin-release.yml` | tag `v*` + dispatch manuel | Build + AppImage Linux → release Forgejo |
 
-Les builds de l'app admin Wails (`admin-ci.yml`, `release.yml`) ont été supprimés — l'app n'est plus buildée en CI ; le code `admin/` reste dans le repo.
+### 🖥️ CI admin — Linux uniquement (choix assumé)
+
+Les runners de la fleet sont **Linux/Docker uniquement** (backend act/docker).
+Or un build Wails n'est pas un `go build` croisable : il faut un **toolchain
+CGO natif** (GCC + GTK4/WebKitGTK 6.0 sur la machine qui compile). D'où :
+
+- **Linux** : buildé en CI (`admin-ci.yml` pour les PR/push,
+  `admin-release.yml` sur tag `v*` → AppImage attaché à la release Forgejo).
+  Prérequis secrets de dépôt : `RELEASE_TOKEN` (PAT avec scope write sur ce
+  repo) — à poser par l'owner ; le jeton injecté par le runner act n'a aucun
+  scope API (401).
+- **macOS** : exige un runner **macOS** (matériel Apple, Xcode/WebKit
+  système) — inexistant dans la fleet. Build local : `task package` dans
+  `admin/` sur une machine macOS.
+- **Windows** : le cross-build Wails→Windows depuis Linux (WebView2, `.syso`,
+  NSIS) est hors périmètre. Build local : `task package` sur une machine
+  Windows.
+
+Autrement dit : la CI ne promet **aucun binaire mac/Windows** ; ces plateformes
+restent des builds locaux (`task package` sur la machine cible).
 
 ---
 
