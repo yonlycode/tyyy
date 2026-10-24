@@ -49,8 +49,9 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./admin
     steps:
+      # PAS de working-directory au niveau job : le cwd est appliqué dès la
+      # première step, avant le checkout → chdir inexistant (exit 126, run #9).
       - name: git sans vérif TLS (cert auto-signé Traefik)
         run: git config --global http.sslVerify false
 
@@ -82,6 +83,7 @@ jobs:
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Set app icon
+        working-directory: ./admin
         run: cp -f assets/appicon.png build/appicon.png
 
       - name: Install frontend dependencies
@@ -93,14 +95,17 @@ jobs:
       # + generate:icons + .desktop + go build -tags production (CGO GTK4).
       # Équivalent de `wails3 build` de l'ancienne CI (vérifié localement).
       - name: Build Linux (task build)
+        working-directory: ./admin
         run: task build
 
       - name: Vérif binaires
+        working-directory: ./admin
         run: |
           ls -l bin/tyyy-admin
           od -c -N 4 bin/tyyy-admin
 
       - name: Vet
+        working-directory: ./admin
         run: go vet ./...
 
       # go build ./... n'est PAS utilisable tel quel : build/ios (scaffold
@@ -108,6 +113,7 @@ jobs:
       # de link. go vet ./... (sans link) passe, et `go build .` +
       # `go build ./pkg/...` couvrent le code réel.
       - name: Build packages Go
+        working-directory: ./admin
         run: |
           go build .
           go build ./pkg/...
@@ -116,6 +122,7 @@ jobs:
       # informatif, non bloquant (même politique que le lint de web-ci).
       - name: Check formatting (non bloquant — erreurs préexistantes sur main)
         continue-on-error: true
+        working-directory: ./admin
         run: |
           gofmt -l .
           test -z "$(gofmt -l .)"
