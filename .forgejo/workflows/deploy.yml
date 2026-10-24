@@ -72,9 +72,15 @@ jobs:
           DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         run: |
           set -e -o pipefail
-          # Auth git via askpass : git demande les credentials en sous-processus.
+          # Auth git via askpass. Le token est écrit dans un fichier 0600
+          # que le script askpass `cat` — pas de printf imbriqué (les
+          # double-évaluations d'échappements cassaient le mot de passe,
+          # runs #3/#4 : « Credentials are incorrect »).
+          TOKFILE="$(mktemp)"
+          printf '%s\n' "$DEPLOY_TOKEN" > "$TOKFILE"
+          chmod 600 "$TOKFILE"
           ASKPASS="$(mktemp)"
-          printf '#!/bin/sh\ncase "$1" in\n  Username*) echo x-access-token ;;\n  Password*) printf "%s\\n" "$DEPLOY_TOKEN" ;;\nesac\n' > "$ASKPASS"
+          printf '#!/bin/sh\ncase "$1" in\n  Username*) echo x-access-token ;;\n  Password*) cat %s ;;\nesac\n' "$TOKFILE" > "$ASKPASS"
           chmod 700 "$ASKPASS"
           export GIT_ASKPASS="$ASKPASS"
           # Branche orpheline locale : contenu = web/out/, historique neuf à
@@ -90,4 +96,4 @@ jobs:
           # origin = dépôt Forgejo ; le jeton du checkout act n'a aucun scope
           # (cf. en-tête) — GIT_ASKPASS fournit DEPLOY_TOKEN à git.
           git push -f --quiet "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git" gh-pages:gh-pages
-          rm -f "$ASKPASS"
+          rm -f "$ASKPASS" "$TOKFILE"
