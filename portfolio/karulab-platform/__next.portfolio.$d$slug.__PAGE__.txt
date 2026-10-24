@@ -1,0 +1,77 @@
+1:"$Sreact.fragment"
+3:I[22177,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js","/tyyy/_next/static/chunks/3mb4hny89hbzl.js","/tyyy/_next/static/chunks/0omn3dxtc-w3k.js"],"ProjectDetailView"]
+2:T42a,[{"@context":"https://schema.org","@type":"CreativeWork","name":"Le Stack Karulab — Go, Mongo, HTMX et frugalité assumée","description":"Les principes d'ingénierie de Karulab : binaires Go statiques, persistance MongoDB, interfaces HTMX sans bundle npm, CI mutualisée et design system partagé. Ce qui est construit, comment, et pourquoi.","url":"https://yonlycode.github.io/tyyy/portfolio/karulab-platform/","dateCreated":"2026-10-17T00:00:00.000Z","author":{"@type":"Person","name":"Yoann Fort"},"keywords":"Architecture Souveraine, Go / Golang, MongoDB, HTMX, Frugalité Logicielle","inLanguage":"fr-FR"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://yonlycode.github.io/tyyy/"},{"@type":"ListItem","position":2,"name":"Portfolio","item":"https://yonlycode.github.io/tyyy/portfolio/"},{"@type":"ListItem","position":3,"name":"Le Stack Karulab — Go, Mongo, HTMX et frugalité assumée","item":"https://yonlycode.github.io/tyyy/portfolio/karulab-platform/"}]}]4:T125f,<h2>Philosophie : En finir avec l'obésité logicielle</h2>
+<p>L'ingénierie logicielle contemporaine souffre d'un mal récurrent : une simple interface de gestion devient 500 Mo de conteneurs Node, 1 500 paquets npm imbriqués et un pipeline de build fragile.</p>
+<p>Notre principe directeur : <strong>le minimalisme architectural au service de la résilience</strong>. Chaque brique doit pouvoir tourner sur un serveur modeste ou une appliance locale, se déployer en secondes et se diagnostiquer sans diplôme d'architecte.</p>
+<h2>Ce Que Nous Construisons Avec Ce Stack</h2>
+<ul>
+<li><strong>Le panel Kaly</strong> (en développement actif) : application Go stdlib + HTMX + MongoDB — waitlist, leads, parc de box, événements, grille tarifaire. Un binaire, une base, zéro build frontend.</li>
+<li><strong>Kady-UI</strong> : notre design system — librairie de web components publiés sur un registry npm privé (Forgejo), Storybook déployé, pour que Go+HTMX, Next.js et les box aient la même pâte graphique.</li>
+<li><strong>ci-shared</strong> : les workflows CI Forgejo mutualisés entre tous nos repos (Go et Node : build, lint, tests, release) — la complexité de CI est versionnée à un seul endroit, pas recopiée repo par repo.</li>
+<li><strong>hermes-base</strong> : l'image Docker de base de nos agents IA, avec harness par profil — la même rigueur appliquée à l'infra d'agents.</li>
+</ul>
+<h2>L'Architecture Type</h2>
+<pre><code>┌────────────────────────────────────────────────────────┐
+│                FRONTEND HYPERMÉDIA (HTMX)              │
+│    HTML sémantique rendu serveur, 0 bundle npm         │
+└──────────────────────────┬─────────────────────────────┘
+                           │ HTTP
+┌──────────────────────────▼─────────────────────────────┐
+│                 BACKEND (GOLANG STDLIB)                │
+│   Binaire statique unique · net/http · goroutines      │
+└──────────────────────────┬─────────────────────────────┘
+                           │ Driver mongo-driver
+┌──────────────────────────▼─────────────────────────────┐
+│                 PERSISTANCE (MONGODB)                  │
+│   Leads, événements, configs box, audit logs           │
+└────────────────────────────────────────────────────────┘
+</code></pre>
+<ul>
+<li><strong>Go stdlib d'abord</strong> : le routeur, les templates <code>html/template</code> (échappement natif), les workers en goroutines. Les dépendances externes sont comptées — le panel n'en a qu'une, le driver Mongo.</li>
+<li><strong>HTMX plutôt qu'un framework SPA</strong> : les mises à jour dynamiques ciblées se font en fragments HTML rendus serveur. Pas de hydration, pas de state management, pas de node_modules côté client.</li>
+<li><strong>MongoDB</strong> : modélisation documentaire pour ce qui est documentaire (événements, configs hétérogènes), index sur les chemins de requête réels.</li>
+<li><strong>Déploiement conteneur</strong> sur Coolify, build direct depuis le Dockerfile, CI qui ne fait que tester et relâcher des tags.</li>
+</ul>
+<h2>Les Vrais Chiffres, Quand Ils Existeront</h2>
+<p>Nous ne publions pas de « p99 en 12 ms » d'un service qui n'est pas encore en production. Ce qui est vérifié aujourd'hui : le panel compile en un binaire unique, ses tests passent en CI, et ses pages se passent totalement de JavaScript applicatif. Les mesures de performance viendront des environnements réels — box pilotes comprises — et seront publiées avec leur méthode de mesure.</p>
+<h2>Bénéfices Attendus (et vérifiables)</h2>
+<ul>
+<li><strong>Surface d'attaque réduite</strong> : pas de chaîne d'approvisionnement npm sur le runtime serveur, échappement HTML natif Go.</li>
+<li><strong>Déploiement en secondes</strong> : un conteneur, une variable d'environnement de connexion Mongo, prêt.</li>
+<li><strong>Frugalité</strong> : le stack vise les machines edge — ce qui tourne sur un mini-PC client tourne aussi sur un VPS à 5 €.</li>
+</ul>
+9:X
+e:X
+e:C
+0:{"buildId":"UTpYd9KprMl3RnEeYIUyF","data":[{"rsc":["$","$1","c",{"children":[[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$2"}}],["$","$L3",null,{"project":{"slug":"karulab-platform","title":"Le Stack Karulab — Go, Mongo, HTMX et frugalité assumée","description":"Les principes d'ingénierie de Karulab : binaires Go statiques, persistance MongoDB, interfaces HTMX sans bundle npm, CI mutualisée et design system partagé. Ce qui est construit, comment, et pourquoi.","date":"2026-10-17","tags":["Architecture Souveraine","Go / Golang","MongoDB","HTMX","Frugalité Logicielle"],"canonicalUrl":"","published":true,"readTime":"3 min read","contentHtml":"$4"}}]],["$L5","$L6"],"$L7"]}],"isPartial":"$@8","staleTime":"$9","varyParams":null},{"rsc":"$La","isPartial":"$@b","staleTime":"$9","varyParams":null},{"rsc":"$Lc","isPartial":"$@d","staleTime":"$9","varyParams":"$e"},{"rsc":"$Lf","isPartial":"$@10","staleTime":"$9","varyParams":"$e"},{"rsc":"$L11","isPartial":"$@12","staleTime":"$9","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@13","rootVaryParams":null,"needsRuntimeRequest":"$@14"}
+15:I[97367,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"OutletBoundary"]
+16:"$Sreact.suspense"
+18:I[97367,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"ViewportBoundary"]
+19:I[97367,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"MetadataBoundary"]
+1a:I[27201,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"IconMark"]
+1b:I[39756,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"default"]
+1c:I[37457,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"default"]
+1d:I[98394,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"KadyElements"]
+1e:I[15290,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"ThemeProvider"]
+1f:I[21334,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"KadyNavbar"]
+20:I[40018,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"Footer"]
+21:I[54576,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"GoogleAnalytics"]
+:HL["/tyyy/_next/static/chunks/1yeshg3xn6x7j.css","style"]
+:HL["https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap","style"]
+5:["$","script","script-0",{"src":"/tyyy/_next/static/chunks/3mb4hny89hbzl.js","async":true}]
+6:["$","script","script-1",{"src":"/tyyy/_next/static/chunks/0omn3dxtc-w3k.js","async":true}]
+7:["$","$L15",null,{"children":["$","$16",null,{"name":"Next.MetadataOutlet","children":"$@17"}]}]
+a:["$","$1","h",{"children":[null,["$","$L18",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#F8FAFC","media":"(prefers-color-scheme: light)"}],["$","meta","3",{"name":"theme-color","content":"#080B14","media":"(prefers-color-scheme: dark)"}]]}],["$","div",null,{"hidden":true,"children":["$","$L19",null,{"children":["$","$16",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Le Stack Karulab — Go, Mongo, HTMX et frugalité assumée | Yoann Fort"}],["$","meta","1",{"name":"description","content":"Les principes d'ingénierie de Karulab : binaires Go statiques, persistance MongoDB, interfaces HTMX sans bundle npm, CI mutualisée et design system partagé. Ce qui est construit, comment, et pourquoi."}],["$","meta","2",{"name":"author","content":"Yoann Fort"}],["$","link","3",{"rel":"manifest","href":"/tyyy/manifest.webmanifest"}],["$","meta","4",{"name":"keywords","content":"Yoann Fort,Karuka Conseil,Architecte IA,IA Souveraine,Inférence locale,Bare-metal,AMD Strix Halo,Kaly HaaS,llama.cpp,Systèmes multi-agents,LLMOps,Hermes Agent,Hardware Edge,Quantisation,Portfolio,Architecture Souveraine,Go / Golang,MongoDB,HTMX,Frugalité Logicielle"}],["$","meta","5",{"name":"creator","content":"tyyy"}],["$","meta","6",{"name":"publisher","content":"tyyy"}],["$","meta","7",{"name":"robots","content":"index, follow"}],["$","meta","8",{"name":"googlebot","content":"index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"}],["$","link","9",{"rel":"canonical","href":"https://yonlycode.github.io/tyyy/portfolio/karulab-platform/"}],["$","meta","10",{"property":"og:title","content":"Le Stack Karulab — Go, Mongo, HTMX et frugalité assumée"}],["$","meta","11",{"property":"og:description","content":"Les principes d'ingénierie de Karulab : binaires Go statiques, persistance MongoDB, interfaces HTMX sans bundle npm, CI mutualisée et design system partagé. Ce qui est construit, comment, et pourquoi."}],["$","meta","12",{"property":"og:url","content":"https://yonlycode.github.io/tyyy/portfolio/karulab-platform/"}],["$","meta","13",{"property":"og:site_name","content":"Yoann Fort"}],["$","meta","14",{"property":"og:locale","content":"fr_FR"}],["$","meta","15",{"property":"og:image","content":"https://yonlycode.github.io/tyyy/portfolio/karulab-platform/opengraph-image"}],["$","meta","16",{"property":"og:image:width","content":"1200"}],["$","meta","17",{"property":"og:image:height","content":"630"}],["$","meta","18",{"property":"og:image:alt","content":"Le Stack Karulab — Go, Mongo, HTMX et frugalité assumée"}],["$","meta","19",{"property":"og:type","content":"article"}],["$","meta","20",{"property":"article:published_time","content":"2026-10-17T00:00:00.000Z"}],["$","meta","21",{"property":"article:tag","content":"Architecture Souveraine"}],["$","meta","22",{"property":"article:tag","content":"Go / Golang"}],["$","meta","23",{"property":"article:tag","content":"MongoDB"}],["$","meta","24",{"property":"article:tag","content":"HTMX"}],["$","meta","25",{"property":"article:tag","content":"Frugalité Logicielle"}],["$","meta","26",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","27",{"name":"twitter:title","content":"Le Stack Karulab — Go, Mongo, HTMX et frugalité assumée"}],["$","meta","28",{"name":"twitter:description","content":"Les principes d'ingénierie de Karulab : binaires Go statiques, persistance MongoDB, interfaces HTMX sans bundle npm, CI mutualisée et design system partagé. Ce qui est construit, comment, et pourquoi."}],["$","meta","29",{"name":"twitter:image","content":"https://yonlycode.github.io/tyyy/portfolio/karulab-platform/opengraph-image"}],["$","link","30",{"rel":"icon","href":"/tyyy/icon.png?icon.16c-ys-u1ipew.png","sizes":"256x256","type":"image/png"}],["$","link","31",{"rel":"apple-touch-icon","href":"/tyyy/apple-icon.png?apple-icon.16c-ys-u1ipew.png","sizes":"256x256","type":"image/png"}],["$","$L1a","32",{}]]}]}]}],null]}]
+c:["$","$1","c",{"children":[null,["$","$L1b",null,{"parallelRouterKey":"children","template":["$","$L1c",null,{}]}]]}]
+f:["$","$1","c",{"children":[null,["$","$L1b",null,{"parallelRouterKey":"children","template":["$","$L1c",null,{}]}]]}]
+11:["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/tyyy/_next/static/chunks/1yeshg3xn6x7j.css","precedence":"next"}],["$","script","script-0",{"src":"/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","async":true}],["$","script","script-1",{"src":"/tyyy/_next/static/chunks/3lqk0gkngv_jp.js","async":true}]],["$","html",null,{"lang":"fr","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){try{if(localStorage.getItem('kady-theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();"}}],["$","link",null,{"rel":"preconnect","href":"https://fonts.googleapis.com"}],["$","link",null,{"rel":"preconnect","href":"https://fonts.gstatic.com","crossOrigin":"anonymous"}],["$","link",null,{"href":"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap","rel":"stylesheet"}]]}],["$","body",null,{"children":[["$","$L1d",null,{}],["$","$L1e",null,{"children":["$","div",null,{"style":{"display":"flex","flexDirection":"column","minHeight":"100vh"},"children":[["$","$L1f",null,{}],["$","main",null,{"style":{"flex":1},"children":["$","$L1b",null,{"parallelRouterKey":"children","template":["$","$L1c",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}],["$","$L20",null,{"links":[{"id":"github","label":"GitHub","url":"https://github.com/yonlycode","icon":"github","enabled":true},{"id":"linkedin","label":"LinkedIn","url":"https://www.linkedin.com/in/yoann-fort/","icon":"linkedin","enabled":true},{"id":"twitter","label":"Twitter / X","url":"https://x.com/TheYonlyYone","icon":"twitter","enabled":true},{"id":"email","label":"Email","url":"mailto:yoann.fort@outlook.com","icon":"email","enabled":true}]}]]}]}],["$","$L21",null,{"gaId":"G-2ZHCGP7VD4"}]]}]]}]]}]
+17:null
+14:true
+9:300
+9:C
+13:0
+b:"$undefined"
+d:"$undefined"
+10:"$undefined"
+12:"$undefined"
+8:"$undefined"

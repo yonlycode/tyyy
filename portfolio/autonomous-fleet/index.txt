@@ -1,0 +1,108 @@
+1:"$Sreact.fragment"
+2:I[98394,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"KadyElements"]
+3:I[15290,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"ThemeProvider"]
+4:I[21334,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"KadyNavbar"]
+5:I[39756,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"default"]
+6:I[37457,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"default"]
+7:I[40018,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"Footer"]
+8:I[54576,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"GoogleAnalytics"]
+a:I[97367,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"OutletBoundary"]
+b:"$Sreact.suspense"
+e:I[97367,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"ViewportBoundary"]
+10:I[97367,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"MetadataBoundary"]
+12:I[68027,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"default",1]
+:HL["/tyyy/_next/static/chunks/1yeshg3xn6x7j.css","style"]
+:HL["https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap","style"]
+d:X
+0:{"P":null,"c":["","portfolio","autonomous-fleet",""],"q":"","i":false,"f":[[["",{"children":["portfolio",{"children":[["slug","autonomous-fleet","d",[]],{"children":["__PAGE__",{},"$undefined","$undefined",4608]},"$undefined","$undefined",4608]},"$undefined","$undefined",4608]},"$undefined","$undefined",4624],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/tyyy/_next/static/chunks/1yeshg3xn6x7j.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/tyyy/_next/static/chunks/3lqk0gkngv_jp.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"fr","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){try{if(localStorage.getItem('kady-theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();"}}],["$","link",null,{"rel":"preconnect","href":"https://fonts.googleapis.com"}],["$","link",null,{"rel":"preconnect","href":"https://fonts.gstatic.com","crossOrigin":"anonymous"}],["$","link",null,{"href":"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap","rel":"stylesheet"}]]}],["$","body",null,{"children":[["$","$L2",null,{}],["$","$L3",null,{"children":["$","div",null,{"style":{"display":"flex","flexDirection":"column","minHeight":"100vh"},"children":[["$","$L4",null,{}],["$","main",null,{"style":{"flex":1},"children":["$","$L5",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}],["$","$L7",null,{"links":[{"id":"github","label":"GitHub","url":"https://github.com/yonlycode","icon":"github","enabled":true},{"id":"linkedin","label":"LinkedIn","url":"https://www.linkedin.com/in/yoann-fort/","icon":"linkedin","enabled":true},{"id":"twitter","label":"Twitter / X","url":"https://x.com/TheYonlyYone","icon":"twitter","enabled":true},{"id":"email","label":"Email","url":"mailto:yoann.fort@outlook.com","icon":"email","enabled":true}]}]]}]}],["$","$L8",null,{"gaId":"G-2ZHCGP7VD4"}]]}]]}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L5",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["$","$1","c",{"children":[null,["$","$L5",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["$","$1","c",{"children":["$L9",[["$","script","script-0",{"src":"/tyyy/_next/static/chunks/3mb4hny89hbzl.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/tyyy/_next/static/chunks/0omn3dxtc-w3k.js","async":true,"nonce":"$undefined"}]],["$","$La",null,{"children":["$","$b",null,{"name":"Next.MetadataOutlet","children":"$@c"}]}]]}],{},null,false,null]},null,false,"$d"]},null,false,"$d"]},null,false,null],["$","$1","h",{"children":[null,["$","$Le",null,{"children":"$Lf"}],["$","div",null,{"hidden":true,"children":["$","$L10",null,{"children":["$","$b",null,{"name":"Next.Metadata","children":"$L11"}]}]}],null]}],false]],"m":"$undefined","G":["$12",[["$","link","0",{"rel":"stylesheet","href":"/tyyy/_next/static/chunks/1yeshg3xn6x7j.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]]],"S":true,"h":null,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"UTpYd9KprMl3RnEeYIUyF"}
+14:I[22177,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js","/tyyy/_next/static/chunks/3mb4hny89hbzl.js","/tyyy/_next/static/chunks/0omn3dxtc-w3k.js"],"ProjectDetailView"]
+d:C
+13:T46f,[{"@context":"https://schema.org","@type":"CreativeWork","name":"Flotte d'Agents Autonomes — Orchestration Hermes, harnesss bornés et infra souveraine","description":"Comment Karulab orchestre une flotte d'agents IA sur infrastructure souveraine : Hermes Agent, harnesss bornés (dsh, agy), Forgejo, Coolify, Tailscale et SeaweedFS. Pas de framework magique, des briques qui se tiennent.","url":"https://yonlycode.github.io/tyyy/portfolio/autonomous-fleet/","dateCreated":"2026-10-17T00:00:00.000Z","author":{"@type":"Person","name":"Yoann Fort"},"keywords":"Multi-Agents, Hermes Agent, Self-Hosted, Infra Souveraine, Tailscale","inLanguage":"fr-FR"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://yonlycode.github.io/tyyy/"},{"@type":"ListItem","position":2,"name":"Portfolio","item":"https://yonlycode.github.io/tyyy/portfolio/"},{"@type":"ListItem","position":3,"name":"Flotte d'Agents Autonomes — Orchestration Hermes, harnesss bornés et infra souveraine","item":"https://yonlycode.github.io/tyyy/portfolio/autonomous-fleet/"}]}]15:T1611,<h2>La Problématique : Le piège des agents tout-puissants</h2>
+<p>Les démonstrateurs d'agents IA « tout-au-prompt » (boucles ouvertes, ReAct non borné) séduisent sur les réseaux sociaux mais s'effondrent dès qu'ils rencontrent le monde réel :</p>
+<ul>
+<li>Boucles de réflexion infinies consommatrices de budget.</li>
+<li>Hallucinations sur les arguments d'outils et corruption d'état.</li>
+<li>Zéro auditabilité : impossible d'expliquer pourquoi l'agent a touché tel fichier ou posté tel truc.</li>
+</ul>
+<p>Notre réponse n'est pas un framework d'agents de plus. C'est une <strong>flotte d'agents aux rôles strictement bornés</strong>, chacun marié à un harness déterministe, sur une infrastructure qu'on auto-héberge de bout en bout.</p>
+<h2>La Flotte</h2>
+<p>Pas un « essaim » générique : des agents nommés, avec un rôle, un harness et un périmètre d'accès explicites.</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Rôle</th>
+<th>Hébergement</th>
+<th>Harness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Migo</strong></td>
+<td>Maître technique : code, infra, revues</td>
+<td>Conteneur dédié</td>
+<td><code>dsh</code> (DeepSeek) pour le code</td>
+</tr>
+<tr>
+<td><strong>Malo</strong></td>
+<td>Agent local sur LLM gratuit</td>
+<td>MacBook M1 Max</td>
+<td>délégation + modèles locaux</td>
+</tr>
+<tr>
+<td><strong>Bueno</strong></td>
+<td>Marketing, rédaction, QA exploratoire, tests E2E navigateur</td>
+<td>Conteneur Coolify</td>
+<td><code>agy</code> (Gemini)</td>
+</tr>
+<tr>
+<td><strong>Kady</strong></td>
+<td>Le buddy produit (notre produit, pas un agent interne)</td>
+<td>Box client / endpoint local</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Chaque agent est une instance <strong>Hermes Agent</strong> avec sa propre mémoire persistante, ses skills versionnées dans un repo dédié, et un contrat : l'agent délègue le code à son harness, relit, valide, et ne pousse jamais à l'aveugle.</p>
+<h2>L'Infrastructure Souveraine</h2>
+<p>Tout tourne sous notre contrôle, rejoints par un tailnet privé :</p>
+<ul>
+<li><strong>Forgejo</strong> : git, CI Actions, registry npm/OCI, wiki = base de connaissances unique de la flotte.</li>
+<li><strong>Coolify</strong> : orchestration des conteneurs (les instances d'agents, les services, les bancs d'essai).</li>
+<li><strong>Tailscale</strong> : le réseau. Rien n'est exposé publiquement qui ne devrait pas l'être.</li>
+<li><strong>SeaweedFS</strong> : stockage objet pour les artefacts lourds et froids.</li>
+<li><strong>MongoDB</strong> : persistance des produits (leads, événements, configs box).</li>
+<li><strong>Inférence locale</strong> : llama.cpp sur AMD Strix Halo (mesures publiées sur ce blog) et endpoint LLM du MacBook — plus des API cloud ponctuelles quand le cloud est l'outil adapté.</li>
+</ul>
+<pre><code>┌─────────────────────────────────────────────────┐
+│                 TAILNET (Tailscale)             │
+│                                                 │
+│  ┌───────────┐  ┌──────────┐  ┌──────────────┐  │
+│  │  Forgejo  │  │ Coolify  │  │  SeaweedFS   │  │
+│  │ git/CI/wiki│  │ conteneurs│  │   objets     │  │
+│  └───────────┘  └────┬─────┘  └──────────────┘  │
+│                      │                          │
+│         ┌────────────┼────────────┐             │
+│    ┌────▼────┐  ┌────▼────┐  ┌────▼─────┐      │
+│    │  Migo   │  │  Bueno  │  │   Kaly   │      │
+│    │ Hermes  │  │ Hermes  │  │  panel   │      │
+│    │  +dsh   │  │  +agy   │  │ Go+Mongo │      │
+│    └─────────┘  └─────────┘  └──────────┘      │
+│         MacBook M1 Max : Malo + endpoint LLM    │
+│         Strix Halo : banc d'essai llama.cpp     │
+└─────────────────────────────────────────────────┘
+</code></pre>
+<h2>Les Principes Qui Tiennent</h2>
+<ul>
+<li><strong>Un agent, un rôle, un harness.</strong> Bueno ne touche pas l'infra ; Migo ne rédige pas les posts LinkedIn. Les périmètres sont écrits, pas implicites.</li>
+<li><strong>Le harness est borné par construction.</strong> Les tâches sont déléguées à un worker headless (dsh, agy) avec un contrat explicite : ces fichiers, pas de commit, pas de push. L'agent relit et valide avant tout merge.</li>
+<li><strong>La connaissance est versionnée.</strong> Skills des agents et wiki d'infra vivent dans Forgejo, pas dans la tête d'un agent. Un agent reconstruit se reconstruit documenté.</li>
+<li><strong>Le cloud est un outil, pas une fondation.</strong> Les API propriétaires passent par des points de passage identifiés et budgétés ; l'orchestration, la donnée et la mémoire restent à la maison.</li>
+</ul>
+<h2>État Réel Du Projet</h2>
+<p>La flotte tourne au quotidien (cette page a été documentée par un de ses membres). Nous n'avons pas de « taux de succès de 98 % » à vous vendre : nous avons des agents qui font le travail, une infra qui tient, et des process qui se renforcent à chaque incident. C'est moins sexy qu'un essaim de huit agents fantômes, c'est surtout vrai.</p>
+9:[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$13"}}],["$","$L14",null,{"project":{"slug":"autonomous-fleet","title":"Flotte d'Agents Autonomes — Orchestration Hermes, harnesss bornés et infra souveraine","description":"Comment Karulab orchestre une flotte d'agents IA sur infrastructure souveraine : Hermes Agent, harnesss bornés (dsh, agy), Forgejo, Coolify, Tailscale et SeaweedFS. Pas de framework magique, des briques qui se tiennent.","date":"2026-10-17","tags":["Multi-Agents","Hermes Agent","Self-Hosted","Infra Souveraine","Tailscale"],"canonicalUrl":"","published":true,"readTime":"4 min read","contentHtml":"$15"}}]]
+f:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#F8FAFC","media":"(prefers-color-scheme: light)"}],["$","meta","3",{"name":"theme-color","content":"#080B14","media":"(prefers-color-scheme: dark)"}]]
+16:I[27201,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"IconMark"]
+c:null
+11:[["$","title","0",{"children":"Flotte d'Agents Autonomes — Orchestration Hermes, harnesss bornés et infra souveraine | Yoann Fort"}],["$","meta","1",{"name":"description","content":"Comment Karulab orchestre une flotte d'agents IA sur infrastructure souveraine : Hermes Agent, harnesss bornés (dsh, agy), Forgejo, Coolify, Tailscale et SeaweedFS. Pas de framework magique, des briques qui se tiennent."}],["$","meta","2",{"name":"author","content":"Yoann Fort"}],["$","link","3",{"rel":"manifest","href":"/tyyy/manifest.webmanifest","crossOrigin":"$undefined"}],["$","meta","4",{"name":"keywords","content":"Yoann Fort,Karuka Conseil,Architecte IA,IA Souveraine,Inférence locale,Bare-metal,AMD Strix Halo,Kaly HaaS,llama.cpp,Systèmes multi-agents,LLMOps,Hermes Agent,Hardware Edge,Quantisation,Portfolio,Multi-Agents,Self-Hosted,Infra Souveraine,Tailscale"}],["$","meta","5",{"name":"creator","content":"tyyy"}],["$","meta","6",{"name":"publisher","content":"tyyy"}],["$","meta","7",{"name":"robots","content":"index, follow"}],["$","meta","8",{"name":"googlebot","content":"index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"}],["$","link","9",{"rel":"canonical","href":"https://yonlycode.github.io/tyyy/portfolio/autonomous-fleet/"}],["$","meta","10",{"property":"og:title","content":"Flotte d'Agents Autonomes — Orchestration Hermes, harnesss bornés et infra souveraine"}],["$","meta","11",{"property":"og:description","content":"Comment Karulab orchestre une flotte d'agents IA sur infrastructure souveraine : Hermes Agent, harnesss bornés (dsh, agy), Forgejo, Coolify, Tailscale et SeaweedFS. Pas de framework magique, des briques qui se tiennent."}],["$","meta","12",{"property":"og:url","content":"https://yonlycode.github.io/tyyy/portfolio/autonomous-fleet/"}],["$","meta","13",{"property":"og:site_name","content":"Yoann Fort"}],["$","meta","14",{"property":"og:locale","content":"fr_FR"}],["$","meta","15",{"property":"og:image","content":"https://yonlycode.github.io/tyyy/portfolio/autonomous-fleet/opengraph-image"}],["$","meta","16",{"property":"og:image:width","content":"1200"}],["$","meta","17",{"property":"og:image:height","content":"630"}],["$","meta","18",{"property":"og:image:alt","content":"Flotte d'Agents Autonomes — Orchestration Hermes, harnesss bornés et infra souveraine"}],["$","meta","19",{"property":"og:type","content":"article"}],["$","meta","20",{"property":"article:published_time","content":"2026-10-17T00:00:00.000Z"}],["$","meta","21",{"property":"article:tag","content":"Multi-Agents"}],["$","meta","22",{"property":"article:tag","content":"Hermes Agent"}],["$","meta","23",{"property":"article:tag","content":"Self-Hosted"}],["$","meta","24",{"property":"article:tag","content":"Infra Souveraine"}],["$","meta","25",{"property":"article:tag","content":"Tailscale"}],["$","meta","26",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","27",{"name":"twitter:title","content":"Flotte d'Agents Autonomes — Orchestration Hermes, harnesss bornés et infra souveraine"}],["$","meta","28",{"name":"twitter:description","content":"Comment Karulab orchestre une flotte d'agents IA sur infrastructure souveraine : Hermes Agent, harnesss bornés (dsh, agy), Forgejo, Coolify, Tailscale et SeaweedFS. Pas de framework magique, des briques qui se tiennent."}],["$","meta","29",{"name":"twitter:image","content":"https://yonlycode.github.io/tyyy/portfolio/autonomous-fleet/opengraph-image"}],["$","link","30",{"rel":"icon","href":"/tyyy/icon.png?icon.16c-ys-u1ipew.png","sizes":"256x256","type":"image/png"}],["$","link","31",{"rel":"apple-touch-icon","href":"/tyyy/apple-icon.png?apple-icon.16c-ys-u1ipew.png","sizes":"256x256","type":"image/png"}],["$","$L16","32",{}]]

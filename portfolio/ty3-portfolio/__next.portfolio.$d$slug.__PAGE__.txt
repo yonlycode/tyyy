@@ -1,0 +1,208 @@
+1:"$Sreact.fragment"
+2:I[22177,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js","/tyyy/_next/static/chunks/3mb4hny89hbzl.js","/tyyy/_next/static/chunks/0omn3dxtc-w3k.js"],"ProjectDetailView"]
+3:T1dfb,<p>Un portfolio &#x26; blog personnel — <strong>minimal et frugal en infra</strong> — édité depuis une <strong>app desktop native</strong> qui pilote le contenu du repo GitHub.</p>
+<p>Le site est un <strong>export statique</strong> (Next.js) hébergé gratuitement sur <strong>GitHub Pages</strong> : aucune base de données, aucun backend, aucun serveur à payer. Le contenu vit directement dans le repo sous forme de fichiers Markdown, et chaque sauvegarde est un commit qui redéclenche automatiquement la publication.</p>
+<p>La gestion du contenu se fait via <strong>tyyy-Admin</strong>, une petite app de bureau (Wails : backend Go + frontend React) qui lit/écrit les fichiers du repo via l'API GitHub et surveille les déploiements.</p>
+<hr>
+<h2>🧠 L'idée en bref</h2>
+<ul>
+<li><strong>Zero frais d'infra</strong> : le site est un export statique servi par GitHub Pages. Rien à héberger, rien à maintenir.</li>
+<li><strong>Git comme seule source de vérité</strong> : articles, projets et liens de contact sont des fichiers Markdown/JSON dans <code>main</code>. Un commit = une publication.</li>
+<li><strong>Édition depuis une app desktop</strong> : pas besoin de taper dans Git ni d'éditer le Markdown à la main — l'admin s'occupe de tout et committe pour vous.</li>
+<li><strong>Un pipeline invisible</strong> : sauvegarder dans l'admin → commit sur <code>main</code> → GitHub Actions rebuild → le site est à jour.</li>
+</ul>
+<hr>
+<h2>📦 Deux packages</h2>
+<p>Le repo est un monorepo contenant deux projets indépendants :</p>
+<h3>1. <code>web/</code> — le site (Next.js, statique)</h3>
+<p>Le portfolio &#x26; blog public, généré en <strong>export statique</strong> (SSG) et déployé sur <strong>GitHub Pages</strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Framework</strong></td>
+<td>Next.js 16 (App Router, <code>output: 'export'</code>)</td>
+</tr>
+<tr>
+<td><strong>Style</strong></td>
+<td>Emotion (CSS-in-JS) + tokens Material Design 3 + Framer Motion</td>
+</tr>
+<tr>
+<td><strong>Contenu</strong></td>
+<td>Markdown local (<code>gray-matter</code>, <code>remark</code>, <code>remark-html</code>, <code>reading-time</code>)</td>
+</tr>
+<tr>
+<td><strong>Rendu</strong></td>
+<td>Statique au build via <code>getSortedArticles()</code> / <code>getArticleBySlug()</code></td>
+</tr>
+<tr>
+<td><strong>Pages</strong></td>
+<td>Accueil, articles, portfolio, contact (linktree), privacy</td>
+</tr>
+<tr>
+<td><strong>Analytics</strong></td>
+<td>GA4 (script côté client)</td>
+</tr>
+<tr>
+<td><strong>Hébergement</strong></td>
+<td>GitHub Pages via <code>deploy.yml</code></td>
+</tr>
+</tbody>
+</table>
+<h3>2. <code>admin/</code> — l'app desktop (Wails : Go + React)</h3>
+<p>Un <strong>CMS de bureau</strong> autonome pour éditer le contenu du repo.</p>
+<p><img src="/tyyy/images/screenshot-2026-08-19-at-22.02.36.png" alt="screenshot-2026-08-19-at-22.02.36.png"></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Shell desktop</strong></td>
+<td>Wails v2 (backend Go, aucun serveur HTTP)</td>
+</tr>
+<tr>
+<td><strong>Backend</strong></td>
+<td>Go 1.26, <code>google/go-github/v60</code>, <code>adrg/frontmatter</code>, oauth2</td>
+</tr>
+<tr>
+<td><strong>Frontend</strong></td>
+<td>React 19 + Vite 7 + TypeScript 5</td>
+</tr>
+<tr>
+<td><strong>Persistance</strong></td>
+<td>Commits GitHub sur <code>main</code> (le PAT reste en mémoire, jamais sur disque)</td>
+</tr>
+<tr>
+<td><strong>Onboarding</strong></td>
+<td>S'appuie sur <code>deploy.yml</code> pour installer l'écosystème</td>
+</tr>
+</tbody>
+</table>
+<p>Fonctionnalités : édition de <strong>articles</strong> et <strong>projets</strong>, gestion des <strong>liens de contact</strong> (réordonnables), <strong>upload d'images</strong>, éditeur Markdown avec <strong>aperçu live</strong>, et un onglet <strong>Deployments</strong> qui suit les builds du site.</p>
+<hr>
+<h2>🗂️ Structure</h2>
+<pre><code>tyyy/
+├── Makefile            # Commandes unifiées (web + admin)
+├── web/                # Le site Next.js (export statique)
+│   ├── content/        # Le contenu du site (la source de vérité)
+│   │   ├── articles/   # .md des articles
+│   │   ├── projects/   # .md des projets
+│   │   └── links.json  # liens de la page /contact
+│   ├── src/            # app router, composants (Emotion), lib (md/links), theme
+│   └── next.config.ts  # output: 'export', basePath '/tyyy', trailingSlash
+└── admin/              # L'app desktop Wails
+    ├── main.go         # embarque le SPA + bind les méthodes Go
+    ├── pkg/
+    │   ├── app/        # App struct — méthodes exposées (GetConfig, SaveArticle, …)
+    │   └── content/    # modèles Article/Project/Links + implémentation GitHub
+    └── frontend/       # SPA React + Vite + TS
+</code></pre>
+<p>Le site et l'admin partagent le <strong>même contrat de contenu</strong> : frontmatter <code>title</code>, <code>description</code>, <code>date</code>, <code>tags</code>, <code>published</code> pour les articles/projets, et <code>{ id, label, url, icon, enabled }</code> pour les liens.</p>
+<hr>
+<h2>🚀 Prise en main</h2>
+<h3>Prérequis</h3>
+<ul>
+<li><strong>Node.js 22+ LTS</strong> (corepack) + <strong>Yarn 1.22</strong></li>
+<li><strong>Go 1.26+</strong> + le <strong>Wails CLI</strong> (<code>wails doctor</code> pour les deps système) — pour l'admin seulement</li>
+<li>Un <strong>GitHub PAT</strong> avec scope <code>repo</code> (lecture/écriture contenu + lecture Actions) — pour l'admin</li>
+</ul>
+<h3>Installation</h3>
+<pre><code class="language-bash">make install          # admin-install + web-install
+</code></pre>
+<h3>Web</h3>
+<pre><code class="language-bash">make web-dev          # dev server (http://localhost:3000)
+make web-build        # build statique -> web/out
+make web-start        # servir le build localement
+make web-lint         # ESLint
+</code></pre>
+<h3>Admin</h3>
+<pre><code class="language-bash">make admin-dev        # app desktop en dev (HMR, ouvre la fenêtre)
+make admin-build      # build -> admin/build/bin/tyyy-admin.app
+make admin-run        # ouvrir l'app compilée
+</code></pre>
+<hr>
+<h2>🔄 Workflow d'édition</h2>
+<ol>
+<li>Lancer <strong>tyyy Admin</strong>, renseigner le token + repo (<code>yonlycode/tyyy</code>) + branche <code>main</code>.</li>
+<li>Créer/éditer un article, un projet ou les liens de contact.</li>
+<li><strong>Sauvegarder = committer</strong> sur <code>main</code> (l'app gère les conflits 409 en demandant un rechargement).</li>
+<li><code>deploy.yml</code> détecte le push sur <code>web/**</code>, rebuild le site et le publie sur GitHub Pages.</li>
+<li>Suivre le statut dans l'onglet <strong>Deployments</strong>.</li>
+</ol>
+<hr>
+<h2>🤖 CI/CD (GitHub Actions)</h2>
+<table>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>Déclencheur</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deploy.yml</code></td>
+<td>push sur <code>main</code> (chemin <code>web/**</code>)</td>
+<td>Build SSG + déploiement GitHub Pages</td>
+</tr>
+<tr>
+<td><code>admin-ci.yml</code></td>
+<td>push/PR sur <code>admin/**</code></td>
+<td><code>go vet</code>, <code>gofmt</code>, build Wails (Linux)</td>
+</tr>
+<tr>
+<td><code>release.yml</code></td>
+<td>tag <code>v*</code></td>
+<td>Build + package l'app desktop (macOS/Linux/Windows) attachés à une release</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>📜 Licence</h2>
+<p>Open source — conserver l'attribution en cas de redistribution.</p>
+<hr>
+<p><em>tyyy — le portfolio du rat de <a href="https://github.com/yonlycode">tyyy</a></em></p>
+8:X
+d:X
+d:C
+0:{"buildId":"UTpYd9KprMl3RnEeYIUyF","data":[{"rsc":["$","$1","c",{"children":[[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"[{\"@context\":\"https://schema.org\",\"@type\":\"CreativeWork\",\"name\":\"TY3 - Le portfolio du rat\",\"description\":\"Un portfolio & blog personnel — minimal et frugal en infra — édité depuis une app desktop native qui pilote le contenu du repo GitHub.\",\"url\":\"https://yonlycode.github.io/tyyy/portfolio/ty3-portfolio/\",\"dateCreated\":\"2026-08-19T00:00:00.000Z\",\"author\":{\"@type\":\"Person\",\"name\":\"Yoann Fort\"},\"keywords\":\"\",\"inLanguage\":\"fr-FR\"},{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Accueil\",\"item\":\"https://yonlycode.github.io/tyyy/\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Portfolio\",\"item\":\"https://yonlycode.github.io/tyyy/portfolio/\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"TY3 - Le portfolio du rat\",\"item\":\"https://yonlycode.github.io/tyyy/portfolio/ty3-portfolio/\"}]}]"}}],["$","$L2",null,{"project":{"slug":"ty3-portfolio","title":"TY3 - Le portfolio du rat","description":"Un portfolio & blog personnel — minimal et frugal en infra — édité depuis une app desktop native qui pilote le contenu du repo GitHub.","date":"2026-08-19","tags":[],"canonicalUrl":"","published":true,"readTime":"5 min read","contentHtml":"$3"}}]],["$L4","$L5"],"$L6"]}],"isPartial":"$@7","staleTime":"$8","varyParams":null},{"rsc":"$L9","isPartial":"$@a","staleTime":"$8","varyParams":null},{"rsc":"$Lb","isPartial":"$@c","staleTime":"$8","varyParams":"$d"},{"rsc":"$Le","isPartial":"$@f","staleTime":"$8","varyParams":"$d"},{"rsc":"$L10","isPartial":"$@11","staleTime":"$8","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@12","rootVaryParams":null,"needsRuntimeRequest":"$@13"}
+14:I[97367,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"OutletBoundary"]
+15:"$Sreact.suspense"
+17:I[97367,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"ViewportBoundary"]
+18:I[97367,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"MetadataBoundary"]
+19:I[27201,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"IconMark"]
+1a:I[39756,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"default"]
+1b:I[37457,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"default"]
+1c:I[98394,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"KadyElements"]
+1d:I[15290,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"ThemeProvider"]
+1e:I[21334,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"KadyNavbar"]
+1f:I[40018,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"Footer"]
+20:I[54576,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"GoogleAnalytics"]
+:HL["/tyyy/_next/static/chunks/1yeshg3xn6x7j.css","style"]
+:HL["https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap","style"]
+4:["$","script","script-0",{"src":"/tyyy/_next/static/chunks/3mb4hny89hbzl.js","async":true}]
+5:["$","script","script-1",{"src":"/tyyy/_next/static/chunks/0omn3dxtc-w3k.js","async":true}]
+6:["$","$L14",null,{"children":["$","$15",null,{"name":"Next.MetadataOutlet","children":"$@16"}]}]
+9:["$","$1","h",{"children":[null,["$","$L17",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#F8FAFC","media":"(prefers-color-scheme: light)"}],["$","meta","3",{"name":"theme-color","content":"#080B14","media":"(prefers-color-scheme: dark)"}]]}],["$","div",null,{"hidden":true,"children":["$","$L18",null,{"children":["$","$15",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"TY3 - Le portfolio du rat | Yoann Fort"}],["$","meta","1",{"name":"description","content":"Un portfolio & blog personnel — minimal et frugal en infra — édité depuis une app desktop native qui pilote le contenu du repo GitHub."}],["$","meta","2",{"name":"author","content":"Yoann Fort"}],["$","link","3",{"rel":"manifest","href":"/tyyy/manifest.webmanifest"}],["$","meta","4",{"name":"keywords","content":"Yoann Fort,Karuka Conseil,Architecte IA,IA Souveraine,Inférence locale,Bare-metal,AMD Strix Halo,Kaly HaaS,llama.cpp,Systèmes multi-agents,LLMOps,Hermes Agent,Hardware Edge,Quantisation,Portfolio"}],["$","meta","5",{"name":"creator","content":"tyyy"}],["$","meta","6",{"name":"publisher","content":"tyyy"}],["$","meta","7",{"name":"robots","content":"index, follow"}],["$","meta","8",{"name":"googlebot","content":"index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"}],["$","link","9",{"rel":"canonical","href":"https://yonlycode.github.io/tyyy/portfolio/ty3-portfolio/"}],["$","meta","10",{"property":"og:title","content":"TY3 - Le portfolio du rat"}],["$","meta","11",{"property":"og:description","content":"Un portfolio & blog personnel — minimal et frugal en infra — édité depuis une app desktop native qui pilote le contenu du repo GitHub."}],["$","meta","12",{"property":"og:url","content":"https://yonlycode.github.io/tyyy/portfolio/ty3-portfolio/"}],["$","meta","13",{"property":"og:site_name","content":"Yoann Fort"}],["$","meta","14",{"property":"og:locale","content":"fr_FR"}],["$","meta","15",{"property":"og:image","content":"https://yonlycode.github.io/tyyy/portfolio/ty3-portfolio/opengraph-image"}],["$","meta","16",{"property":"og:image:width","content":"1200"}],["$","meta","17",{"property":"og:image:height","content":"630"}],["$","meta","18",{"property":"og:image:alt","content":"TY3 - Le portfolio du rat"}],["$","meta","19",{"property":"og:type","content":"article"}],["$","meta","20",{"property":"article:published_time","content":"2026-08-19T00:00:00.000Z"}],["$","meta","21",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","22",{"name":"twitter:title","content":"TY3 - Le portfolio du rat"}],["$","meta","23",{"name":"twitter:description","content":"Un portfolio & blog personnel — minimal et frugal en infra — édité depuis une app desktop native qui pilote le contenu du repo GitHub."}],["$","meta","24",{"name":"twitter:image","content":"https://yonlycode.github.io/tyyy/portfolio/ty3-portfolio/opengraph-image"}],["$","link","25",{"rel":"icon","href":"/tyyy/icon.png?icon.16c-ys-u1ipew.png","sizes":"256x256","type":"image/png"}],["$","link","26",{"rel":"apple-touch-icon","href":"/tyyy/apple-icon.png?apple-icon.16c-ys-u1ipew.png","sizes":"256x256","type":"image/png"}],["$","$L19","27",{}]]}]}]}],null]}]
+b:["$","$1","c",{"children":[null,["$","$L1a",null,{"parallelRouterKey":"children","template":["$","$L1b",null,{}]}]]}]
+e:["$","$1","c",{"children":[null,["$","$L1a",null,{"parallelRouterKey":"children","template":["$","$L1b",null,{}]}]]}]
+10:["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/tyyy/_next/static/chunks/1yeshg3xn6x7j.css","precedence":"next"}],["$","script","script-0",{"src":"/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","async":true}],["$","script","script-1",{"src":"/tyyy/_next/static/chunks/3lqk0gkngv_jp.js","async":true}]],["$","html",null,{"lang":"fr","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){try{if(localStorage.getItem('kady-theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();"}}],["$","link",null,{"rel":"preconnect","href":"https://fonts.googleapis.com"}],["$","link",null,{"rel":"preconnect","href":"https://fonts.gstatic.com","crossOrigin":"anonymous"}],["$","link",null,{"href":"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap","rel":"stylesheet"}]]}],["$","body",null,{"children":[["$","$L1c",null,{}],["$","$L1d",null,{"children":["$","div",null,{"style":{"display":"flex","flexDirection":"column","minHeight":"100vh"},"children":[["$","$L1e",null,{}],["$","main",null,{"style":{"flex":1},"children":["$","$L1a",null,{"parallelRouterKey":"children","template":["$","$L1b",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}],["$","$L1f",null,{"links":[{"id":"github","label":"GitHub","url":"https://github.com/yonlycode","icon":"github","enabled":true},{"id":"linkedin","label":"LinkedIn","url":"https://www.linkedin.com/in/yoann-fort/","icon":"linkedin","enabled":true},{"id":"twitter","label":"Twitter / X","url":"https://x.com/TheYonlyYone","icon":"twitter","enabled":true},{"id":"email","label":"Email","url":"mailto:yoann.fort@outlook.com","icon":"email","enabled":true}]}]]}]}],["$","$L20",null,{"gaId":"G-2ZHCGP7VD4"}]]}]]}]]}]
+16:null
+13:true
+8:300
+8:C
+12:0
+a:"$undefined"
+c:"$undefined"
+f:"$undefined"
+11:"$undefined"
+7:"$undefined"

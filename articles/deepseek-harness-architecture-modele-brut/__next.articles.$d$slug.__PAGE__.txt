@@ -1,0 +1,85 @@
+1:"$Sreact.fragment"
+3:I[17953,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js","/tyyy/_next/static/chunks/3iet8zo-w0oz2.js","/tyyy/_next/static/chunks/0omn3dxtc-w3k.js"],"ArticleView"]
+2:T4b8,[{"@context":"https://schema.org","@type":"BlogPosting","headline":"DeepSeek Harness : L'architecture qui tue le mythe du modèle brut","description":"Analyse technique de l'architecture du DeepSeek Harness — prefix caching, compaction, framework Cordis, culture des mémos.","url":"https://yonlycode.github.io/tyyy/articles/deepseek-harness-architecture-modele-brut/","mainEntityOfPage":"https://yonlycode.github.io/tyyy/articles/deepseek-harness-architecture-modele-brut/","datePublished":"2026-07-20T00:00:00.000Z","author":{"@type":"Person","name":"Yoann Fort"},"publisher":{"@type":"Person","name":"Yoann Fort"},"keywords":"DeepSeek, AI-Engineering, LLM-Architecture, Local-First, Agent-AI, MLOps","inLanguage":"fr-FR"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://yonlycode.github.io/tyyy/"},{"@type":"ListItem","position":2,"name":"Articles","item":"https://yonlycode.github.io/tyyy/articles/"},{"@type":"ListItem","position":3,"name":"DeepSeek Harness : L'architecture qui tue le mythe du modèle brut","item":"https://yonlycode.github.io/tyyy/articles/deepseek-harness-architecture-modele-brut/"}]}]4:T14eb,<p><strong>Un token en cache coûte 120x moins cher qu'un token recalculé.</strong></p>
+<p>0,003$ contre 0,43$ par million de tokens.</p>
+<p>La différence n'est pas dans le modèle. Elle est dans l'architecture du système qui l'entoure.</p>
+<p>DeepSeek l'a compris. Leur harness est une machine d'ingénierie obsessionnelle. Voici ce qu'on peut en tirer.</p>
+<hr>
+<h3>1/ Le log "Append-Only" — L'impératif financier</h3>
+<p>Règle d'or : <strong>une fois qu'une donnée a été envoyée au modèle, on ne revient jamais en arrière.</strong></p>
+<p>Si l'agent produit une erreur (mauvais chemin d'accès, commande ratée), l'erreur reste dans le log. L'agent formule sa correction à la suite. Point.</p>
+<p>Pourquoi ? Le prefix caching.</p>
+<p>Les fournisseurs de LLMs gardent le début d'une requête en cache. Si le contexte reste strictement identique, le modèle ne recalcule pas cette base. Modifier un historique, même d'une lettre au début, <strong>détruit ce signet précieux.</strong></p>
+<p>Le contexte n'est jamais stocké comme un tableau manipulable. Il est calculé à la volée comme une projection dérivée du journal d'événements. Chaque byte gagné est un byte qui reste en cache.</p>
+<hr>
+<h3>2/ Le hack de la "Compaction"</h3>
+<p>Quand la mémoire de l'agent sature, la plupart des systèmes insèrent un "prompt de résumé" au début de la conversation.</p>
+<p>Ironie : c'est exactement au moment où la requête est la plus volumineuse et la plus onéreuse qu'ils <strong>tuent le prefix cache.</strong></p>
+<p>DeepSeek fait autrement : même requête exacte (instructions, outils, historique long) + un message utilisateur tout à la fin qui demande à l'agent d'agir comme moteur de compaction.</p>
+<p>Le cache est intégralement préservé. Le résumé arrive à la fin, pas au début. Zéro friction. C'est simple. C'est efficace.</p>
+<hr>
+<h3>3/ Cordis — Chaque action doit savoir se rétracter</h3>
+<p>Le harness s'appuie sur Cordis, un framework issu du monde des chatbots écrit par "Shigma".</p>
+<p>La règle : <strong>composabilité stricte.</strong> Chaque plugin, chaque composant doit déclarer sa fonction inverse. Aucun plugin ne s'installe sans fournir la méthode exacte pour annuler proprement toutes ses interactions temporelles.</p>
+<p>Zéro fuite de mémoire. Zéro effet de bord résiduel en production.</p>
+<p>C'est une exigence architecturale, pas une feature optionnelle.</p>
+<hr>
+<h3>4/ Quatre presets, une enveloppe</h3>
+<p>DeepSeek orchestre quatre modes de comportement dans le même système :</p>
+<p><strong>Standard Mode</strong> — L'agent classique avec outils de lecture et shell.</p>
+<p><strong>Programmatic Tool Calling</strong> — Le plus intéressant. L'agent reçoit une interface TypeScript générée. Au lieu de pinguer l'API à chaque besoin, il rédige un programme global qui boucle, filtre et interroge plusieurs outils en parallèle. Exécution dans un Worker Thread Node.js cloisonné (CPU et RAM limités). Seul le résultat pur enrichit le contexte.</p>
+<p><strong>Minimal Mode</strong> — L'environnement brut de post-training, utilisé pour le reinforcement learning. Un shell persistant + un éditeur.</p>
+<p><strong>Creation Mode</strong> — L'agent obtient un accès système au harness qui le fait lui-même tourner. Il peut écrire du JavaScript pour instancier, configurer et évaluer d'autres agents directement depuis l'hôte.</p>
+<hr>
+<h3>5/ Orchestration de sous-agents officielle</h3>
+<p>Pas besoin d'émuler des concurrents maladroitement. Le harness lance des instances d'agents externes comme Claude Code ou le serveur CodeX d'OpenAI pour déléguer des tâches spécifiques.</p>
+<p>Il pointe vers les binaires installés sur la machine, gère la création puis la destruction méticuleuse de l'arbre des processus locaux. Une fois la tâche achevée, tout est nettoyé.</p>
+<hr>
+<h3>6/ La culture des mémos</h3>
+<p>C'est le point le plus sous-estimé.</p>
+<p>Le répertoire source contient <strong>683 mémos d'ingénierie</strong> documentant formellement l'architecture. Aucun changement substantiel du code n'est autorisé sans un mémo associé validé automatiquement par un script.</p>
+<p>Chaque document doit obligatoirement inclure une section <strong>"Alternatives Considérées".</strong></p>
+<p>Ça semble mineur. C'est énorme. Ça évite que des développeurs arrivant plus tard ne relitiguent sans fin des options qui avaient déjà été écartées de manière justifiée.</p>
+<hr>
+<h3>Ce que ça nous apprend</h3>
+<p>Le défi futur de l'IA agentige n'est pas d'avoir le meilleur modèle de base.</p>
+<p>C'est de développer des wrappers extrêmement rigoureux, <strong>efficaces financièrement</strong>, et capables d'interagir nativement avec l'écosystème local sans détruire le cache.</p>
+<p>Le harness DeepSeek est un manifeste technique. 683 mémos. Un log append-only. Un système qui économise 120x par byte en cache.</p>
+<p>Les modèles s'homogénéiseront. Les wrappers qui tiendront la route, c'est ceux qui pensent l'ingénierie system comme un tout.</p>
+<p>C'est exactement cette approche que je défends depuis le début : la souveraineté ne se résume pas à faire tourner un modèle en local. C'est toute l'architecture autour qui compte.</p>
+<p>#DeepSeek #AIEngineering #LLM #AgentAI #LocalFirst #MLOps</p>
+9:X
+e:X
+e:C
+0:{"buildId":"UTpYd9KprMl3RnEeYIUyF","data":[{"rsc":["$","$1","c",{"children":[[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"$2"}}],["$","$L3",null,{"article":{"slug":"deepseek-harness-architecture-modele-brut","title":"DeepSeek Harness : L'architecture qui tue le mythe du modèle brut","description":"Analyse technique de l'architecture du DeepSeek Harness — prefix caching, compaction, framework Cordis, culture des mémos.","date":"2026-07-20","tags":["DeepSeek","AI-Engineering","LLM-Architecture","Local-First","Agent-AI","MLOps"],"canonicalUrl":"","published":true,"readTime":"4 min read","contentHtml":"$4"}}]],["$L5","$L6"],"$L7"]}],"isPartial":"$@8","staleTime":"$9","varyParams":null},{"rsc":"$La","isPartial":"$@b","staleTime":"$9","varyParams":null},{"rsc":"$Lc","isPartial":"$@d","staleTime":"$9","varyParams":"$e"},{"rsc":"$Lf","isPartial":"$@10","staleTime":"$9","varyParams":"$e"},{"rsc":"$L11","isPartial":"$@12","staleTime":"$9","varyParams":null}],"isUpgradeableISRFallback":false,"a":"$@13","rootVaryParams":null,"needsRuntimeRequest":"$@14"}
+15:I[97367,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"OutletBoundary"]
+16:"$Sreact.suspense"
+18:I[97367,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"ViewportBoundary"]
+19:I[97367,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"MetadataBoundary"]
+1a:I[27201,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"IconMark"]
+1b:I[39756,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"default"]
+1c:I[37457,["/tyyy/_next/static/chunks/0h2qsuyze9ds1.js"],"default"]
+1d:I[98394,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"KadyElements"]
+1e:I[15290,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"ThemeProvider"]
+1f:I[21334,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"KadyNavbar"]
+20:I[40018,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"Footer"]
+21:I[54576,["/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","/tyyy/_next/static/chunks/3lqk0gkngv_jp.js"],"GoogleAnalytics"]
+:HL["/tyyy/_next/static/chunks/1yeshg3xn6x7j.css","style"]
+:HL["https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap","style"]
+5:["$","script","script-0",{"src":"/tyyy/_next/static/chunks/3iet8zo-w0oz2.js","async":true}]
+6:["$","script","script-1",{"src":"/tyyy/_next/static/chunks/0omn3dxtc-w3k.js","async":true}]
+7:["$","$L15",null,{"children":["$","$16",null,{"name":"Next.MetadataOutlet","children":"$@17"}]}]
+a:["$","$1","h",{"children":[null,["$","$L18",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}],["$","meta","2",{"name":"theme-color","content":"#F8FAFC","media":"(prefers-color-scheme: light)"}],["$","meta","3",{"name":"theme-color","content":"#080B14","media":"(prefers-color-scheme: dark)"}]]}],["$","div",null,{"hidden":true,"children":["$","$L19",null,{"children":["$","$16",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"DeepSeek Harness : L'architecture qui tue le mythe du modèle brut | Yoann Fort"}],["$","meta","1",{"name":"description","content":"Analyse technique de l'architecture du DeepSeek Harness — prefix caching, compaction, framework Cordis, culture des mémos."}],["$","meta","2",{"name":"author","content":"Yoann Fort"}],["$","link","3",{"rel":"manifest","href":"/tyyy/manifest.webmanifest"}],["$","meta","4",{"name":"keywords","content":"Yoann Fort,Karuka Conseil,Architecte IA,IA Souveraine,Inférence locale,Bare-metal,AMD Strix Halo,Kaly HaaS,llama.cpp,Systèmes multi-agents,LLMOps,Hermes Agent,Hardware Edge,Quantisation,Portfolio,DeepSeek,AI-Engineering,LLM-Architecture,Local-First,Agent-AI,MLOps"}],["$","meta","5",{"name":"creator","content":"tyyy"}],["$","meta","6",{"name":"publisher","content":"tyyy"}],["$","meta","7",{"name":"robots","content":"index, follow"}],["$","meta","8",{"name":"googlebot","content":"index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"}],["$","link","9",{"rel":"canonical","href":"https://yonlycode.github.io/tyyy/articles/deepseek-harness-architecture-modele-brut/"}],["$","meta","10",{"property":"og:title","content":"DeepSeek Harness : L'architecture qui tue le mythe du modèle brut"}],["$","meta","11",{"property":"og:description","content":"Analyse technique de l'architecture du DeepSeek Harness — prefix caching, compaction, framework Cordis, culture des mémos."}],["$","meta","12",{"property":"og:url","content":"https://yonlycode.github.io/tyyy/articles/deepseek-harness-architecture-modele-brut/"}],["$","meta","13",{"property":"og:site_name","content":"Yoann Fort"}],["$","meta","14",{"property":"og:locale","content":"fr_FR"}],["$","meta","15",{"property":"og:image","content":"https://yonlycode.github.io/tyyy/articles/deepseek-harness-architecture-modele-brut/opengraph-image"}],["$","meta","16",{"property":"og:image:width","content":"1200"}],["$","meta","17",{"property":"og:image:height","content":"630"}],["$","meta","18",{"property":"og:image:alt","content":"DeepSeek Harness : L'architecture qui tue le mythe du modèle brut"}],["$","meta","19",{"property":"og:type","content":"article"}],["$","meta","20",{"property":"article:published_time","content":"2026-07-20T00:00:00.000Z"}],["$","meta","21",{"property":"article:tag","content":"DeepSeek"}],["$","meta","22",{"property":"article:tag","content":"AI-Engineering"}],["$","meta","23",{"property":"article:tag","content":"LLM-Architecture"}],["$","meta","24",{"property":"article:tag","content":"Local-First"}],["$","meta","25",{"property":"article:tag","content":"Agent-AI"}],["$","meta","26",{"property":"article:tag","content":"MLOps"}],["$","meta","27",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","28",{"name":"twitter:title","content":"DeepSeek Harness : L'architecture qui tue le mythe du modèle brut"}],["$","meta","29",{"name":"twitter:description","content":"Analyse technique de l'architecture du DeepSeek Harness — prefix caching, compaction, framework Cordis, culture des mémos."}],["$","meta","30",{"name":"twitter:image","content":"https://yonlycode.github.io/tyyy/articles/deepseek-harness-architecture-modele-brut/opengraph-image"}],["$","link","31",{"rel":"icon","href":"/tyyy/icon.png?icon.16c-ys-u1ipew.png","sizes":"256x256","type":"image/png"}],["$","link","32",{"rel":"apple-touch-icon","href":"/tyyy/apple-icon.png?apple-icon.16c-ys-u1ipew.png","sizes":"256x256","type":"image/png"}],["$","$L1a","33",{}]]}]}]}],null]}]
+c:["$","$1","c",{"children":[null,["$","$L1b",null,{"parallelRouterKey":"children","template":["$","$L1c",null,{}]}]]}]
+f:["$","$1","c",{"children":[null,["$","$L1b",null,{"parallelRouterKey":"children","template":["$","$L1c",null,{}]}]]}]
+11:["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/tyyy/_next/static/chunks/1yeshg3xn6x7j.css","precedence":"next"}],["$","script","script-0",{"src":"/tyyy/_next/static/chunks/0m9hbcyx1xptv.js","async":true}],["$","script","script-1",{"src":"/tyyy/_next/static/chunks/3lqk0gkngv_jp.js","async":true}]],["$","html",null,{"lang":"fr","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){try{if(localStorage.getItem('kady-theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();"}}],["$","link",null,{"rel":"preconnect","href":"https://fonts.googleapis.com"}],["$","link",null,{"rel":"preconnect","href":"https://fonts.gstatic.com","crossOrigin":"anonymous"}],["$","link",null,{"href":"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap","rel":"stylesheet"}]]}],["$","body",null,{"children":[["$","$L1d",null,{}],["$","$L1e",null,{"children":["$","div",null,{"style":{"display":"flex","flexDirection":"column","minHeight":"100vh"},"children":[["$","$L1f",null,{}],["$","main",null,{"style":{"flex":1},"children":["$","$L1b",null,{"parallelRouterKey":"children","template":["$","$L1c",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}],["$","$L20",null,{"links":[{"id":"github","label":"GitHub","url":"https://github.com/yonlycode","icon":"github","enabled":true},{"id":"linkedin","label":"LinkedIn","url":"https://www.linkedin.com/in/yoann-fort/","icon":"linkedin","enabled":true},{"id":"twitter","label":"Twitter / X","url":"https://x.com/TheYonlyYone","icon":"twitter","enabled":true},{"id":"email","label":"Email","url":"mailto:yoann.fort@outlook.com","icon":"email","enabled":true}]}]]}]}],["$","$L21",null,{"gaId":"G-2ZHCGP7VD4"}]]}]]}]]}]
+17:null
+14:true
+9:300
+9:C
+13:0
+b:"$undefined"
+d:"$undefined"
+10:"$undefined"
+12:"$undefined"
+8:"$undefined"
